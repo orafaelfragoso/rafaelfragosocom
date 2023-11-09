@@ -1,25 +1,33 @@
 "use client";
 
-import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 import { siteConfig } from "@/config/site";
 import { navConfig } from "@/config/navigation";
 import { cn } from "@/lib/utils";
+import { LinkWithFeedback } from "@/components/link-with-feedback";
+import Image from "next/image";
 
 export function MainNav() {
   const pathname = usePathname();
 
   return (
-    <div className="mr-4 hidden md:flex">
-      <Link href="/" className="mr-6 flex items-center">
-        <span className="hidden font-bold sm:inline-block break-keep">
+    <div className="mr-4 flex">
+      <LinkWithFeedback href="/" className="md:mr-6 flex flex-row items-center">
+        <Image
+          src="/apple-touch-icon.png"
+          width={38}
+          height={38}
+          alt="Rafael Fragoso"
+          className="mr-2"
+        />
+        <span className="hidden font-bold text-lg sm:inline-block break-keep">
           {siteConfig.name}
         </span>
-      </Link>
+      </LinkWithFeedback>
       <nav className="flex items-center space-x-6 text-sm font-medium">
         {navConfig.main.map((navItem) => (
-          <Link
+          <LinkWithFeedback
             key={navItem.title}
             href={navItem.href}
             title={navItem.description}
@@ -31,7 +39,7 @@ export function MainNav() {
             )}
           >
             {navItem.title}
-          </Link>
+          </LinkWithFeedback>
         ))}
       </nav>
     </div>

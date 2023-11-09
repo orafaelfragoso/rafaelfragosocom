@@ -21,6 +21,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Portal } from "@/components/portal";
+import { useAudio } from "@/hooks/use-audio";
 import Confetti from "react-confetti";
 import { subscribe } from "@/actions/newsletter";
 
@@ -37,7 +38,12 @@ const schema = z
 type SchemaType = z.infer<typeof schema>;
 
 export function CardNewsletter({ className }: CardNewsletterProps) {
+  const baseUrl =
+    typeof window !== "undefined"
+      ? window.location.origin
+      : process.env.BASE_URL;
   const [exploding, setExploding] = useState(false);
+  const { play, volume } = useAudio(`${baseUrl}/coin.wav`);
 
   const form = useForm<SchemaType>({
     resolver: zodResolver(schema),
@@ -55,6 +61,8 @@ export function CardNewsletter({ className }: CardNewsletterProps) {
         throw new Error();
       }
 
+      volume(0.5);
+      play();
       setExploding(true);
       form.reset();
     } catch (error) {

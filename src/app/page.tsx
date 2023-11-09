@@ -69,7 +69,7 @@ export default function Home() {
           height="680"
           className="hidden lg:inline-block absolute top-[-64px] right-[-64px]"
           alt="Rafael Fragoso Avatar"
-          priority={false}
+          priority={true}
         />
       </PageHeader>
 

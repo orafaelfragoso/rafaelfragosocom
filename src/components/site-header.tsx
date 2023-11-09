@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
 import { CommandMenu } from "@/components/command-menu";
@@ -8,6 +7,7 @@ import { MobileNav } from "@/components/mobile-nav";
 import { ModeToggle } from "@/components/mode-toggle";
 import { buttonVariants } from "@/components/ui/button";
 import { MainNavBorder } from "@/components/main-nav-border";
+import { LinkWithFeedback } from "@/components/link-with-feedback";
 
 export function SiteHeader() {
   return (
@@ -20,7 +20,7 @@ export function SiteHeader() {
             <CommandMenu />
           </div>
           <nav className="flex items-center">
-            <Link
+            <LinkWithFeedback
               href={siteConfig.links.github}
               target="_blank"
               rel="noreferrer"
@@ -36,8 +36,8 @@ export function SiteHeader() {
                 <Icons.gitHub className="h-4 w-4" />
                 <span className="sr-only">GitHub</span>
               </div>
-            </Link>
-            <Link
+            </LinkWithFeedback>
+            <LinkWithFeedback
               href={siteConfig.links.twitter}
               target="_blank"
               rel="noreferrer"
@@ -53,8 +53,8 @@ export function SiteHeader() {
                 <Icons.twitter className="h-3 w-3 fill-current" />
                 <span className="sr-only">Twitter</span>
               </div>
-            </Link>
-            <Link
+            </LinkWithFeedback>
+            <LinkWithFeedback
               href={siteConfig.links.linkedin}
               target="_blank"
               rel="noreferrer"
@@ -70,7 +70,7 @@ export function SiteHeader() {
                 <Icons.linkedin className="h-5 w-5 fill-current" />
                 <span className="sr-only">Linkedin</span>
               </div>
-            </Link>
+            </LinkWithFeedback>
             <ModeToggle />
           </nav>
         </div>
