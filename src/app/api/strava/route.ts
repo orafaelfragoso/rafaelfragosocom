@@ -27,14 +27,9 @@ export async function GET() {
         refresh_token: refreshToken,
         grant_type: "refresh_token",
       }),
-    });
+    }).then((res) => res.json());
 
-    if (!tokenResponse.ok) {
-      throw new Error("Failed to obtain access token");
-    }
-
-    const tokenData = await tokenResponse.json();
-    const accessToken = tokenData.access_token;
+    const accessToken = tokenResponse.access_token;
 
     const activitiesResponse = await fetch(
       `https://www.strava.com/api/v3/athletes/${athleteId}/stats`,
@@ -43,14 +38,9 @@ export async function GET() {
           Authorization: `Bearer ${accessToken}`,
         },
       }
-    );
+    ).then((res) => res.json());
 
-    if (!activitiesResponse.ok) {
-      throw new Error("Failed to fetch Strava activities");
-    }
-
-    const activitiesData = await activitiesResponse.json();
-    const runActivities = activitiesData["all_run_totals"];
+    const runActivities = activitiesResponse["all_run_totals"];
 
     const formattedActivities = {
       totalRuns: runActivities.count,

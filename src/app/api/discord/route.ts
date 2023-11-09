@@ -11,16 +11,11 @@ export async function GET() {
           Authorization: `Bot ${token}`,
         },
       }
-    );
+    ).then((res) => res.json());
 
-    if (!response.ok) {
-      throw new Error("Failed to fetch server data");
-    }
-
-    const serverData = await response.json();
     const data = {
-      totalMembers: serverData.approximate_member_count,
-      onlineMembers: serverData.approximate_presence_count,
+      totalMembers: response.approximate_member_count,
+      onlineMembers: response.approximate_presence_count,
     };
 
     return Response.json(data, {
