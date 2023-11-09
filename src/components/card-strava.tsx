@@ -19,8 +19,8 @@ export async function CardStrava() {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="text-2xl font-bold">{data?.totalDistance}</div>
-        <p className="text-xs text-muted-foreground">{data?.totalTime}</p>
+        <div className="text-2xl font-bold">{data?.totalDistance || 0}</div>
+        <p className="text-xs text-muted-foreground">{data?.totalTime || 0}</p>
       </CardContent>
     </Card>
   );

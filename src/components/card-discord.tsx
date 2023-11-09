@@ -19,9 +19,11 @@ export async function CardDiscord() {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="text-2xl font-bold">{data?.totalMembers} members</div>
+        <div className="text-2xl font-bold">
+          {data?.totalMembers || 0} members
+        </div>
         <p className="text-xs text-muted-foreground">
-          {data?.onlineMembers} online now
+          {data?.onlineMembers || 0} online now
         </p>
       </CardContent>
     </Card>

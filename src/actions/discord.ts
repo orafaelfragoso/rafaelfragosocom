@@ -11,7 +11,6 @@ export async function getDiscordMembers() {
       headers: {
         Authorization: `Bot ${token}`,
       },
-      next: { revalidate: 3600 },
     }
   ).then((res) => res.json());
 
