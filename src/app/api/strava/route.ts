@@ -1,5 +1,3 @@
-import NodeCache from "node-cache";
-
 const formatDistance = (distanceInMeters: number) => {
   const kilometers = (distanceInMeters / 1000).toFixed(2);
   return `${kilometers} km`;
@@ -11,8 +9,6 @@ const formatTime = (seconds: number) => {
   return `${hours}h ${minutes}m`;
 };
 
-const cache = new NodeCache();
-
 export async function GET() {
   const athleteId = "36752953";
   const clientId = process.env.STRAVA_CLIENT_ID;
@@ -20,12 +16,6 @@ export async function GET() {
   const refreshToken = process.env.STRAVA_REFRESH_TOKEN;
 
   try {
-    const cachedResponse = cache.get("strava");
-
-    if (cachedResponse) {
-      return Response.json(cachedResponse);
-    }
-
     const tokenResponse = await fetch("https://www.strava.com/oauth/token", {
       method: "POST",
       headers: {
@@ -68,9 +58,14 @@ export async function GET() {
       totalTime: formatTime(runActivities.elapsed_time),
     };
 
-    cache.set("strava", formattedActivities, 60 * 60);
-
-    return Response.json(formattedActivities);
+    return Response.json(formattedActivities, {
+      status: 200,
+      headers: {
+        "Cache-Control": "public, s-maxage=3600",
+        "CDN-Cache-Control": "public, s-maxage=3600",
+        "Vercel-CDN-Cache-Control": "public, s-maxage=3600",
+      },
+    });
   } catch (error) {
     console.error(error);
     return Response.json([]);

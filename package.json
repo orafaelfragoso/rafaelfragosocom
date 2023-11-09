@@ -25,12 +25,12 @@
     "jotai": "^2.5.1",
     "next": "14.0.1",
     "next-themes": "^0.2.1",
-    "node-cache": "^5.1.2",
     "react": "^18",
     "react-confetti": "^6.1.0",
     "react-dom": "^18",
     "react-hook-form": "^7.48.2",
     "react-wrap-balancer": "^1.1.0",
+    "sharp": "^0.32.6",
     "tailwind-merge": "^2.0.0",
     "tailwindcss-animate": "^1.0.7",
     "zod": "^3.22.4"

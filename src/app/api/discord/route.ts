@@ -1,18 +1,8 @@
-import NodeCache from "node-cache";
-
-const cache = new NodeCache();
-
 export async function GET() {
   const serverId = "875738767841964113";
   const token = process.env.DISCORD_BOT_TOKEN;
 
   try {
-    const cachedResponse = cache.get("discord");
-
-    if (cachedResponse) {
-      return Response.json(cachedResponse);
-    }
-
     const response = await fetch(
       `https://discord.com/api/v10/guilds/${serverId}?with_counts=true`,
       {
@@ -33,9 +23,14 @@ export async function GET() {
       onlineMembers: serverData.approximate_presence_count,
     };
 
-    cache.set("discord", data, 60 * 60);
-
-    return Response.json(data);
+    return Response.json(data, {
+      status: 200,
+      headers: {
+        "Cache-Control": "public, s-maxage=3600",
+        "CDN-Cache-Control": "public, s-maxage=3600",
+        "Vercel-CDN-Cache-Control": "public, s-maxage=3600",
+      },
+    });
   } catch (error) {
     console.error(error);
     return Response.json([]);
