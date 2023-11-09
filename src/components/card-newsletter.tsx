@@ -4,7 +4,13 @@ import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import * as z from "zod";
-import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
@@ -16,6 +22,7 @@ import {
 } from "@/components/ui/card";
 import { Portal } from "@/components/portal";
 import Confetti from "react-confetti";
+import { subscribe } from "@/actions/newsletter";
 
 export type CardNewsletterProps = {
   className?: string;
@@ -43,18 +50,19 @@ export function CardNewsletter({ className }: CardNewsletterProps) {
 
   const onSubmit: SubmitHandler<SchemaType> = async (values) => {
     try {
-      const formData = new FormData();
-      formData.append("email", values.email);
-
-      await fetch("/api/newsletter", {
-        method: "POST",
-        body: formData,
-      });
+      const res: any = await subscribe(values.email);
+      if (res?.error) {
+        throw new Error();
+      }
 
       setExploding(true);
       form.reset();
     } catch (error) {
-      console.log(error);
+      form.setError("email", {
+        type: "custom",
+        message: "E-mail is already registered",
+      });
+      form.setFocus("email");
     }
   };
 
@@ -89,6 +97,9 @@ export function CardNewsletter({ className }: CardNewsletterProps) {
                           disabled={isSubmitting}
                         />
                       </FormControl>
+                      {errors?.email && (
+                        <FormMessage>{errors?.email.message}</FormMessage>
+                      )}
                     </FormItem>
                   )}
                 />

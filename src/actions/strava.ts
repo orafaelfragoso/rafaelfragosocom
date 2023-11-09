@@ -1,4 +1,6 @@
-export async function GET() {
+"use server";
+
+export async function getStravaStats() {
   const formatDistance = (distanceInMeters: number) => {
     const kilometers = (distanceInMeters / 1000).toFixed(2);
     return `${kilometers} km`;
@@ -34,6 +36,7 @@ export async function GET() {
     const activitiesResponse = await fetch(
       `https://www.strava.com/api/v3/athletes/${athleteId}/stats`,
       {
+        next: { revalidate: 3600 },
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -42,22 +45,13 @@ export async function GET() {
 
     const runActivities = activitiesResponse["all_run_totals"];
 
-    const formattedActivities = {
+    return {
       totalRuns: runActivities.count,
       totalDistance: formatDistance(runActivities.distance),
       totalTime: formatTime(runActivities.elapsed_time),
     };
-
-    return Response.json(formattedActivities, {
-      status: 200,
-      headers: {
-        "Cache-Control": "public, s-maxage=3600",
-        "CDN-Cache-Control": "public, s-maxage=3600",
-        "Vercel-CDN-Cache-Control": "public, s-maxage=3600",
-      },
-    });
-  } catch (error) {
+  } catch (error: any) {
     console.error(error);
-    return Response.json({ error }, { status: 503 });
+    return { error: error?.message || "Something wrong" };
   }
 }

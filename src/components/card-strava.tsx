@@ -5,20 +5,10 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-
-type Stats = {
-  totalDistance: string;
-  totalRuns: number;
-  totalTime: string;
-};
-
-async function getStrava() {
-  const res = await fetch(`${process.env.BASE_URL}/api/strava`);
-  return res.json();
-}
+import { getStravaStats } from "@/actions/strava";
 
 export async function CardStrava() {
-  const data: Stats | null = await getStrava();
+  const data: any = await getStravaStats();
 
   return (
     <Card className="flex-1 basis-1/3">

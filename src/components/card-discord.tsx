@@ -5,19 +5,10 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-
-type Stats = {
-  totalMembers: number;
-  onlineMembers: number;
-};
-
-async function getDiscord() {
-  const res = await fetch(`${process.env.BASE_URL}/api/discord`);
-  return res.json();
-}
+import { getDiscordMembers } from "@/actions/discord";
 
 export async function CardDiscord() {
-  const data: Stats | null = await getDiscord();
+  const data: any = await getDiscordMembers();
 
   return (
     <Card className="flex-1 basis-1/3">
