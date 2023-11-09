@@ -44,7 +44,6 @@ export default function Home() {
           {/* <Link href="#" className={cn(buttonVariants())}>
             Read the blog
           </Link> */}
-          <Button disabled>Read the blog</Button>
           <Link
             target="_blank"
             rel="noreferrer"
@@ -53,6 +52,15 @@ export default function Home() {
           >
             <Icons.gitHub className="mr-2 h-4 w-4" />
             GitHub
+          </Link>
+          <Link
+            target="_blank"
+            rel="noreferrer"
+            href={siteConfig.links.instagram}
+            className={cn(buttonVariants({ variant: "outline" }))}
+          >
+            <Icons.instagram className="mr-2 h-4 w-4" />
+            Instagram
           </Link>
         </div>
         <Image

@@ -15,8 +15,6 @@ export async function getDiscordMembers() {
       }
     ).then((res) => res.json());
 
-    console.log(response);
-
     return {
       totalMembers: response.approximate_member_count,
       onlineMembers: response.approximate_presence_count,

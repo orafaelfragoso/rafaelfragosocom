@@ -88,6 +88,7 @@ export function CardNewsletter({ className }: CardNewsletterProps) {
                       <FormControl>
                         <Input
                           {...field}
+                          type="email"
                           className={
                             errors?.email
                               ? "dark:focus-visible:ring-red-500 focus-visible:ring-red-500 ring-red-500"

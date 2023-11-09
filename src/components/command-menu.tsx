@@ -17,6 +17,7 @@ import {
   CommandList,
   CommandSeparator,
 } from "@/components/ui/command";
+import { navConfig } from "@/config/navigation";
 
 export function CommandMenu({ ...props }: DialogProps) {
   const router = useRouter();
@@ -59,6 +60,20 @@ export function CommandMenu({ ...props }: DialogProps) {
         <CommandInput placeholder="Type a command or search..." />
         <CommandList>
           <CommandEmpty>No results found.</CommandEmpty>
+          <CommandGroup heading="Links">
+            {navConfig.social.map(({ icon: Icon, ...navItem }) => (
+              <CommandItem
+                key={navItem.href}
+                value={navItem.title}
+                onSelect={() => {
+                  window.open(navItem.href, "_blank");
+                }}
+              >
+                <Icon className="mr-2 h-4 w-4" />
+                {navItem.title}
+              </CommandItem>
+            ))}
+          </CommandGroup>
           <CommandSeparator />
           <CommandGroup heading="Theme">
             <CommandItem onSelect={() => runCommand(() => setTheme("light"))}>

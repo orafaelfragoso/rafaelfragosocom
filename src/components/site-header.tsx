@@ -1,5 +1,4 @@
 import Link from "next/link";
-
 import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
 import { CommandMenu } from "@/components/command-menu";
@@ -8,7 +7,7 @@ import { MainNav } from "@/components/main-nav";
 import { MobileNav } from "@/components/mobile-nav";
 import { ModeToggle } from "@/components/mode-toggle";
 import { buttonVariants } from "@/components/ui/button";
-import { MainNavBorder } from "./main-nav-border";
+import { MainNavBorder } from "@/components/main-nav-border";
 
 export function SiteHeader() {
   return (
