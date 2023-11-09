@@ -1,15 +1,15 @@
-const formatDistance = (distanceInMeters: number) => {
-  const kilometers = (distanceInMeters / 1000).toFixed(2);
-  return `${kilometers} km`;
-};
-
-const formatTime = (seconds: number) => {
-  const hours = Math.floor(seconds / 3600);
-  const minutes = Math.floor((seconds % 3600) / 60);
-  return `${hours}h ${minutes}m`;
-};
-
 export async function GET() {
+  const formatDistance = (distanceInMeters: number) => {
+    const kilometers = (distanceInMeters / 1000).toFixed(2);
+    return `${kilometers} km`;
+  };
+
+  const formatTime = (seconds: number) => {
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    return `${hours}h ${minutes}m`;
+  };
+
   const athleteId = "36752953";
   const clientId = process.env.STRAVA_CLIENT_ID;
   const clientSecret = process.env.STRAVA_CLIENT_SECRET;
@@ -68,6 +68,6 @@ export async function GET() {
     });
   } catch (error) {
     console.error(error);
-    return Response.json([]);
+    return Response.json({ error }, { status: 503 });
   }
 }

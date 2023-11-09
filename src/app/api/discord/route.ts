@@ -33,6 +33,6 @@ export async function GET() {
     });
   } catch (error) {
     console.error(error);
-    return Response.json([]);
+    return Response.json({ error }, { status: 503 });
   }
 }
