@@ -29,9 +29,15 @@ export async function getStravaStats() {
         refresh_token: refreshToken,
         grant_type: "refresh_token",
       }),
-    }).then((res) => res.json());
+    });
 
-    const accessToken = tokenResponse.access_token;
+    if (!tokenResponse.ok) {
+      console.error("Could not verify credentials");
+      return { error: "Could not verify credentials" };
+    }
+
+    const tokenData = await tokenResponse.json();
+    const accessToken = tokenData.access_token;
 
     const activitiesResponse = await fetch(
       `https://www.strava.com/api/v3/athletes/${athleteId}/stats`,
@@ -41,14 +47,20 @@ export async function getStravaStats() {
           Authorization: `Bearer ${accessToken}`,
         },
       }
-    ).then((res) => res.json());
+    );
 
-    const runActivities = activitiesResponse["all_run_totals"];
+    if (!activitiesResponse.ok) {
+      console.error("Could not retrieve activities");
+      return { error: "Could not retrieve activities" };
+    }
+
+    const activitiesData = await activitiesResponse.json();
+    const runActivities = activitiesData?.all_runs_totals;
 
     return {
-      totalRuns: runActivities.count,
-      totalDistance: formatDistance(runActivities.distance),
-      totalTime: formatTime(runActivities.elapsed_time),
+      totalRuns: runActivities?.count || 0,
+      totalDistance: formatDistance(runActivities?.distance || 0),
+      totalTime: formatTime(runActivities?.elapsed_time || 0),
     };
   } catch (error: any) {
     console.error(error);
