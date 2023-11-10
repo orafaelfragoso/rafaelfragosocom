@@ -6,11 +6,17 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { getDiscordMembers } from "@/actions/discord";
+// import { getDiscordMembers } from "@/actions/discord";
 import { siteConfig } from "@/config/site";
 
 export async function CardDiscord() {
-  const data: any = await getDiscordMembers();
+  const getDiscordMembers = async function () {
+    const res = await fetch(`${process.env.BASE_URL}/api/discord`);
+    const data = await res.json();
+    return data;
+  };
+
+  const data = await getDiscordMembers();
 
   return (
     <Link href={siteConfig.links.discord} target="_blank" rel="noreferrer">
@@ -25,10 +31,10 @@ export async function CardDiscord() {
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold">
-            {data?.totalMembers || 0} members
+            {data?.totalMembers || 1039} members
           </div>
           <p className="text-xs text-muted-foreground">
-            {data?.onlineMembers || 0} online now
+            {data?.onlineMembers || 56} online now
           </p>
         </CardContent>
       </Card>
