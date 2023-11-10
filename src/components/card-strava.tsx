@@ -10,7 +10,11 @@ import { getStravaStats } from "@/actions/strava";
 import { siteConfig } from "@/config/site";
 
 export async function CardStrava() {
-  const data: any = await getStravaStats();
+  const getStrava = async function () {
+    return await getStravaStats();
+  };
+
+  const data = await getStrava();
 
   return (
     <Link href={siteConfig.links.strava} target="_blank" rel="noreferrer">

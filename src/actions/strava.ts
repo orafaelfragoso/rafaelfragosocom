@@ -32,8 +32,7 @@ export async function getStravaStats() {
     });
 
     if (!tokenResponse.ok) {
-      console.error("Could not verify credentials");
-      return { error: "Could not verify credentials" };
+      throw new Error("could not verify credentials");
     }
 
     const tokenData = await tokenResponse.json();
@@ -49,8 +48,7 @@ export async function getStravaStats() {
     );
 
     if (!activitiesResponse.ok) {
-      console.error("Could not retrieve activities");
-      return { error: "Could not retrieve activities" };
+      throw new Error("could not retrieve activities");
     }
 
     const activitiesData = await activitiesResponse.json();
@@ -63,6 +61,11 @@ export async function getStravaStats() {
     };
   } catch (error: any) {
     console.error(error);
-    return { error: error?.message || "Something wrong" };
+    return {
+      error: error?.message,
+      totalRuns: 0,
+      totalDistance: formatDistance(0),
+      totalTime: formatTime(0),
+    };
   }
 }
