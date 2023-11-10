@@ -6,15 +6,16 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { getStravaStats } from "@/actions/strava";
 import { siteConfig } from "@/config/site";
 
 export async function CardStrava() {
-  const getStrava = async function () {
-    return await getStravaStats();
+  const getStravaStats = async function () {
+    const res = await fetch(`${process.env.BASE_URL}/api/strava`);
+    const data = await res.json();
+    return data;
   };
 
-  const data = await getStrava();
+  const data = await getStravaStats();
 
   return (
     <Link href={siteConfig.links.strava} target="_blank" rel="noreferrer">
