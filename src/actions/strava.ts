@@ -42,7 +42,6 @@ export async function getStravaStats() {
     const activitiesResponse = await fetch(
       `https://www.strava.com/api/v3/athletes/${athleteId}/stats`,
       {
-        next: { revalidate: 3600 },
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -55,7 +54,7 @@ export async function getStravaStats() {
     }
 
     const activitiesData = await activitiesResponse.json();
-    const runActivities = activitiesData?.all_runs_totals;
+    const runActivities = activitiesData?.all_run_totals;
 
     return {
       totalRuns: runActivities?.count || 0,
