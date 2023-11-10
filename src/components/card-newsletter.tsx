@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import * as z from "zod";
@@ -24,6 +24,7 @@ import { Portal } from "@/components/portal";
 import { useAudio } from "@/hooks/use-audio";
 import Confetti from "react-confetti";
 import { subscribe } from "@/actions/newsletter";
+import { AudioContext } from "@/components/audio-provider";
 
 export type CardNewsletterProps = {
   className?: string;
@@ -42,6 +43,7 @@ export function CardNewsletter({ className }: CardNewsletterProps) {
     typeof window !== "undefined"
       ? window.location.origin
       : process.env.BASE_URL;
+  const { audioAllowed } = useContext(AudioContext);
   const [exploding, setExploding] = useState(false);
   const { play, volume } = useAudio(`${baseUrl}/coin.wav`);
 
@@ -61,8 +63,10 @@ export function CardNewsletter({ className }: CardNewsletterProps) {
         throw new Error();
       }
 
-      volume(0.5);
-      play();
+      if (audioAllowed) {
+        volume(0.5);
+        play();
+      }
       setExploding(true);
       form.reset();
     } catch (error) {

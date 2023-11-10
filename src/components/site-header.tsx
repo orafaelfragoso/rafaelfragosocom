@@ -8,6 +8,7 @@ import { ModeToggle } from "@/components/mode-toggle";
 import { buttonVariants } from "@/components/ui/button";
 import { MainNavBorder } from "@/components/main-nav-border";
 import { LinkWithFeedback } from "@/components/link-with-feedback";
+import { AudioToggle } from "@/components/audio-toggle";
 
 export function SiteHeader() {
   return (
@@ -33,25 +34,8 @@ export function SiteHeader() {
                   "w-9 px-0"
                 )}
               >
-                <Icons.gitHub className="h-4 w-4" />
+                <Icons.github className="h-4 w-4" />
                 <span className="sr-only">GitHub</span>
-              </div>
-            </LinkWithFeedback>
-            <LinkWithFeedback
-              href={siteConfig.links.twitter}
-              target="_blank"
-              rel="noreferrer"
-            >
-              <div
-                className={cn(
-                  buttonVariants({
-                    variant: "ghost",
-                  }),
-                  "w-9 px-0"
-                )}
-              >
-                <Icons.twitter className="h-3 w-3 fill-current" />
-                <span className="sr-only">Twitter</span>
               </div>
             </LinkWithFeedback>
             <LinkWithFeedback
@@ -72,6 +56,7 @@ export function SiteHeader() {
               </div>
             </LinkWithFeedback>
             <ModeToggle />
+            <AudioToggle />
           </nav>
         </div>
       </div>

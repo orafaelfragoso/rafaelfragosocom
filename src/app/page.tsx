@@ -1,7 +1,4 @@
-import { Suspense } from "react";
 import Image from "next/image";
-import Link from "next/link";
-import { ArrowRightIcon } from "@radix-ui/react-icons";
 
 import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
@@ -11,27 +8,22 @@ import {
   PageHeaderDescription,
   PageHeaderHeading,
 } from "@/components/page-header";
-import { Button, buttonVariants } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
+import { buttonVariants } from "@/components/ui/button";
 import avatarImage from "../../public/avatar.png";
 import { CardStrava } from "@/components/card-strava";
 import { CardDiscord } from "@/components/card-discord";
-import { CardSkeleton } from "@/components/card-skeleton";
 import { CardNewsletter } from "@/components/card-newsletter";
+import { LinkWithFeedback } from "@/components/link-with-feedback";
 
 export default function Home() {
   return (
     <div className="container relative">
       <PageHeader className="pb-8">
-        <Link
-          href="#"
-          className="inline-flex items-center rounded-lg bg-muted px-3 py-1 text-sm font-medium"
-        >
-          🎉 <Separator className="mx-2 h-4" orientation="vertical" />{" "}
-          <span className="sm:hidden">Tech blog on steroids.</span>
-          <span className="hidden sm:inline">A new tech blog on steroids!</span>
-          <ArrowRightIcon className="ml-1 h-4 w-4" />
-        </Link>
+        <span className="animate-border rounded-lg inline-block bg-transparent from-purple-500 via-red-500 to-pink-500 p-0.5 bg-gradient-to-r">
+          <span className="block bg-background rounded-md px-2 py-1 text-foreground text-xs font-semibold">
+            Available for hire
+          </span>
+        </span>
         <PageHeaderHeading>
           I&apos;m a Senior Software Engineer
         </PageHeaderHeading>
@@ -44,24 +36,74 @@ export default function Home() {
           {/* <Link href="#" className={cn(buttonVariants())}>
             Read the blog
           </Link> */}
-          <Link
+          <LinkWithFeedback
+            href={siteConfig.links.linkedin}
             target="_blank"
             rel="noreferrer"
+          >
+            <div
+              className={cn(
+                buttonVariants({
+                  variant: "outline",
+                }),
+                "w-9 px-0"
+              )}
+            >
+              <Icons.linkedin className="h-5 w-5 fill-current" />
+              <span className="sr-only">Linkedin</span>
+            </div>
+          </LinkWithFeedback>
+          <LinkWithFeedback
             href={siteConfig.links.github}
-            className={cn(buttonVariants({ variant: "outline" }))}
-          >
-            <Icons.gitHub className="mr-2 h-4 w-4" />
-            GitHub
-          </Link>
-          <Link
             target="_blank"
             rel="noreferrer"
-            href={siteConfig.links.instagram}
-            className={cn(buttonVariants({ variant: "outline" }))}
           >
-            <Icons.instagram className="mr-2 h-4 w-4" />
-            Instagram
-          </Link>
+            <div
+              className={cn(
+                buttonVariants({
+                  variant: "outline",
+                }),
+                "w-9 px-0"
+              )}
+            >
+              <Icons.github className="h-5 w-5 fill-current" />
+              <span className="sr-only">Github</span>
+            </div>
+          </LinkWithFeedback>
+          <LinkWithFeedback
+            href={siteConfig.links.twitter}
+            target="_blank"
+            rel="noreferrer"
+          >
+            <div
+              className={cn(
+                buttonVariants({
+                  variant: "outline",
+                }),
+                "w-9 px-0"
+              )}
+            >
+              <Icons.twitter className="h-5 w-5 fill-current" />
+              <span className="sr-only">Twitter</span>
+            </div>
+          </LinkWithFeedback>
+          <LinkWithFeedback
+            href={siteConfig.links.instagram}
+            target="_blank"
+            rel="noreferrer"
+          >
+            <div
+              className={cn(
+                buttonVariants({
+                  variant: "outline",
+                }),
+                "w-9 px-0"
+              )}
+            >
+              <Icons.instagram className="h-5 w-5 fill-current" />
+              <span className="sr-only">Instagram</span>
+            </div>
+          </LinkWithFeedback>
         </div>
         <Image
           src={avatarImage}

@@ -27,7 +27,7 @@ export const navConfig: NavConfig = {
     {
       title: "Github",
       href: siteConfig.links.github,
-      icon: Icons.gitHub,
+      icon: Icons.github,
     },
     {
       title: "LinkedIn",
