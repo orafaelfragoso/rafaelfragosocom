@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import {
   Card,
@@ -6,17 +8,17 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-// import { getDiscordMembers } from "@/actions/discord";
 import { siteConfig } from "@/config/site";
+import { useApi } from "@/hooks/use-api";
+import { Skeleton } from "@/components/ui/skeleton";
 
-export async function CardDiscord() {
-  const getDiscordMembers = async function () {
-    const res = await fetch(`${process.env.BASE_URL}/api/discord`);
-    const data = await res.json();
-    return data;
-  };
+type ApiResponse = {
+  totalMembers: number;
+  onlineMembers: number;
+};
 
-  const data = await getDiscordMembers();
+export function CardDiscord() {
+  const { data, loading } = useApi<ApiResponse>("/api/discord");
 
   return (
     <Link href={siteConfig.links.discord} target="_blank" rel="noreferrer">
@@ -31,11 +33,19 @@ export async function CardDiscord() {
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold">
-            {data?.totalMembers || 1039} members
+            {loading ? (
+              <Skeleton className="h-4 w-full mb-2" />
+            ) : (
+              `${data?.totalMembers} members`
+            )}
           </div>
-          <p className="text-xs text-muted-foreground">
-            {data?.onlineMembers || 56} online now
-          </p>
+          <div className="text-xs text-muted-foreground">
+            {loading ? (
+              <Skeleton className="h-4 w-full" />
+            ) : (
+              `${data?.onlineMembers} online now`
+            )}
+          </div>
         </CardContent>
       </Card>
     </Link>

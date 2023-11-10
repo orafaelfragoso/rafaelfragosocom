@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import {
   Card,
@@ -7,15 +9,17 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { siteConfig } from "@/config/site";
+import { useApi } from "@/hooks/use-api";
+import { Skeleton } from "@/components/ui/skeleton";
 
-export async function CardStrava() {
-  const getStravaStats = async function () {
-    const res = await fetch(`${process.env.BASE_URL}/api/strava`);
-    const data = await res.json();
-    return data;
-  };
+type ApiResponse = {
+  totalRuns: number;
+  totalDistance: string;
+  totalTime: string;
+};
 
-  const data = await getStravaStats();
+export function CardStrava() {
+  const { data, loading } = useApi<ApiResponse>("/api/strava");
 
   return (
     <Link href={siteConfig.links.strava} target="_blank" rel="noreferrer">
@@ -27,10 +31,16 @@ export async function CardStrava() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold">{data?.totalDistance || 0}</div>
-          <p className="text-xs text-muted-foreground">
-            {data?.totalTime || 0}
-          </p>
+          <div className="text-2xl font-bold">
+            {loading ? (
+              <Skeleton className="h-4 w-full mb-2" />
+            ) : (
+              data?.totalDistance
+            )}
+          </div>
+          <div className="text-xs text-muted-foreground">
+            {loading ? <Skeleton className="h-4 w-full" /> : data?.totalTime}
+          </div>
         </CardContent>
       </Card>
     </Link>

@@ -75,12 +75,8 @@ export default function Home() {
 
       <div className="flex flex-col lg:flex-row gap-4">
         <CardNewsletter className="md:basis-2/3" />
-        <Suspense fallback={<CardSkeleton className="md:basis-1/3" />}>
-          <CardDiscord />
-        </Suspense>
-        <Suspense fallback={<CardSkeleton className="md:basis-1/3" />}>
-          <CardStrava />
-        </Suspense>
+        <CardDiscord />
+        <CardStrava />
       </div>
     </div>
   );

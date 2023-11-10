@@ -36,7 +36,6 @@ export async function GET() {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
-        next: { revalidate: 3600 * 24 },
       }
     );
 
