@@ -17,7 +17,7 @@ type NavConfig = {
 };
 
 export const navConfig: NavConfig = {
-  main: [],
+  main: [{ title: "Blog", href: "blog", description: "Read my blog posts" }],
   social: [
     {
       title: "X (Twitter)",

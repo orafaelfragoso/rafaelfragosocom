@@ -1,9 +1,15 @@
 "use client";
 
-import * as React from "react";
+import { useEffect, useState, useCallback, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { DialogProps } from "@radix-ui/react-alert-dialog";
-import { LaptopIcon, MoonIcon, SunIcon } from "@radix-ui/react-icons";
+import {
+  LaptopIcon,
+  MoonIcon,
+  SunIcon,
+  FileTextIcon,
+  Link1Icon,
+} from "@radix-ui/react-icons";
 import { useTheme } from "next-themes";
 
 import { cn } from "@/lib/utils";
@@ -18,13 +24,30 @@ import {
   CommandSeparator,
 } from "@/components/ui/command";
 import { navConfig } from "@/config/navigation";
+import { allPosts } from "contentlayer/generated";
+import Minisearch from "minisearch";
 
 export function CommandMenu({ ...props }: DialogProps) {
   const router = useRouter();
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const searchResults = useMemo(() => {
+    if (searchTerm.length === 0) return [];
+
+    const index = new Minisearch({
+      fields: ["title", "description"],
+      storeFields: ["_id", "title", "slug"],
+    });
+
+    index.addAll(allPosts.map((post) => ({ ...post, id: post._id })));
+
+    return index.search(searchTerm, { boost: { title: 2 }, prefix: true });
+  }, [searchTerm]);
+
   const { setTheme } = useTheme();
 
-  React.useEffect(() => {
+  useEffect(() => {
     const down = (e: KeyboardEvent) => {
       if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
         e.preventDefault();
@@ -36,7 +59,7 @@ export function CommandMenu({ ...props }: DialogProps) {
     return () => document.removeEventListener("keydown", down);
   }, []);
 
-  const runCommand = React.useCallback((command: () => unknown) => {
+  const runCommand = useCallback((command: () => unknown) => {
     setOpen(false);
     command();
   }, []);
@@ -57,9 +80,44 @@ export function CommandMenu({ ...props }: DialogProps) {
         </kbd>
       </Button>
       <CommandDialog open={open} onOpenChange={setOpen}>
-        <CommandInput placeholder="Type a command or search..." />
+        <CommandInput
+          placeholder="Type a command or search..."
+          onValueChange={(value) => setSearchTerm(value)}
+        />
         <CommandList>
           <CommandEmpty>No results found.</CommandEmpty>
+          {navConfig.main.length > 0 && (
+            <CommandGroup heading="Navigation">
+              {navConfig.main.map((nav) => (
+                <CommandItem
+                  key={nav.href}
+                  value={nav.title}
+                  onSelect={() => {
+                    runCommand(() => router.push(nav.href));
+                  }}
+                >
+                  <Link1Icon className="mr-2 h-4 w-4" />
+                  {nav.title}
+                </CommandItem>
+              ))}
+            </CommandGroup>
+          )}
+          {searchResults.length > 0 && (
+            <CommandGroup heading="Posts">
+              {searchResults.map((post) => (
+                <CommandItem
+                  key={post._id}
+                  value={post.title}
+                  onSelect={() => {
+                    runCommand(() => router.push(post.slug));
+                  }}
+                >
+                  <FileTextIcon className="mr-2 h-4 w-4" />
+                  {post.title}
+                </CommandItem>
+              ))}
+            </CommandGroup>
+          )}
           <CommandGroup heading="Links">
             {navConfig.social.map(({ icon: Icon, ...navItem }) => (
               <CommandItem

@@ -1,13 +1,8 @@
-import { siteConfig } from "@/config/site";
-import { cn } from "@/lib/utils";
 import { CommandMenu } from "@/components/command-menu";
-import { Icons } from "@/components/icons";
 import { MainNav } from "@/components/main-nav";
 import { MobileNav } from "@/components/mobile-nav";
 import { ModeToggle } from "@/components/mode-toggle";
-import { buttonVariants } from "@/components/ui/button";
 import { MainNavBorder } from "@/components/main-nav-border";
-import { LinkWithFeedback } from "@/components/link-with-feedback";
 import { AudioToggle } from "@/components/audio-toggle";
 
 export function SiteHeader() {
@@ -21,40 +16,6 @@ export function SiteHeader() {
             <CommandMenu />
           </div>
           <nav className="flex items-center">
-            <LinkWithFeedback
-              href={siteConfig.links.github}
-              target="_blank"
-              rel="noreferrer"
-            >
-              <div
-                className={cn(
-                  buttonVariants({
-                    variant: "ghost",
-                  }),
-                  "w-9 px-0"
-                )}
-              >
-                <Icons.github className="h-4 w-4" />
-                <span className="sr-only">GitHub</span>
-              </div>
-            </LinkWithFeedback>
-            <LinkWithFeedback
-              href={siteConfig.links.linkedin}
-              target="_blank"
-              rel="noreferrer"
-            >
-              <div
-                className={cn(
-                  buttonVariants({
-                    variant: "ghost",
-                  }),
-                  "w-9 px-0"
-                )}
-              >
-                <Icons.linkedin className="h-5 w-5 fill-current" />
-                <span className="sr-only">Linkedin</span>
-              </div>
-            </LinkWithFeedback>
             <ModeToggle />
             <AudioToggle />
           </nav>
