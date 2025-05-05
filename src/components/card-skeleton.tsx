@@ -1,17 +1,11 @@
-import {
-  Card,
-  CardDescription,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Skeleton } from '@/components/ui/skeleton'
 
 export type CardSkeletonProps = {
-  className?: string;
-};
+  className?: string
+}
 
-export function CardSkeleton({ className = "" }: CardSkeletonProps) {
+export function CardSkeleton({ className = '' }: CardSkeletonProps) {
   return (
     <Card className={`flex-1 w-full ${className}`}>
       <CardHeader className="space-y-2 pb-2">
@@ -27,5 +21,5 @@ export function CardSkeleton({ className = "" }: CardSkeletonProps) {
         <Skeleton className="h-12 w-full" />
       </CardContent>
     </Card>
-  );
+  )
 }

@@ -1,32 +1,32 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from 'react'
 
 interface ApiResponse<T> {
-  data: T | null;
-  loading: boolean;
-  error: any;
+  data: T | null
+  loading: boolean
+  error: Error | null
 }
 
 export const useApi = <T>(apiEndpoint: string): ApiResponse<T> => {
-  const [data, setData] = useState<T | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<Error | null>(null);
+  const [data, setData] = useState<T | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<Error | null>(null)
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        setLoading(true);
-        const response = await fetch(apiEndpoint);
-        const result: T = await response.json();
-        setData(result);
-      } catch (error: any) {
-        setError(error);
+        setLoading(true)
+        const response = await fetch(apiEndpoint)
+        const result: T = await response.json()
+        setData(result)
+      } catch (error: unknown) {
+        setError(error instanceof Error ? error : new Error('An error occurred'))
       } finally {
-        setLoading(false);
+        setLoading(false)
       }
-    };
+    }
 
-    fetchData();
-  }, [apiEndpoint]);
+    fetchData()
+  }, [apiEndpoint])
 
-  return { data, loading, error };
-};
+  return { data, loading, error }
+}

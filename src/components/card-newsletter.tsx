@@ -1,82 +1,58 @@
-"use client";
+'use client'
 
-import { useContext, useState } from "react";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { SubmitHandler, useForm } from "react-hook-form";
-import * as z from "zod";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardDescription,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Portal } from "@/components/portal";
-import { useAudio } from "@/hooks/use-audio";
-import Confetti from "react-confetti";
-import { subscribe } from "@/actions/newsletter";
-import { AudioContext } from "@/components/audio-provider";
+import { subscribe } from '@/actions/newsletter'
+import { Portal } from '@/components/portal'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form'
+import { Input } from '@/components/ui/input'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useContext, useState } from 'react'
+import Confetti from 'react-confetti'
+import { type SubmitHandler, useForm } from 'react-hook-form'
+import * as z from 'zod'
 
 export type CardNewsletterProps = {
-  className?: string;
-};
+  className?: string
+}
 
 const schema = z
   .object({
-    email: z.string().email("You need a valid email address"),
+    email: z.string().email('You need a valid email address'),
   })
-  .required();
+  .required()
 
-type SchemaType = z.infer<typeof schema>;
+type SchemaType = z.infer<typeof schema>
 
 export function CardNewsletter({ className }: CardNewsletterProps) {
-  const baseUrl =
-    typeof window !== "undefined"
-      ? window.location.origin
-      : process.env.BASE_URL;
-  const { audioAllowed } = useContext(AudioContext);
-  const [exploding, setExploding] = useState(false);
-  const { play, volume } = useAudio(`${baseUrl}/coin.wav`);
+  const [exploding, setExploding] = useState(false)
 
   const form = useForm<SchemaType>({
     resolver: zodResolver(schema),
     defaultValues: {
-      email: "",
+      email: '',
     },
-  });
+  })
 
-  const { errors, isSubmitting } = form.formState;
+  const { errors, isSubmitting } = form.formState
 
   const onSubmit: SubmitHandler<SchemaType> = async (values) => {
     try {
-      const res: any = await subscribe(values.email);
-      if (res?.error) {
-        throw new Error();
+      const res = await subscribe(values.email)
+      if ('error' in res) {
+        throw new Error()
       }
 
-      if (audioAllowed) {
-        volume(0.5);
-        play();
-      }
-      setExploding(true);
-      form.reset();
+      setExploding(true)
+      form.reset()
     } catch (error) {
-      form.setError("email", {
-        type: "custom",
-        message: "E-mail is already registered",
-      });
-      form.setFocus("email");
+      form.setError('email', {
+        type: 'custom',
+        message: 'E-mail is already registered',
+      })
+      form.setFocus('email')
     }
-  };
+  }
 
   return (
     <>
@@ -84,8 +60,8 @@ export function CardNewsletter({ className }: CardNewsletterProps) {
         <CardHeader className="space-y-0 pb-2">
           <CardTitle className="text-xl font-medium">Subscribe now!</CardTitle>
           <CardDescription>
-            Join my newsletter and be informed on new articles, job alerts and
-            tech news. I promise not to spam you with ads or miracle offers.
+            Join my newsletter and be informed on new articles, job alerts and tech news. I promise not to spam you with
+            ads or miracle offers.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -103,24 +79,18 @@ export function CardNewsletter({ className }: CardNewsletterProps) {
                           type="email"
                           className={
                             errors?.email
-                              ? "dark:focus-visible:ring-red-500 focus-visible:ring-red-500 ring-red-500"
-                              : ""
+                              ? 'dark:focus-visible:ring-red-500 focus-visible:ring-red-500 ring-red-500'
+                              : ''
                           }
                           placeholder="Your best email address"
                           disabled={isSubmitting}
                         />
                       </FormControl>
-                      {errors?.email && (
-                        <FormMessage>{errors?.email.message}</FormMessage>
-                      )}
+                      {errors?.email && <FormMessage>{errors?.email.message}</FormMessage>}
                     </FormItem>
                   )}
                 />
-                <Button
-                  type="submit"
-                  className="w-full md:w-auto"
-                  disabled={isSubmitting}
-                >
+                <Button type="submit" className="w-full md:w-auto" disabled={isSubmitting}>
                   Subscribe
                 </Button>
               </div>
@@ -130,12 +100,9 @@ export function CardNewsletter({ className }: CardNewsletterProps) {
       </Card>
       {exploding && (
         <Portal>
-          <Confetti
-            recycle={false}
-            onConfettiComplete={() => setExploding(false)}
-          />
+          <Confetti recycle={false} onConfettiComplete={() => setExploding(false)} />
         </Portal>
       )}
     </>
-  );
+  )
 }

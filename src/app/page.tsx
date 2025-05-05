@@ -1,19 +1,15 @@
-import Image from "next/image";
+import Image from 'next/image'
 
-import { siteConfig } from "@/config/site";
-import { cn } from "@/lib/utils";
-import { Icons } from "@/components/icons";
-import {
-  PageHeader,
-  PageHeaderDescription,
-  PageHeaderHeading,
-} from "@/components/page-header";
-import { buttonVariants } from "@/components/ui/button";
-import avatarImage from "../../public/avatar.png";
-import { CardStrava } from "@/components/card-strava";
-import { CardDiscord } from "@/components/card-discord";
-import { CardNewsletter } from "@/components/card-newsletter";
-import { LinkWithFeedback } from "@/components/link-with-feedback";
+import { CardDiscord } from '@/components/card-discord'
+import { CardNewsletter } from '@/components/card-newsletter'
+import { CardStrava } from '@/components/card-strava'
+import { Icons } from '@/components/icons'
+import { PageHeader, PageHeaderDescription, PageHeaderHeading } from '@/components/page-header'
+import { buttonVariants } from '@/components/ui/button'
+import { siteConfig } from '@/config/site'
+import { cn } from '@/lib/utils'
+import Link from 'next/link'
+import avatarImage from '../../public/avatar.png'
 
 export default function Home() {
   return (
@@ -24,86 +20,63 @@ export default function Home() {
             Available for hire
           </span>
         </span>
-        <PageHeaderHeading>
-          I&apos;m a Senior Software Engineer
-        </PageHeaderHeading>
+        <PageHeaderHeading>I&apos;m a Senior Software Engineer</PageHeaderHeading>
         <PageHeaderDescription>
-          Welcome to my space where I enthusiastically share my passions and
-          creative endeavors with the world. You&apos;ll find everything related
-          to JavaScript and whatever else piques my interest.
+          Welcome to my space where I enthusiastically share my passions and creative endeavors with the world.
+          You&apos;ll find everything related to JavaScript and whatever else piques my interest.
         </PageHeaderDescription>
         <div className="flex w-full items-center space-x-4 pb-8 pt-4 md:pb-10">
           {/* <Link href="#" className={cn(buttonVariants())}>
             Read the blog
           </Link> */}
-          <LinkWithFeedback
-            href={siteConfig.links.linkedin}
-            target="_blank"
-            rel="noreferrer"
-          >
+          <Link href={siteConfig.links.linkedin} target="_blank" rel="noreferrer">
             <div
               className={cn(
                 buttonVariants({
-                  variant: "outline",
+                  variant: 'outline',
                 }),
-                "w-9 px-0"
-              )}
-            >
+                'w-9 px-0',
+              )}>
               <Icons.linkedin className="h-5 w-5 fill-current" />
               <span className="sr-only">Linkedin</span>
             </div>
-          </LinkWithFeedback>
-          <LinkWithFeedback
-            href={siteConfig.links.github}
-            target="_blank"
-            rel="noreferrer"
-          >
+          </Link>
+          <Link href={siteConfig.links.github} target="_blank" rel="noreferrer">
             <div
               className={cn(
                 buttonVariants({
-                  variant: "outline",
+                  variant: 'outline',
                 }),
-                "w-9 px-0"
-              )}
-            >
+                'w-9 px-0',
+              )}>
               <Icons.github className="h-5 w-5 fill-current" />
               <span className="sr-only">Github</span>
             </div>
-          </LinkWithFeedback>
-          <LinkWithFeedback
-            href={siteConfig.links.twitter}
-            target="_blank"
-            rel="noreferrer"
-          >
+          </Link>
+          <Link href={siteConfig.links.twitter} target="_blank" rel="noreferrer">
             <div
               className={cn(
                 buttonVariants({
-                  variant: "outline",
+                  variant: 'outline',
                 }),
-                "w-9 px-0"
-              )}
-            >
+                'w-9 px-0',
+              )}>
               <Icons.twitter className="h-5 w-5 fill-current" />
               <span className="sr-only">Twitter</span>
             </div>
-          </LinkWithFeedback>
-          <LinkWithFeedback
-            href={siteConfig.links.instagram}
-            target="_blank"
-            rel="noreferrer"
-          >
+          </Link>
+          <Link href={siteConfig.links.instagram} target="_blank" rel="noreferrer">
             <div
               className={cn(
                 buttonVariants({
-                  variant: "outline",
+                  variant: 'outline',
                 }),
-                "w-9 px-0"
-              )}
-            >
+                'w-9 px-0',
+              )}>
               <Icons.instagram className="h-5 w-5 fill-current" />
               <span className="sr-only">Instagram</span>
             </div>
-          </LinkWithFeedback>
+          </Link>
         </div>
         <Image
           src={avatarImage}
@@ -121,5 +94,5 @@ export default function Home() {
         <CardStrava />
       </div>
     </div>
-  );
+  )
 }

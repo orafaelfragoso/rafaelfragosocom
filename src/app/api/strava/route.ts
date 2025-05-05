@@ -1,53 +1,44 @@
-import { formatDistance, formatTime } from "@/lib/utils";
+import { formatDistance, formatTime } from '@/lib/utils'
 
 export async function GET() {
-  const athleteId = "36752953";
-  const clientId = process.env.STRAVA_CLIENT_ID;
-  const clientSecret = process.env.STRAVA_CLIENT_SECRET;
-  const refreshToken = process.env.STRAVA_REFRESH_TOKEN;
+  const athleteId = '36752953'
+  const clientId = process.env.STRAVA_CLIENT_ID
+  const clientSecret = process.env.STRAVA_CLIENT_SECRET
+  const refreshToken = process.env.STRAVA_REFRESH_TOKEN
 
   try {
-    const tokenResponse = await fetch("https://www.strava.com/oauth/token", {
-      method: "POST",
+    const tokenResponse = await fetch('https://www.strava.com/oauth/token', {
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         client_id: clientId,
         client_secret: clientSecret,
         refresh_token: refreshToken,
-        grant_type: "refresh_token",
+        grant_type: 'refresh_token',
       }),
-    });
+    })
 
     if (!tokenResponse.ok) {
-      return Response.json(
-        { error: "Couldn't retrieve token" },
-        { status: 503 }
-      );
+      return Response.json({ error: "Couldn't retrieve token" }, { status: 503 })
     }
 
-    const tokenData = await tokenResponse.json();
-    const accessToken = tokenData.access_token;
+    const tokenData = await tokenResponse.json()
+    const accessToken = tokenData.access_token
 
-    const activitiesResponse = await fetch(
-      `https://www.strava.com/api/v3/athletes/${athleteId}/stats`,
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      }
-    );
+    const activitiesResponse = await fetch(`https://www.strava.com/api/v3/athletes/${athleteId}/stats`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    })
 
     if (!activitiesResponse.ok) {
-      return Response.json(
-        { error: "Couldn't fetch activities" },
-        { status: 503 }
-      );
+      return Response.json({ error: "Couldn't fetch activities" }, { status: 503 })
     }
 
-    const activitiesData = await activitiesResponse.json();
-    const runActivities = activitiesData?.all_run_totals;
+    const activitiesData = await activitiesResponse.json()
+    const runActivities = activitiesData?.all_run_totals
 
     return Response.json(
       {
@@ -55,10 +46,10 @@ export async function GET() {
         totalDistance: formatDistance(runActivities?.distance || 0),
         totalTime: formatTime(runActivities?.elapsed_time || 0),
       },
-      { status: 200 }
-    );
-  } catch (error: any) {
-    console.error(error);
-    return Response.json({ error: "Couldn't fetch the data" }, { status: 503 });
+      { status: 200 },
+    )
+  } catch (error: unknown) {
+    console.error(error instanceof Error ? error.message : error)
+    return Response.json({ error: "Couldn't fetch the data" }, { status: 503 })
   }
 }
