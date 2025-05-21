@@ -9,7 +9,6 @@ import { buttonVariants } from '@/components/ui/button'
 import { siteConfig } from '@/config/site'
 import { cn } from '@/lib/utils'
 import Link from 'next/link'
-import avatarImage from '../../public/avatar.png'
 
 export default function Home() {
   return (
@@ -79,7 +78,7 @@ export default function Home() {
           </Link>
         </div>
         <Image
-          src={avatarImage}
+          src="/avatar.png"
           width="680"
           height="680"
           className="hidden lg:inline-block absolute top-[-64px] right-[-64px]"

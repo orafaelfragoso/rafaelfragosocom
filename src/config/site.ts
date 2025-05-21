@@ -5,7 +5,7 @@ export const siteConfig = {
   description:
     'I’m a software developer who loves to share my knowledge and passion for web development. On my blog, you’ll find articles on javascript, react, typescript, nodejs, react native, and more.',
   links: {
-    twitter: 'https://twitter.com/orafaelfragoso',
+    twitter: 'https://x.com/orafaelfragoso',
     github: 'https://github.com/orafaelfragoso',
     linkedin: 'https://linkedin.com/in/rafaelfragosom',
     instagram: 'https://instagram.com/orafaelfragoso',
