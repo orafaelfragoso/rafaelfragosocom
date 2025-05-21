@@ -1,3 +1,6 @@
+export const dynamic = 'force-static'
+export const revalidate = 86400
+
 export async function GET() {
   try {
     const serverId = '875738767841964113'
@@ -8,7 +11,6 @@ export async function GET() {
       headers: {
         Authorization: `Bot ${token}`,
       },
-      next: { revalidate: 3600 },
     })
 
     if (!response.ok) {

@@ -1,5 +1,8 @@
 import { formatDistance, formatTime } from '@/lib/utils'
 
+export const dynamic = 'force-static'
+export const revalidate = 86400
+
 export async function GET() {
   const athleteId = '36752953'
   const clientId = process.env.STRAVA_CLIENT_ID
