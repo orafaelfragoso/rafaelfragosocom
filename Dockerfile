@@ -18,6 +18,11 @@ FROM oven/bun:1.2-slim AS runner
 WORKDIR /app
 ENV NODE_ENV=production
 
+# Install wget and curl
+RUN apt-get update && \
+    apt-get install -y wget curl --no-install-recommends && \
+    rm -rf /var/lib/apt/lists/*
+
 # Create a non-root user
 RUN addgroup --system --gid 1001 bunjs && \
     adduser --system --uid 1001 nextjs
