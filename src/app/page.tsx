@@ -1,8 +1,5 @@
 import Image from 'next/image'
 
-import { CardDiscord } from '@/components/card-discord'
-import { CardNewsletter } from '@/components/card-newsletter'
-import { CardStrava } from '@/components/card-strava'
 import { Icons } from '@/components/icons'
 import { PageHeader, PageHeaderDescription, PageHeaderHeading } from '@/components/page-header'
 import { buttonVariants } from '@/components/ui/button'
@@ -87,11 +84,7 @@ export default function Home() {
         />
       </PageHeader>
 
-      <div className="flex flex-col lg:flex-row gap-4">
-        <CardNewsletter className="md:basis-2/3" />
-        <CardDiscord />
-        <CardStrava />
-      </div>
+      <div className="flex flex-col lg:flex-row gap-4" />
     </div>
   )
 }
