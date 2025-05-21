@@ -48,6 +48,8 @@
     "typescript": "^5"
   },
   "trustedDependencies": [
-    "@biomejs/biome"
+    "@biomejs/biome",
+    "@tailwindcss/oxide",
+    "sharp"
   ]
 }
