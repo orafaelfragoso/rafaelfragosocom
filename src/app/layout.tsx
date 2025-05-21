@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Script from 'next/script'
 
 import { ThemeProvider } from '@/components/providers'
 import { SiteFooter } from '@/components/site-footer'
@@ -75,6 +76,11 @@ export default function RootLayout({ children }: RootLayoutProps) {
               <SiteFooter />
             </div>
           </ThemeProvider>
+          <Script
+            defer
+            data-domain="rafaelfragoso.com"
+            src="https://plausible.workbits.io/js/script.outbound-links.js"
+          />
         </body>
       </html>
     </>
