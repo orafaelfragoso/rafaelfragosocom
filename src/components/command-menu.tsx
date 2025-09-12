@@ -1,7 +1,7 @@
 'use client'
 
 import type { DialogProps } from '@radix-ui/react-dialog'
-import { LaptopIcon, MoonIcon, SunIcon } from '@radix-ui/react-icons'
+import { Laptop, Moon, Sun } from 'lucide-react'
 import { useTheme } from 'next-themes'
 import * as React from 'react'
 
@@ -15,7 +15,7 @@ import {
   CommandList,
   CommandSeparator,
 } from '@/components/ui/command'
-import { navConfig } from '@/config/navigation'
+import config from '@/config'
 import { cn } from '@/lib/utils'
 
 export function CommandMenu({ ...props }: DialogProps) {
@@ -56,7 +56,7 @@ export function CommandMenu({ ...props }: DialogProps) {
         <CommandList>
           <CommandEmpty>No results found.</CommandEmpty>
           <CommandGroup heading="Links">
-            {navConfig.social.map(({ icon: Icon, ...navItem }) => (
+            {config.navigation.social.map(({ icon: Icon, ...navItem }) => (
               <CommandItem
                 key={navItem.href}
                 value={navItem.title}
@@ -71,15 +71,15 @@ export function CommandMenu({ ...props }: DialogProps) {
           <CommandSeparator />
           <CommandGroup heading="Theme">
             <CommandItem onSelect={() => runCommand(() => setTheme('light'))}>
-              <SunIcon className="mr-2 h-4 w-4" />
+              <Sun className="mr-2 h-4 w-4" />
               Light
             </CommandItem>
             <CommandItem onSelect={() => runCommand(() => setTheme('dark'))}>
-              <MoonIcon className="mr-2 h-4 w-4" />
+              <Moon className="mr-2 h-4 w-4" />
               Dark
             </CommandItem>
             <CommandItem onSelect={() => runCommand(() => setTheme('system'))}>
-              <LaptopIcon className="mr-2 h-4 w-4" />
+              <Laptop className="mr-2 h-4 w-4" />
               System
             </CommandItem>
           </CommandGroup>

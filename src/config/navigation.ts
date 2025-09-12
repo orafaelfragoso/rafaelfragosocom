@@ -1,17 +1,17 @@
-import { Icons } from '@/components/icons'
-import { siteConfig } from '@/config/site'
+import { Github, Instagram, Linkedin, Twitter } from 'lucide-react'
+import { siteConfig } from './site'
 
-type NavItem = {
+export type NavItem = {
   title: string
   description: string
   href: string
 }
 
-type SocialNavItem = Omit<NavItem, 'description'> & {
+export type SocialNavItem = Omit<NavItem, 'description'> & {
   icon: React.JSXElementConstructor<{ className?: string }>
 }
 
-type NavConfig = {
+export type NavConfig = {
   main: NavItem[]
   social: SocialNavItem[]
 }
@@ -20,34 +20,24 @@ export const navConfig: NavConfig = {
   main: [],
   social: [
     {
-      title: 'X (Twitter)',
-      href: siteConfig.links.twitter,
-      icon: Icons.twitter,
+      title: 'X',
+      href: siteConfig.links.x,
+      icon: Twitter,
     },
     {
       title: 'Github',
       href: siteConfig.links.github,
-      icon: Icons.github,
+      icon: Github,
     },
     {
       title: 'LinkedIn',
       href: siteConfig.links.linkedin,
-      icon: Icons.linkedin,
+      icon: Linkedin,
     },
     {
       title: 'Instagram',
       href: siteConfig.links.instagram,
-      icon: Icons.instagram,
-    },
-    {
-      title: 'Discord',
-      href: siteConfig.links.discord,
-      icon: Icons.discord,
-    },
-    {
-      title: 'Strava',
-      href: siteConfig.links.strava,
-      icon: Icons.strava,
+      icon: Instagram,
     },
   ],
 }
