@@ -16,7 +16,7 @@ const app = {
     enableTransitions: false,
   },
   features: {
-    analytics: true,
+    analytics: !env.isDev,
     commandMenu: true,
     darkMode: true,
   },

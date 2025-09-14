@@ -2,7 +2,6 @@ import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
-  typedRoutes: true,
   compress: true,
   poweredByHeader: false,
   output: 'standalone',

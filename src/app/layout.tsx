@@ -1,13 +1,14 @@
+import type { Metadata } from 'next'
 import Script from 'next/script'
-
+import { Footer } from '@/components/footer'
+import { Navbar } from '@/components/navbar'
 import { ThemeProvider } from '@/components/providers'
 import config from '@/config'
 import { fontSans } from '@/lib/fonts'
 import { cn } from '@/lib/utils'
-
 import './globals.css'
 
-export const metadata = config.metadata.default
+export const metadata: Metadata = config.metadata.default
 
 interface RootLayoutProps {
   children: React.ReactNode
@@ -16,20 +17,23 @@ interface RootLayoutProps {
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <head />
       <body className={cn('min-h-screen bg-background font-sans antialiased', fontSans.variable)}>
         <ThemeProvider
           attribute="class"
           defaultTheme={config.app.theme.defaultTheme}
           enableSystem
           disableTransitionOnChange={!config.app.theme.enableTransitions}>
-          {children}
+          <div className="relative min-h-screen flex flex-col">
+            <Navbar />
+            <main className="relative flex flex-1">{children}</main>
+            <Footer />
+          </div>
         </ThemeProvider>
         {config.app.features.analytics && (
-          <Script 
-            defer 
-            data-domain={config.site.analytics.plausible.domain} 
-            src={config.site.analytics.plausible.src} 
+          <Script
+            defer
+            data-domain={config.site.analytics.plausible.domain}
+            src={config.site.analytics.plausible.src}
           />
         )}
       </body>

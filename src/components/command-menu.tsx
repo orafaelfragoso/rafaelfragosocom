@@ -2,6 +2,7 @@
 
 import type { DialogProps } from '@radix-ui/react-dialog'
 import { Laptop, Moon, Sun } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 import { useTheme } from 'next-themes'
 import * as React from 'react'
 
@@ -15,46 +16,45 @@ import {
   CommandList,
   CommandSeparator,
 } from '@/components/ui/command'
-import config from '@/config'
-import { cn } from '@/lib/utils'
+import { config } from '@/config'
+import { useCommand } from '@/hooks/use-command'
 
 export function CommandMenu({ ...props }: DialogProps) {
-  const [open, setOpen] = React.useState(false)
   const { setTheme } = useTheme()
+  const router = useRouter()
+  const command = useCommand()
 
-  React.useEffect(() => {
-    const down = (e: KeyboardEvent) => {
-      if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
-        e.preventDefault()
-        setOpen((open) => !open)
-      }
-    }
-
-    document.addEventListener('keydown', down)
-    return () => document.removeEventListener('keydown', down)
-  }, [])
-
-  const runCommand = React.useCallback((command: () => unknown) => {
-    setOpen(false)
-    command()
-  }, [])
+  const runCommand = React.useCallback(
+    (cmd: () => unknown) => {
+      command.close()
+      cmd()
+    },
+    [command],
+  )
 
   return (
     <>
       <Button
-        variant="outline"
-        className={cn('relative w-full justify-start text-sm text-muted-foreground sm:pr-12 md:w-40 lg:w-64')}
-        onClick={() => setOpen(true)}
+        variant="ghost"
+        className="h-9 w-9 px-0 text-foreground/80 hover:text-foreground"
+        onClick={() => command.open()}
         {...props}>
-        <span className="inline-flex">Search...</span>
-        <kbd className="pointer-events-none absolute right-1.5 top-1.5 hidden h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex">
-          <span className="text-xs">⌘</span>K
-        </kbd>
+        <span className="text-xl">⌘</span>
+        <span className="sr-only">Search</span>
       </Button>
-      <CommandDialog open={open} onOpenChange={setOpen}>
+      <CommandDialog open={command.isOpen} onOpenChange={command.toggle}>
         <CommandInput placeholder="Type a command or search..." />
         <CommandList>
           <CommandEmpty>No results found.</CommandEmpty>
+          <CommandGroup heading="Pages">
+            {config.navigation.main.map((page) => (
+              <CommandItem key={page.href} value={page.title} onSelect={() => runCommand(() => router.push(page.href))}>
+                <page.icon className="mr-2 h-4 w-4" />
+                {page.title}
+              </CommandItem>
+            ))}
+          </CommandGroup>
+          <CommandSeparator />
           <CommandGroup heading="Links">
             {config.navigation.social.map(({ icon: Icon, ...navItem }) => (
               <CommandItem

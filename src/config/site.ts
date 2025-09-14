@@ -10,10 +10,9 @@ export const siteConfig = {
     email: 'hello@rafaelfragoso.com',
   },
   links: {
-    x: 'https://x.com/orafaelfragoso',
+    twitter: 'https://x.com/orafaelfragoso',
     github: 'https://github.com/orafaelfragoso',
     linkedin: 'https://linkedin.com/in/rafaelfragosom',
-    instagram: 'https://instagram.com/orafaelfragoso',
   },
   analytics: {
     plausible: {

@@ -1,10 +1,22 @@
-import { Github, Instagram, Linkedin, Twitter } from 'lucide-react'
+import {
+  FolderOpenDot,
+  Github,
+  Home,
+  Linkedin,
+  type LucideProps,
+  NotebookTabs,
+  Rss,
+  ToolCase,
+  Twitter,
+  User,
+} from 'lucide-react'
 import { siteConfig } from './site'
 
 export type NavItem = {
   title: string
   description: string
   href: string
+  icon: React.ForwardRefExoticComponent<Omit<LucideProps, 'ref'> & React.RefAttributes<SVGSVGElement>>
 }
 
 export type SocialNavItem = Omit<NavItem, 'description'> & {
@@ -17,11 +29,48 @@ export type NavConfig = {
 }
 
 export const navConfig: NavConfig = {
-  main: [],
+  main: [
+    {
+      title: 'Home',
+      href: '/',
+      description: 'Return to the homepage',
+      icon: Home,
+    },
+    {
+      title: 'About',
+      href: '/about',
+      description: 'Learn more about my background and experience',
+      icon: User,
+    },
+    {
+      title: 'Articles',
+      href: '/articles',
+      description: 'Read my thoughts',
+      icon: Rss,
+    },
+    {
+      title: 'Projects',
+      href: '/projects',
+      description: 'View my latest work and side projects',
+      icon: FolderOpenDot,
+    },
+    {
+      title: 'Uses',
+      href: '/uses',
+      description: 'See my favorite tools and gear',
+      icon: ToolCase,
+    },
+    {
+      title: 'Contact',
+      href: '/contact',
+      description: 'Get in touch for opportunities',
+      icon: NotebookTabs,
+    },
+  ],
   social: [
     {
-      title: 'X',
-      href: siteConfig.links.x,
+      title: 'Twitter',
+      href: siteConfig.links.twitter,
       icon: Twitter,
     },
     {
@@ -33,11 +82,6 @@ export const navConfig: NavConfig = {
       title: 'LinkedIn',
       href: siteConfig.links.linkedin,
       icon: Linkedin,
-    },
-    {
-      title: 'Instagram',
-      href: siteConfig.links.instagram,
-      icon: Instagram,
     },
   ],
 }
