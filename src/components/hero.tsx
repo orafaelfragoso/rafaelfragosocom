@@ -19,7 +19,7 @@ export function Hero() {
                 I fix the technical problems that make websites crash and developers pull their hair out. When systems
                 break or act weird, I dive in and make them work. Digital detective, but with more coffee.
               </p>
-              <div className="opacity-0 animate-[fade-blur-in_0.7s_ease-out_forwards_0.4s]">
+              <div className="hidden md:block md:opacity-0 md:animate-[fade-blur-in_0.7s_ease-out_forwards_0.4s]">
                 <Shortcut />
               </div>
             </div>

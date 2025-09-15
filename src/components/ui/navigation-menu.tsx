@@ -95,7 +95,7 @@ export function NavigationMenu({ pages }: NavbarProps) {
   }, [updateLinePosition, hideLinePosition])
 
   return (
-    <nav className="flex justify-center absolute left-1/2 translate-x-[-50%]" aria-label="Navigation">
+    <nav className="hidden md:flex justify-center absolute left-1/2 translate-x-[-50%]" aria-label="Navigation">
       <div className="flex relative" ref={navRef}>
         {pages.map((page) => {
           const isActive = pathname === page.href

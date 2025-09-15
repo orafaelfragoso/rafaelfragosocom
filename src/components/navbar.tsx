@@ -11,10 +11,8 @@ export function Navbar() {
       <div className="mx-auto flex h-16 items-center justify-between px-4 relative">
         {/* Logo */}
         <div className="flex items-center">
-          <Link href="/" className="flex items-center space-x-4 ml-2">
-            <span className="font-bold text-lg text-foreground/80 hover:text-foreground transition-colors duration-200 ease-in-out">
-              {config.site.name}
-            </span>
+          <Link href="/" className="flex items-center space-x-4 ml-2 logo">
+            {config.site.name}
           </Link>
         </div>
 

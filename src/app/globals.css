@@ -166,6 +166,11 @@
     @apply bg-background text-foreground;
   }
 
+  .logo {
+    font-family: var(--font-heading);
+    @apply font-bold text-2xl leading-normal text-foreground/80 hover:text-foreground transition-colors duration-200 ease-in-out;
+  }
+
   .northern-lights::before {
     content: '';
     position: absolute;

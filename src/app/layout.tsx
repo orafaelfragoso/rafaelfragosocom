@@ -4,7 +4,7 @@ import { Footer } from '@/components/footer'
 import { Navbar } from '@/components/navbar'
 import { ThemeProvider } from '@/components/providers'
 import config from '@/config'
-import { fontSans } from '@/lib/fonts'
+import { fontHeading, fontSans } from '@/lib/fonts'
 import { cn } from '@/lib/utils'
 import './globals.css'
 
@@ -16,8 +16,8 @@ interface RootLayoutProps {
 
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className={cn('min-h-screen bg-background font-sans antialiased', fontSans.variable)}>
+    <html lang="en" suppressHydrationWarning className={cn(fontSans.variable, fontHeading.variable)}>
+      <body className="min-h-screen bg-background font-sans antialiased">
         <ThemeProvider
           attribute="class"
           defaultTheme={config.app.theme.defaultTheme}
