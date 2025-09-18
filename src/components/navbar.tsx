@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { CommandMenu } from '@/components/command-menu'
-// import { NavigationMenu } from '@/components/ui/navigation-menu'
+import { NavigationMenu } from '@/components/ui/navigation-menu'
 import config from '@/config'
 
 export function Navbar() {
@@ -17,7 +17,7 @@ export function Navbar() {
         </div>
 
         {/* Desktop Navigation */}
-        {/* <NavigationMenu pages={config.navigation.main} /> */}
+        <NavigationMenu pages={config.navigation.main} />
 
         {/* Right Side Actions */}
         <div className="flex items-center space-x-2">

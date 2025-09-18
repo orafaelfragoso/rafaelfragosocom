@@ -2,7 +2,7 @@
 
 import type { DialogProps } from '@radix-ui/react-dialog'
 import { Laptop, Moon, Sun } from 'lucide-react'
-// import { useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { useTheme } from 'next-themes'
 import * as React from 'react'
 
@@ -21,7 +21,7 @@ import { useCommand } from '@/hooks/use-command'
 
 export function CommandMenu({ ...props }: DialogProps) {
   const { setTheme } = useTheme()
-  // const router = useRouter()
+  const router = useRouter()
   const command = useCommand()
 
   const runCommand = React.useCallback(
@@ -46,7 +46,7 @@ export function CommandMenu({ ...props }: DialogProps) {
         <CommandInput placeholder="Type a command or search..." />
         <CommandList>
           <CommandEmpty>No results found.</CommandEmpty>
-          {/* <CommandGroup heading="Pages">
+          <CommandGroup heading="Pages">
             {config.navigation.main.map((page) => (
               <CommandItem key={page.href} value={page.title} onSelect={() => runCommand(() => router.push(page.href))}>
                 <page.icon className="mr-2 h-4 w-4" />
@@ -54,7 +54,7 @@ export function CommandMenu({ ...props }: DialogProps) {
               </CommandItem>
             ))}
           </CommandGroup>
-          <CommandSeparator /> */}
+          <CommandSeparator />
           <CommandGroup heading="Links">
             {config.navigation.social.map(({ icon: Icon, ...navItem }) => (
               <CommandItem
