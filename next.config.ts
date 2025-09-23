@@ -1,10 +1,12 @@
 import type { NextConfig } from 'next'
+import '@/env'
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   compress: true,
   poweredByHeader: false,
   output: 'standalone',
+  transpilePackages: ['@t3-oss/env-nextjs', '@t3-oss/env-core'],
   eslint: {
     ignoreDuringBuilds: true,
   },
@@ -13,6 +15,9 @@ const nextConfig: NextConfig = {
   },
   experimental: {
     reactCompiler: true,
+  },
+  images: {
+    qualities: [100, 80],
   },
   headers: async () => [
     {
