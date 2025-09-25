@@ -35,7 +35,7 @@ const BentoGrid = React.forwardRef<HTMLDivElement, BentoGridProps & { as?: React
 BentoGrid.displayName = 'BentoGrid'
 
 const bentoGridItemVariants = cva(
-  'group/bento relative col-span-12 flex flex-col justify-between overflow-hidden rounded-xl bg-[#f8f8f8] dark:bg-[#161616] transition-all duration-500 ease-in-out hover:scale-102',
+  'group/bento relative col-span-12 flex flex-col justify-between overflow-hidden rounded-xl bg-[#f8f8f8] dark:bg-[#161616] transition-all duration-500 ease-in-out',
   {
     variants: {
       variant: {

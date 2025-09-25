@@ -6,6 +6,7 @@ import { ThemeProvider } from '@/components/providers'
 import config from '@/config'
 import { fontHeading, fontSans } from '@/lib/fonts'
 import { cn } from '@/lib/utils'
+
 import './globals.css'
 
 export const metadata: Metadata = config.metadata.default

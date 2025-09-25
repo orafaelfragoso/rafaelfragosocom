@@ -1,43 +1,41 @@
 import dynamic from 'next/dynamic'
 import Image from 'next/image'
-import { AuroraText } from '@/components/ui/aurora-text'
 import { BentoGrid, BentoGridItem } from '@/components/ui/bento-grid'
 import { Button } from '@/components/ui/button'
+import { Title } from '@/components/ui/title'
 
 const Mapbox = dynamic(() => import('@/components/mapbox').then((mod) => mod.Mapbox))
 
 export default function About() {
   return (
     <div className="container mx-auto max-w-screen-lg px-4">
-      <div className="mt-16 mb-4 space-y-6 flex flex-row gap-8">
-        <div className="flex flex-1 gap-8 flex-col">
-          <h1 className="text-3xl font-bold tracking-tight sm:text-3xl font-sans opacity-0 animate-fade-blur-in">
-            <AuroraText speed={2} colors={['#8f5cff', '#c084fc', '#6d28d9']}>
-              Stay Hungry. Stay Foolish.
-            </AuroraText>
-          </h1>
-          <p className="mx-auto text-md text-muted-foreground lg:mx-0 leading-7 font-sans opacity-0 animate-[fade-blur-in_0.7s_ease-out_forwards_0.2s]">
-            Hey, I'm Rafael Fragoso. I started as a software engineer back in 2007, working with PHP, HTML & CSS.
-          </p>
-          <p className="mx-auto text-md text-muted-foreground lg:mx-0 leading-7 font-sans opacity-0 animate-[fade-blur-in_0.7s_ease-out_forwards_0.2s]">
-            I'm Brazilian through and through - born and raised in Rio de Janeiro, the wonderful city I'm proud to call
-            home. I share my life with my incredible wife and my bright 8-year-old daughter.
-          </p>
-          <p className="mx-auto text-md text-muted-foreground lg:mx-0 leading-7 font-sans opacity-0 animate-[fade-blur-in_0.7s_ease-out_forwards_0.2s]">
-            I'm passionate about open source projects, crafting great user experiences, and optimizing performance. When
-            I'm not working or building something new, you'll find me at the beach, gaming, watching movies, or spending
-            quality time with my family.
-          </p>
-        </div>
-        <div className="hidden md:flex items-center justify-center opacity-0 animate-[fade-blur-in_0.7s_ease-out_forwards_0.6s]">
-          <Image
-            src="/profile.jpeg"
-            alt="Rafael Fragoso profile picture"
-            className="object-cover w-full h-full rounded-xl"
-            width={666}
-            height={666}
-            priority
-          />
+      <div className="mt-16 mb-4 space-y-6 flex flex-col gap-8">
+        <Title>Stay Hungry. Stay Foolish.</Title>
+        <div className="flex flex-row gap-8">
+          <div className="flex flex-1 gap-8 flex-col items-center justify-center">
+            <p className="mx-auto text-md text-secondary-foreground lg:mx-0 leading-7 font-sans opacity-0 animate-[fade-blur-in_0.7s_ease-out_forwards_0.2s]">
+              Hey, I'm Rafael Fragoso. I started as a software engineer back in 2007, working with PHP, HTML & CSS.
+            </p>
+            <p className="mx-auto text-md text-secondary-foreground lg:mx-0 leading-7 font-sans opacity-0 animate-[fade-blur-in_0.7s_ease-out_forwards_0.2s]">
+              I'm Brazilian through and through - born and raised in Rio de Janeiro, the wonderful city I'm proud to
+              call home. I share my life with my incredible wife and my bright 8-year-old daughter.
+            </p>
+            <p className="mx-auto text-md text-secondary-foreground lg:mx-0 leading-7 font-sans opacity-0 animate-[fade-blur-in_0.7s_ease-out_forwards_0.2s]">
+              I'm passionate about open source projects, crafting great user experiences, and optimizing performance.
+              When I'm not working or building something new, you'll find me at the beach, gaming, watching movies, or
+              spending quality time with my family.
+            </p>
+          </div>
+          <div className="hidden md:flex items-center justify-center opacity-0 animate-[fade-blur-in_0.7s_ease-out_forwards_0.6s]">
+            <Image
+              src="/profile.jpeg"
+              alt="Rafael Fragoso profile picture"
+              className="object-cover w-full h-full rounded-xl"
+              width={666}
+              height={666}
+              priority
+            />
+          </div>
         </div>
       </div>
       <BentoGrid>

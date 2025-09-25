@@ -42,18 +42,18 @@ export const navConfig: NavConfig = {
       description: 'Learn more about my background and experience',
       icon: User,
     },
-    {
-      title: 'Articles',
-      href: '/articles',
-      description: 'Read my thoughts',
-      icon: Rss,
-    },
-    {
-      title: 'Projects',
-      href: '/projects',
-      description: 'View my latest work and side projects',
-      icon: FolderOpenDot,
-    },
+    // {
+    //   title: 'Articles',
+    //   href: '/articles',
+    //   description: 'Read my thoughts',
+    //   icon: Rss,
+    // },
+    // {
+    //   title: 'Projects',
+    //   href: '/projects',
+    //   description: 'View my latest work and side projects',
+    //   icon: FolderOpenDot,
+    // },
     {
       title: 'Uses',
       href: '/uses',
@@ -61,9 +61,9 @@ export const navConfig: NavConfig = {
       icon: ToolCase,
     },
     {
-      title: 'Contact',
-      href: '/contact',
-      description: 'Get in touch for opportunities',
+      title: 'Hire Me',
+      href: '/hire-me',
+      description: 'Get in touch with opportunities',
       icon: NotebookTabs,
     },
   ],
