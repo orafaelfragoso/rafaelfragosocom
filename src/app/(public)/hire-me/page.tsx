@@ -44,7 +44,7 @@ export default function Uses() {
                   asChild
                   className="px-1 py-2 h-auto text-purple-500 dark:text-purple-300 hover:bg-transparent hover:text-purple-400 hover:cursor-pointer hover:no-underline">
                   <a
-                    href="https://docs.google.com/document/d/12yn6kGC6arKy_ZJL-rGYVa7giRFCqFCVRUCKzGquXBQ/export?format=pdf"
+                    href="https://docs.google.com/document/d/17t93MLoIBZZ9l5xhmQ97t-2vrqhu8Z9n1arefhBLuwU/export?format=pdf"
                     target="_blank"
                     rel="noopener noreferrer">
                     <FileDown />
