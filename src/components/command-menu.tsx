@@ -38,9 +38,10 @@ export function CommandMenu({ ...props }: DialogProps) {
         variant="ghost"
         className="h-9 w-9 px-0 text-foreground/80 hover:text-foreground"
         onClick={() => command.open()}
+        aria-label="Open command menu"
         {...props}>
         <span className="text-xl">⌘</span>
-        <span className="sr-only">Search</span>
+        <span className="sr-only">Open command menu</span>
       </Button>
       <CommandDialog open={command.isOpen} onOpenChange={command.toggle}>
         <CommandInput placeholder="Type a command or search..." />

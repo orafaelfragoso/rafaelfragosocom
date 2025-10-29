@@ -105,6 +105,7 @@ export function NavigationMenu({ pages }: NavbarProps) {
               key={page.href}
               href={page.href}
               data-nav-link
+              aria-current={isActive ? 'page' : undefined}
               className={cn(
                 'relative z-10 px-4 py-3 text-xs uppercase font-medium cursor-pointer transition-colors duration-200',
                 'text-foreground/60 hover:text-foreground/80 no-underline',

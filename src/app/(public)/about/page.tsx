@@ -1,10 +1,29 @@
 import dynamic from 'next/dynamic'
+import type { Metadata } from 'next'
+import { Suspense } from 'react'
 import Image from 'next/image'
 import { BentoGrid, BentoGridItem } from '@/components/ui/bento-grid'
 import { Button } from '@/components/ui/button'
 import { Title } from '@/components/ui/title'
+import { createMetadata } from '@/config/metadata'
 
-const Mapbox = dynamic(() => import('@/components/mapbox').then((mod) => mod.Mapbox))
+const Mapbox = dynamic(() => import('@/components/mapbox').then((mod) => mod.Mapbox), {
+  loading: () => (
+    <div className="flex flex-col gap-4">
+      <div className="flex-1 rounded-md overflow-hidden min-h-32 bg-muted animate-pulse" />
+      <div className="h-6 w-64 bg-muted animate-pulse rounded" />
+    </div>
+  ),
+})
+
+export const metadata: Metadata = createMetadata({
+  title: 'About',
+  description:
+    "I'm a software engineer from Rio de Janeiro, Brazil. Learn about my journey, my passion for open source, and the tools I use to build great user experiences.",
+  alternates: {
+    canonical: '/about',
+  },
+})
 
 export default function About() {
   return (
@@ -30,9 +49,10 @@ export default function About() {
             <Image
               src="/profile.jpeg"
               alt="Rafael Fragoso profile picture"
-              className="object-cover w-full h-full rounded-xl"
-              width={666}
-              height={666}
+              className="object-cover rounded-xl"
+              width={333}
+              height={333}
+              sizes="(max-width: 768px) 100vw, 333px"
               priority
             />
           </div>
@@ -41,7 +61,15 @@ export default function About() {
       <BentoGrid>
         <BentoGridItem mdColSpan={6} mdRowSpan={2}>
           <div className="p-4 flex flex-col flex-1 gap-4">
-            <Mapbox showDistance />
+            <Suspense
+              fallback={
+                <div className="flex flex-col gap-4">
+                  <div className="flex-1 rounded-md overflow-hidden min-h-32 bg-muted animate-pulse" />
+                  <div className="h-6 w-64 bg-muted animate-pulse rounded" />
+                </div>
+              }>
+              <Mapbox showDistance />
+            </Suspense>
           </div>
         </BentoGridItem>
         <BentoGridItem mdColSpan={6} mdRowSpan={1}>
@@ -53,7 +81,8 @@ export default function About() {
                 className="w-full h-full object-cover"
                 width={96}
                 height={96}
-                quality={100}
+                sizes="96px"
+                quality={80}
               />
             </div>
             <div className="flex-1 text-md text-muted-foreground font-sans z-10 flex flex-col gap-4">

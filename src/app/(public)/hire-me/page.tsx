@@ -1,9 +1,20 @@
+import type { Metadata } from 'next'
 import { CalendarDays, FileDown } from 'lucide-react'
 import { BentoGrid, BentoGridItem } from '@/components/ui/bento-grid'
 import { Button } from '@/components/ui/button'
 import { Title } from '@/components/ui/title'
+import { createMetadata } from '@/config/metadata'
 
-export default function Uses() {
+export const metadata: Metadata = createMetadata({
+  title: 'Hire Me',
+  description:
+    "I'm a skilled software engineer looking for new opportunities. Get in touch to discuss your project, download my resume, or schedule a meeting. Open to exciting challenges.",
+  alternates: {
+    canonical: '/hire-me',
+  },
+})
+
+export default function HireMe() {
   return (
     <div className="container mx-auto max-w-screen-lg px-4">
       <div className="mt-16 mb-4 space-y-6 flex flex-col gap-4">
