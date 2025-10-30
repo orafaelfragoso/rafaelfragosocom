@@ -50,8 +50,7 @@ function setCachedLocation(coordinates: Coordinates): void {
       timestamp: Date.now(),
     }
     localStorage.setItem(CACHE_KEY, JSON.stringify(cached))
-  } catch {
-  }
+  } catch {}
 }
 
 export function useIpLocation(): LocationResult {

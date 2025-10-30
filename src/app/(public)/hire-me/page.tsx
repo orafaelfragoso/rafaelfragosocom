@@ -1,9 +1,9 @@
-import type { Metadata } from 'next'
 import { CalendarDays, FileDown } from 'lucide-react'
+import type { Metadata } from 'next'
 import { BentoGrid, BentoGridItem } from '@/components/ui/bento-grid'
 import { Button } from '@/components/ui/button'
 import { Title } from '@/components/ui/title'
-import { createMetadata } from '@/config/metadata'
+import { createMetadata } from '@/config'
 
 export const metadata: Metadata = createMetadata({
   title: 'Hire Me',

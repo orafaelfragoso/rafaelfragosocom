@@ -141,7 +141,8 @@ export function Mapbox({ showDistance }: MapboxProps) {
           ref={mapContainerRef}
           role="img"
           aria-label="Interactive map showing distance from visitor location to Rio de Janeiro, Brazil"
-          aria-busy={isMounted ? loading : false} />
+          aria-busy={isMounted ? loading : false}
+        />
       </div>
       <div className="text-md text-muted-foreground font-sans">
         {showDistance && (

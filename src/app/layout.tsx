@@ -31,7 +31,9 @@ export default function RootLayout({ children }: RootLayoutProps) {
           disableTransitionOnChange={!config.app.theme.enableTransitions}>
           <div className="relative min-h-screen flex flex-col">
             <Navbar />
-            <main id="main-content" className="relative flex flex-1">{children}</main>
+            <main id="main-content" className="relative flex flex-1">
+              {children}
+            </main>
             <Footer />
           </div>
         </ThemeProvider>

@@ -42,18 +42,6 @@ export const navConfig: NavConfig = {
       description: 'Learn more about my background and experience',
       icon: User,
     },
-    // {
-    //   title: 'Articles',
-    //   href: '/articles',
-    //   description: 'Read my thoughts',
-    //   icon: Rss,
-    // },
-    // {
-    //   title: 'Projects',
-    //   href: '/projects',
-    //   description: 'View my latest work and side projects',
-    //   icon: FolderOpenDot,
-    // },
     {
       title: 'Uses',
       href: '/uses',

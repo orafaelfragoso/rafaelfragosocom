@@ -1,12 +1,12 @@
 import type { Metadata } from 'next'
 import { Title } from '@/components/ui/title'
 import { VerticalList, VerticalListItem } from '@/components/ui/vertical-list'
-import { createMetadata } from '@/config/metadata'
+import { createMetadata } from '@/config'
 
 export const metadata: Metadata = createMetadata({
   title: 'Uses',
   description:
-    "Discover the tools, apps, and gear I use to build software, stay productive, and create amazing user experiences. Hardware, software, and development tools.",
+    'Discover the tools, apps, and gear I use to build software, stay productive, and create amazing user experiences. Hardware, software, and development tools.',
   alternates: {
     canonical: '/uses',
   },

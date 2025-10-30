@@ -1,5 +1,5 @@
 import type { MetadataRoute } from 'next'
-import { siteConfig } from '@/config/site'
+import config from '@/config'
 
 export default function robots(): MetadataRoute.Robots {
   return {
@@ -10,6 +10,6 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ['/api/', '/_next/'],
       },
     ],
-    sitemap: `${siteConfig.url}/sitemap.xml`,
+    sitemap: `${config.site.url}/sitemap.xml`,
   }
 }

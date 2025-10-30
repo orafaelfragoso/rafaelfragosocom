@@ -1,9 +1,8 @@
 import type { MetadataRoute } from 'next'
-import { siteConfig } from '@/config/site'
-import { navConfig } from '@/config/navigation'
+import config from '@/config'
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = siteConfig.url
+  const baseUrl = config.site.url
 
   const staticRoutes: MetadataRoute.Sitemap = [
     {
@@ -12,7 +11,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'monthly',
       priority: 1,
     },
-    ...navConfig.main
+    ...config.navigation.main
       .filter((route) => route.href !== '/')
       .map((route) => ({
         url: `${baseUrl}${route.href}`,

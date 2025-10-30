@@ -1,7 +1,7 @@
 'use client'
 
-import { useEffect } from 'react'
 import { usePathname } from 'next/navigation'
+import { useEffect } from 'react'
 
 export function ViewTransitions() {
   const pathname = usePathname()
@@ -23,4 +23,3 @@ export function ViewTransitions() {
 
   return null
 }
-

@@ -1,11 +1,11 @@
-import dynamic from 'next/dynamic'
 import type { Metadata } from 'next'
-import { Activity, Suspense } from 'react'
+import dynamic from 'next/dynamic'
 import Image from 'next/image'
+import { Activity, Suspense } from 'react'
 import { BentoGrid, BentoGridItem } from '@/components/ui/bento-grid'
 import { Button } from '@/components/ui/button'
 import { Title } from '@/components/ui/title'
-import { createMetadata } from '@/config/metadata'
+import { createMetadata } from '@/config'
 
 const Mapbox = dynamic(() => import('@/components/mapbox').then((mod) => mod.Mapbox), {
   loading: () => (

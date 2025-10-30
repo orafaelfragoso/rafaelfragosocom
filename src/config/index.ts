@@ -1,12 +1,8 @@
+import { env } from './env'
 import { createMetadata, defaultMetadata } from './metadata'
 import { navConfig } from './navigation'
 import { siteConfig } from './site'
-
-const env = {
-  isDev: process.env.NODE_ENV === 'development',
-  isProd: process.env.NODE_ENV === 'production',
-  isTest: process.env.NODE_ENV === 'test',
-} as const
+import { validateConfig } from './validation'
 
 const app = {
   name: 'Rafael Fragoso Portfolio',
@@ -22,18 +18,30 @@ const app = {
   },
 } as const
 
-export const config = {
+const configData = {
   site: siteConfig,
   navigation: navConfig,
+  app,
+} as const
+
+if (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'test') {
+  validateConfig(configData)
+}
+
+export const config = {
+  ...configData,
   metadata: {
     create: createMetadata,
     default: defaultMetadata,
   },
-  app,
   env,
 } as const
 
 export default config
+
+export { createMetadata } from './metadata'
+
+export type { NavItem, SocialNavItem } from './navigation'
 
 export type Config = typeof config
 export type SiteConfig = typeof config.site

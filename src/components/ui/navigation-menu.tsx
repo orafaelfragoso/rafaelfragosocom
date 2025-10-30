@@ -5,7 +5,7 @@ import { usePathname } from 'next/navigation'
 import { useCallback, useEffect, useEffectEvent, useRef } from 'react'
 import colors from 'tailwindcss/colors'
 import { Highlighter } from '@/components/ui/highlighter'
-import type { NavItem } from '@/config/navigation'
+import type { NavItem } from '@/config'
 import { cn } from '@/lib/utils'
 
 type NavbarProps = {
