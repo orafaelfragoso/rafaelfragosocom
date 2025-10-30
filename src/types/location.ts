@@ -14,4 +14,3 @@ export interface CachedLocation {
   coordinates: Coordinates
   timestamp: number
 }
-

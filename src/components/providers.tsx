@@ -7,9 +7,7 @@ import { CommandProvider } from '@/components/command-provider'
 export function ThemeProvider({ children, ...props }: ThemeProviderProps) {
   return (
     <NextThemesProvider {...props}>
-      <CommandProvider>
-        {children}
-      </CommandProvider>
+      <CommandProvider>{children}</CommandProvider>
     </NextThemesProvider>
   )
 }

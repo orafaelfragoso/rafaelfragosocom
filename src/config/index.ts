@@ -1,4 +1,4 @@
-import type { AppConfigType, ConfigDataType, NavConfig, SiteConfigType } from '@/types/config'
+import type { AppConfigType, ConfigDataType, SiteConfigType } from '@/types/config'
 
 import { env } from './env'
 import { createMetadata, defaultMetadata } from './metadata'
@@ -37,9 +37,8 @@ export const config = {
 
 export default config
 
+export type { NavConfig, NavItem, SocialNavItem } from '@/types/config'
 export { createMetadata } from './metadata'
-
-export type { NavItem, NavConfig, SocialNavItem } from '@/types/config'
 
 export type Config = typeof config
 export type SiteConfig = typeof config.site

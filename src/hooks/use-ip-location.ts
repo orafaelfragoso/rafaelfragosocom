@@ -1,6 +1,5 @@
-import type { CachedLocation, Coordinates, LocationResult } from '@/types/location'
-
 import { useEffect, useState } from 'react'
+import type { CachedLocation, Coordinates, LocationResult } from '@/types/location'
 
 const CACHE_KEY = 'ip-location-cache'
 const CACHE_DURATION = 24 * 60 * 60 * 1000

@@ -1,9 +1,8 @@
-import type { NavConfig } from '@/types/config'
-
 import { Github, Home, Linkedin, NotebookTabs, ToolCase, Twitter, User } from 'lucide-react'
+import type { NavConfig } from '@/types/config'
 import { siteConfig } from './site'
 
-export type { NavItem, NavConfig, SocialNavItem } from '@/types/config'
+export type { NavConfig, NavItem, SocialNavItem } from '@/types/config'
 
 export const navConfig: NavConfig = {
   main: [

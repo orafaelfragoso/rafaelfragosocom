@@ -62,4 +62,3 @@ export type ConfigDataType = {
   readonly navigation: NavConfig
   readonly app: AppConfigType
 }
-

@@ -1,8 +1,7 @@
-import type { NavItem } from '@/types/config'
-import type { StructuredData } from '@/types/structured-data'
-
 import { navConfig } from '@/config/navigation'
 import { siteConfig } from '@/config/site'
+import type { NavItem } from '@/types/config'
+import type { StructuredData } from '@/types/structured-data'
 
 export type { StructuredData } from '@/types/structured-data'
 

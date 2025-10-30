@@ -4,4 +4,3 @@ export interface StructuredData {
   '@type': string
   [key: string]: unknown
 }
-

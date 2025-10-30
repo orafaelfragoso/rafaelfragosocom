@@ -1,6 +1,5 @@
-import type { Coordinates } from '@/types/location'
-
 import { useMemo } from 'react'
+import type { Coordinates } from '@/types/location'
 
 function toRadians(degrees: number): number {
   return degrees * (Math.PI / 180)

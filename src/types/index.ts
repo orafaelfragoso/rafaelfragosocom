@@ -11,4 +11,3 @@ export type {
 export type { CachedLocation, Coordinates, LocationResult } from './location'
 
 export type { StructuredData } from './structured-data'
-

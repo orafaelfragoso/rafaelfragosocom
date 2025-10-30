@@ -1,17 +1,17 @@
 # Build stage
-FROM oven/bun:1.3-slim AS builder
+FROM node:25-alpine AS builder
 WORKDIR /app
 
 # Copy only package files for better caching
-COPY package.json bun.lock* ./
-RUN bun install --frozen-lockfile
+COPY package*.json bun.lock* ./
+RUN npm install
 
 # Disable telemetry during runtime if desired
 ENV NEXT_TELEMETRY_DISABLED=1
 
 # Copy source files and build the app
 COPY . .
-RUN bun run build
+RUN npm run build
 
 # Production stage
 FROM oven/bun:1.3-slim AS runner
