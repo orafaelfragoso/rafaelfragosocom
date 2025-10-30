@@ -3,6 +3,7 @@ import type { Metadata } from 'next'
 import { PageTemplate } from '@/components/layout/page-template'
 import { BentoGrid, BentoGridItem } from '@/components/ui/bento-grid'
 import { Button } from '@/components/ui/button'
+import { Subtitle } from '@/components/ui/subtitle'
 import { Title } from '@/components/ui/title'
 import { createMetadata } from '@/config'
 
@@ -18,17 +19,19 @@ export const metadata: Metadata = createMetadata({
 export default function HireMe() {
   return (
     <PageTemplate maxWidth="screen-lg" as="article">
-      <Title>Lean Forward. I Got You.</Title>
-      <p className="text-md text-foreground leading-7 font-sans opacity-0 delay-100 animate-fade-blur-in">
-        Do you believe I have the skills and experience to help you achieve your goals? Are you working on the next
-        big thing? Are you expanding your business? Let's talk about how I can assist you.
-      </p>
+      <section aria-labelledby="hire-me-heading" className="mb-32 text-center">
+        <Title id="hire-me-heading">Lean Forward. I Got You.</Title>
+        <Subtitle>
+          Do you believe I have the skills and experience to help you achieve your goals? Are you working on the next
+          big thing? Are you expanding your business? Let's talk about how I can assist you.
+        </Subtitle>
+      </section>
       <section className="flex flex-col gap-4 opacity-0 delay-200 animate-fade-blur-in" aria-label="Contact options">
         <BentoGrid>
           <BentoGridItem mdColSpan={6} mdRowSpan={1}>
             <div className="flex flex-col justify-start items-start gap-4 p-4">
-              <h2 className="text-md font-semibold text-foreground">Schedule a Meeting</h2>
-              <p className="text-sm text-foreground font-sans">
+              <h2 className="text-md font-semibold text-[#4d4357] dark:text-foreground">Schedule a Meeting</h2>
+              <p className="text-sm text-[#4d4357] dark:text-foreground font-sans">
                 Book a meeting with me so we can get to know each other and discuss your project and how I can help
                 you achieve your goals.
               </p>
@@ -49,8 +52,8 @@ export default function HireMe() {
           </BentoGridItem>
           <BentoGridItem mdColSpan={6} mdRowSpan={1}>
             <div className="flex flex-col justify-start items-start gap-4 p-4">
-              <h2 className="text-md font-semibold text-foreground">Download my resume</h2>
-              <p className="text-sm text-foreground font-sans">
+              <h2 className="text-md font-semibold text-[#4d4357] dark:text-foreground">Download my resume</h2>
+              <p className="text-sm text-[#4d4357] dark:text-foreground font-sans">
                 If you're interested in working together, feel free to download my resume and reach out to me. I'm
                 always open to new opportunities.
               </p>

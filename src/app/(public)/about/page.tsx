@@ -91,7 +91,7 @@ export default function About() {
                   sizes="96px"
                 />
               </div>
-              <div className="flex-1 text-md text-muted-foreground font-sans z-10 flex flex-col gap-4">
+              <div className="flex-1 text-md text-[#4d4357] dark:text-foreground font-sans z-10 flex flex-col gap-4">
                 <p>
                   I run Workbits, a <span className="font-bold">Discord community</span> with over{' '}
                   <span className="font-bold">1,000</span> developers, where we share ideas, help each other, and grow
@@ -106,7 +106,7 @@ export default function About() {
             </div>
           </BentoGridItem>
           <BentoGridItem mdColSpan={3} mdRowSpan={1}>
-            <div className="flex-1 p-4 flex flex-col items-center justify-center gap-4 text-md text-muted-foreground font-sans">
+            <div className="flex-1 p-4 flex flex-col items-center justify-center gap-4 text-md text-[#4d4357] dark:text-foreground font-sans">
               <p className="text-center">
                 I'm <span className="font-bold">176cm</span> tall.
               </p>
@@ -116,7 +116,7 @@ export default function About() {
             </div>
           </BentoGridItem>
           <BentoGridItem mdColSpan={3} mdRowSpan={1}>
-            <div className="flex-1 p-4 flex flex-col items-center justify-center gap-4 text-md text-muted-foreground font-sans">
+            <div className="flex-1 p-4 flex flex-col items-center justify-center gap-4 text-md text-[#4d4357] dark:text-foreground font-sans">
               <p className="text-center">
                 I started coding when I was <span className="font-bold">13 years</span> old.
               </p>

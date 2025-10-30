@@ -163,7 +163,7 @@ export function VerticalList({ children, className }: VerticalListProps) {
   }, [])
 
   return (
-    <div ref={listRef} className={cn('relative inline-flex flex-col items-start ml-4', className)}>
+    <div ref={listRef} className={cn('relative inline-flex flex-col items-start', className)}>
       {children}
       <span
         className="absolute bg-purple-300/20 rounded opacity-0 pointer-events-none"

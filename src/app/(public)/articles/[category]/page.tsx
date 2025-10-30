@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { PageTemplate } from '@/components/layout/page-template'
 import { TopArticlesSection } from '@/components/top-articles-section'
+import { Subtitle } from '@/components/ui/subtitle'
 import { Title } from '@/components/ui/title'
 import { VerticalList } from '@/components/ui/vertical-list'
 import { createMetadata } from '@/config'
@@ -68,11 +69,9 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
             </li>
           </ol>
         </nav>
-        <section aria-labelledby="category-heading">
+        <section aria-labelledby="category-heading" className="mb-32 text-center">
           <Title id="category-heading">{categoryName} Articles</Title>
-          <p className="text-md text-foreground leading-7 font-sans opacity-0 delay-100 animate-fade-blur-in">
-            Explore all articles about {categoryName} and related topics.
-          </p>
+          <Subtitle>Explore all articles about {categoryName} and related topics.</Subtitle>
         </section>
         <div className="opacity-0 delay-200 animate-fade-blur-in">
           <TopArticlesSection packs={packs} />
