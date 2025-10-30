@@ -47,6 +47,8 @@ playwright-report/
 test-results/
 
 # LLM
-.cursor/
-.claude/
-CLAUDE.md
+/.cursor/
+/.cursor/*
+/.claude/
+/.claude/*
+/CLAUDE.md
