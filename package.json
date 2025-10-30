@@ -58,6 +58,7 @@
   "trustedDependencies": [
     "@biomejs/biome",
     "@tailwindcss/oxide",
+    "msw",
     "sharp"
   ]
 }
