@@ -21,18 +21,15 @@ export function Hero() {
             </div>
           </div>
 
-          <div className="flex justify-center lg:justify-end order-first lg:order-0" aria-hidden="true">
-            <div className="opacity-0 animate-[fade-blur-in_0.7s_ease-out_forwards_0.6s]">
-              <Image
-                src="/floating-avatar.png"
-                alt={`${config.site.author.name} avatar`}
-                width={512}
-                height={512}
-                sizes="(max-width: 640px) 160px, (max-width: 768px) 288px, (max-width: 1024px) 352px, (max-width: 1280px) 416px, 480px"
-                className="h-[160px] w-[160px] sm:h-[288px] sm:w-[288px] object-contain md:h-[352px] md:w-[352px] lg:h-[416px] lg:w-[416px] xl:h-[480px] xl:w-[480px] animate-float"
-                priority
-              />
-            </div>
+          <div className="flex justify-center lg:justify-end order-first lg:order-0">
+            <Image
+              src="/floating-avatar.webp"
+              alt={`${config.site.author.name} avatar`}
+              width={512}
+              height={512}
+              className="h-[160px] w-[160px] sm:h-[288px] sm:w-[288px] object-contain md:h-[352px] md:w-[352px] lg:h-[416px] lg:w-[416px] xl:h-[480px] xl:w-[480px] animate-float"
+              priority
+            />
           </div>
         </div>
       </div>

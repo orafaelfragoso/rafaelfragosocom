@@ -23,14 +23,11 @@ const nextConfig: NextConfig = {
     viewTransition: true,
     turbopackFileSystemCacheForDev: true,
   },
-
   output: 'standalone',
-
   cacheComponents: true,
 
   images: {
     formats: ['image/avif', 'image/webp'],
-    qualities: [100, 80],
     remotePatterns: [
       {
         protocol: 'https',

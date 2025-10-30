@@ -54,7 +54,7 @@ export default function About() {
             </div>
             <div className="hidden md:flex items-center justify-center opacity-0 animate-[fade-blur-in_0.7s_ease-out_forwards_0.6s]">
               <Image
-                src="/profile.jpeg"
+                src="/profile.webp"
                 alt="Rafael Fragoso profile picture"
                 className="object-cover rounded-xl"
                 width={333}
@@ -84,13 +84,12 @@ export default function About() {
             <div className="p-4 flex flex-row flex-1 gap-8 items-center relative">
               <div className="w-36 flex flex-col items-center justify-center absolute z-0 -bottom-12 -left-12 rotate-45 opacity-30 select-none">
                 <Image
-                  src="/workbits.png"
+                  src="/workbits.webp"
                   alt="Workbits discord community logo"
                   className="w-full h-full object-cover"
                   width={96}
                   height={96}
                   sizes="96px"
-                  quality={80}
                 />
               </div>
               <div className="flex-1 text-md text-muted-foreground font-sans z-10 flex flex-col gap-4">
