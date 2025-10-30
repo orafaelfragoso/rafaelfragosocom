@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { PageTemplate } from '@/components/layout/page-template'
 import { TopArticlesSection } from '@/components/top-articles-section'
+import { Button } from '@/components/ui/button'
 import { Subtitle } from '@/components/ui/subtitle'
 import { Title } from '@/components/ui/title'
 import { VerticalList } from '@/components/ui/vertical-list'
@@ -56,19 +57,6 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   return (
     <PageTemplate>
       <header>
-        <nav aria-label="Breadcrumb" className="text-sm">
-          <ol className="flex items-center gap-2 text-muted-foreground">
-            <li>
-              <Link href="/articles" className="hover:text-foreground transition-colors">
-                Articles
-              </Link>
-            </li>
-            <li aria-hidden="true">/</li>
-            <li className="text-foreground" aria-current="page">
-              {categoryName}
-            </li>
-          </ol>
-        </nav>
         <section aria-labelledby="category-heading" className="mb-32 text-center">
           <Title id="category-heading">{categoryName} Articles</Title>
           <Subtitle>Explore all articles about {categoryName} and related topics.</Subtitle>
@@ -82,13 +70,12 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
               <div key={article.slug}></div>
             ))}
           </VerticalList>
-          <nav aria-label="Category navigation">
-            <Link
-              href="/articles"
-              className="text-sm text-primary hover:underline inline-block mt-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:rounded"
-              aria-label="Go back to all articles">
-              ← Back to all articles
-            </Link>
+          <nav aria-label="Category navigation" className="flex justify-center mt-4">
+            <Button variant="outline" asChild>
+              <Link href="/articles" aria-label="Go back to all articles">
+                ← Back to all articles
+              </Link>
+            </Button>
           </nav>
         </div>
       </header>

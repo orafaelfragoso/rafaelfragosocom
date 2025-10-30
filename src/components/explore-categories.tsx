@@ -13,10 +13,10 @@ export function ExploreCategories({ categories }: ExploreCategoriesProps) {
   }
 
   return (
-    <section aria-labelledby="explore-categories-heading" className="mb-12">
+    <section aria-labelledby="explore-categories-heading" className="mb-32">
       <h2
         id="explore-categories-heading"
-        className="text-4xl font-normal text-[#4d4357] dark:text-foreground mb-16 text-center">
+        className="text-2xl font-bold text-[#4d4357] dark:text-foreground mb-16 text-center">
         Explore Categories
       </h2>
 

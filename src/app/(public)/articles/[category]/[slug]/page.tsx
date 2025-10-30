@@ -113,29 +113,6 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
     <PageTemplate maxWidth="screen-lg">
       <article itemScope itemType="https://schema.org/BlogPosting">
         <header className="flex flex-col gap-2 opacity-0 delay-100 animate-fade-blur-in">
-          <nav aria-label="Breadcrumb" className="text-sm">
-            <ol className="flex items-center gap-2 text-muted-foreground">
-              <li>
-                <Link
-                  href="/articles"
-                  className="hover:text-foreground transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:rounded">
-                  Articles
-                </Link>
-              </li>
-              <li aria-hidden="true">/</li>
-              <li>
-                <Link
-                  href={`/articles/${categorySlug}`}
-                  className="hover:text-foreground transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:rounded">
-                  {categoryName}
-                </Link>
-              </li>
-              <li aria-hidden="true">/</li>
-              <li className="text-foreground line-clamp-1" aria-current="page" itemProp="name">
-                {article.title}
-              </li>
-            </ol>
-          </nav>
           <Title itemProp="headline">{article.title}</Title>
           <div className="flex flex-col gap-2 text-sm text-muted-foreground">
             <time itemProp="datePublished" dateTime={article.date}>
