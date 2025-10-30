@@ -1,14 +1,15 @@
+import type { AppConfigType, ConfigDataType, NavConfig, SiteConfigType } from '@/types/config'
+
 import { env } from './env'
 import { createMetadata, defaultMetadata } from './metadata'
 import { navConfig } from './navigation'
 import { siteConfig } from './site'
-import { validateConfig } from './validation'
 
-const app = {
+const app: AppConfigType = {
   name: 'Rafael Fragoso Portfolio',
   version: '1.0.0',
   theme: {
-    defaultTheme: 'system' as const,
+    defaultTheme: 'system',
     enableTransitions: false,
   },
   features: {
@@ -16,16 +17,13 @@ const app = {
     commandMenu: true,
     darkMode: true,
   },
-} as const
+}
 
-const configData = {
-  site: siteConfig,
+// TypeScript will validate structure matches types at compile time
+const configData: ConfigDataType = {
+  site: siteConfig satisfies SiteConfigType,
   navigation: navConfig,
   app,
-} as const
-
-if (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'test') {
-  validateConfig(configData)
 }
 
 export const config = {
@@ -41,10 +39,9 @@ export default config
 
 export { createMetadata } from './metadata'
 
-export type { NavItem, SocialNavItem } from './navigation'
+export type { NavItem, NavConfig, SocialNavItem } from '@/types/config'
 
 export type Config = typeof config
 export type SiteConfig = typeof config.site
-export type NavConfig = typeof config.navigation
 export type AppConfig = typeof config.app
 export type EnvConfig = typeof config.env

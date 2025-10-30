@@ -1,23 +1,9 @@
+import type { CachedLocation, Coordinates, LocationResult } from '@/types/location'
+
 import { useEffect, useState } from 'react'
-
-interface Coordinates {
-  latitude: number
-  longitude: number
-}
-
-interface LocationResult {
-  coordinates: Coordinates | null
-  loading: boolean
-  error: string | null
-}
 
 const CACHE_KEY = 'ip-location-cache'
 const CACHE_DURATION = 24 * 60 * 60 * 1000
-
-interface CachedLocation {
-  coordinates: Coordinates
-  timestamp: number
-}
 
 function getCachedLocation(): Coordinates | null {
   if (typeof window === 'undefined') return null

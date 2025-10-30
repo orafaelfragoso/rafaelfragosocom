@@ -3,8 +3,10 @@ import Script from 'next/script'
 import { Footer } from '@/components/footer'
 import { Navbar } from '@/components/navbar'
 import { ThemeProvider } from '@/components/providers'
+import { StructuredData } from '@/components/structured-data'
 import config from '@/config'
 import { fontHeading, fontSans } from '@/lib/fonts'
+import { createOrganizationSchema, createPersonSchema, createWebsiteSchema } from '@/lib/structured-data'
 import { cn } from '@/lib/utils'
 
 import './globals.css'
@@ -16,9 +18,12 @@ interface RootLayoutProps {
 }
 
 export default function RootLayout({ children }: RootLayoutProps) {
+  const structuredData = [createOrganizationSchema(), createPersonSchema(), createWebsiteSchema()]
+
   return (
     <html lang="en" suppressHydrationWarning className={cn(fontSans.variable, fontHeading.variable)}>
       <body className="min-h-screen bg-background font-sans antialiased">
+        <StructuredData data={structuredData} />
         <a
           href="#main-content"
           className="absolute left-0 top-0 z-50 -translate-y-full bg-primary px-4 py-2 text-primary-foreground focus:translate-y-0 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2">

@@ -21,15 +21,7 @@ export interface BentoGridProps extends React.HTMLAttributes<HTMLDivElement>, Va
 
 const BentoGrid = React.forwardRef<HTMLDivElement, BentoGridProps & { as?: React.ElementType }>(
   ({ className, variant, as: Comp = 'section', ...props }, ref) => {
-    return (
-      <Comp
-        ref={ref}
-        role="grid"
-        aria-label="Bento Grid"
-        className={cn(bentoGridVariants({ variant }), className, 'relative')}
-        {...props}
-      />
-    )
+    return <Comp ref={ref} className={cn(bentoGridVariants({ variant }), className, 'relative')} {...props} />
   },
 )
 BentoGrid.displayName = 'BentoGrid'
@@ -96,7 +88,6 @@ const BentoGridItem = React.forwardRef<HTMLDivElement, BentoGridItemProps>(
   ({ className, variant, colSpan, mdColSpan, rowSpan, mdRowSpan, as: Comp = 'article', ...props }, ref) => (
     <Comp
       ref={ref}
-      role="gridcell"
       data-bento-item
       className={cn(
         bentoGridItemVariants({

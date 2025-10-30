@@ -5,14 +5,19 @@ export const fontHeading = FontHeading({
   variable: '--font-heading',
   display: 'swap',
   weight: ['700'],
+  preload: true,
 })
 
 export const fontSans = FontSans({
   subsets: ['latin'],
   variable: '--font-sans',
+  display: 'swap',
+  preload: true,
 })
 
 export const fontMono = FontMono({
   subsets: ['latin'],
   variable: '--font-mono',
+  display: 'swap',
+  preload: false, // Only preload if used above the fold
 })

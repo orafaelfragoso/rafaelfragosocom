@@ -1,9 +1,6 @@
-import { useMemo } from 'react'
+import type { Coordinates } from '@/types/location'
 
-interface Coordinates {
-  latitude: number
-  longitude: number
-}
+import { useMemo } from 'react'
 
 function toRadians(degrees: number): number {
   return degrees * (Math.PI / 180)

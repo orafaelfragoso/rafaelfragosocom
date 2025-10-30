@@ -1,32 +1,9 @@
-import {
-  FolderOpenDot,
-  Github,
-  Home,
-  Linkedin,
-  type LucideProps,
-  NotebookTabs,
-  Rss,
-  ToolCase,
-  Twitter,
-  User,
-} from 'lucide-react'
+import type { NavConfig } from '@/types/config'
+
+import { Github, Home, Linkedin, NotebookTabs, ToolCase, Twitter, User } from 'lucide-react'
 import { siteConfig } from './site'
 
-export type NavItem = {
-  title: string
-  description: string
-  href: string
-  icon: React.ForwardRefExoticComponent<Omit<LucideProps, 'ref'> & React.RefAttributes<SVGSVGElement>>
-}
-
-export type SocialNavItem = Omit<NavItem, 'description'> & {
-  icon: React.JSXElementConstructor<{ className?: string }>
-}
-
-export type NavConfig = {
-  main: NavItem[]
-  social: SocialNavItem[]
-}
+export type { NavItem, NavConfig, SocialNavItem } from '@/types/config'
 
 export const navConfig: NavConfig = {
   main: [

@@ -1,14 +1,33 @@
-import { createEnv } from '@t3-oss/env-nextjs'
-import { z } from 'zod'
+// TypeScript-based environment variable handling - no zod dependency
+// Validates at build time and provides type-safe access
 
-export const env = createEnv({
-  server: {},
+function getClientEnv() {
+  const mapboxToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN
 
-  client: {
-    NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN: z.string().min(1),
-  },
+  if (!mapboxToken || mapboxToken.trim() === '') {
+    throw new Error('NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN environment variable is required')
+  }
 
-  runtimeEnv: {
-    NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN: process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN,
-  },
-})
+  return {
+    NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN: mapboxToken,
+  }
+}
+
+function getServerEnv() {
+  return {
+    isDev: process.env.NODE_ENV === 'development',
+    isProd: process.env.NODE_ENV === 'production',
+    isTest: process.env.NODE_ENV === 'test',
+  }
+}
+
+// Validate client env at module load time (build/runtime)
+const clientEnv = getClientEnv()
+
+// Server env is always available
+const serverEnv = getServerEnv()
+
+export const env = {
+  ...clientEnv,
+  ...serverEnv,
+} as const

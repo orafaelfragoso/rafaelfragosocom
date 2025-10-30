@@ -4,4 +4,4 @@ export const env = {
   isTest: process.env.NODE_ENV === 'test',
 } as const
 
-export type Env = typeof env
+export type EnvConfig = typeof env

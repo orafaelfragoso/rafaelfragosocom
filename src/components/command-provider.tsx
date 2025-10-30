@@ -31,25 +31,21 @@ export function CommandProvider({ children }: CommandProviderProps) {
   }, [])
 
   const handleKeyDown = useEffectEvent((e: KeyboardEvent) => {
-    // Cmd+K (Mac) or Ctrl+K (Windows/Linux)
     if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
       e.preventDefault()
       toggle()
     }
 
-    // Escape to close
     if (e.key === 'Escape' && isOpen) {
       close()
     }
   })
 
-  // Handle keyboard shortcuts
   useEffect(() => {
     document.addEventListener('keydown', handleKeyDown)
     return () => document.removeEventListener('keydown', handleKeyDown)
-  }, [handleKeyDown])
+  }, [])
 
-  // Prevent body scroll when command menu is open
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden'
