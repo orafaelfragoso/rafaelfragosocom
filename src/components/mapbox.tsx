@@ -176,7 +176,18 @@ export function Mapbox({ showDistance }: MapboxProps) {
 
     return () => {
       isMounted = false
-      mapRef.current?.remove()
+      if (mapRef.current) {
+        try {
+          // Only remove if map is fully initialized
+          if (mapRef.current.getContainer()) {
+            mapRef.current.remove()
+          }
+        } catch (error) {
+          // Silently handle cleanup errors during unmount
+          console.debug('Map cleanup error:', error)
+        }
+        mapRef.current = null
+      }
     }
   }, [userLocation, mapStyle, loading])
 

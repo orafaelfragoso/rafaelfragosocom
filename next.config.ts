@@ -1,4 +1,5 @@
 import bundleAnalyzer from '@next/bundle-analyzer'
+import createMDX from '@next/mdx'
 import type { NextConfig } from 'next'
 import '@/env'
 
@@ -21,10 +22,10 @@ const nextConfig: NextConfig = {
   productionBrowserSourceMaps: true,
   experimental: {
     viewTransition: true,
-    turbopackFileSystemCacheForDev: true,
   },
   output: 'standalone',
   cacheComponents: true,
+  pageExtensions: ['js', 'jsx', 'md', 'mdx', 'ts', 'tsx'],
 
   images: {
     formats: ['image/avif', 'image/webp'],
@@ -62,8 +63,15 @@ const nextConfig: NextConfig = {
   ],
 }
 
+const withMDX = createMDX({
+  options: {
+    remarkPlugins: [],
+    rehypePlugins: [],
+  },
+})
+
 const withBundleAnalyzer = bundleAnalyzer({
   enabled: process.env.ANALYZE === 'true',
 })
 
-export default withBundleAnalyzer(nextConfig)
+export default withBundleAnalyzer(withMDX(nextConfig))
