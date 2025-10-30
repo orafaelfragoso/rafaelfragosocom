@@ -30,8 +30,7 @@ export function Hero() {
                 height={512}
                 sizes="(max-width: 640px) 160px, (max-width: 768px) 288px, (max-width: 1024px) 352px, (max-width: 1280px) 416px, 480px"
                 className="h-[160px] w-[160px] sm:h-[288px] sm:w-[288px] object-contain md:h-[352px] md:w-[352px] lg:h-[416px] lg:w-[416px] xl:h-[480px] xl:w-[480px] animate-float"
-                placeholder="blur"
-                blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAACXBIWXMAABYlAAAWJQFJUiTwAAAAjklEQVR4nG3MTQoDIQyG4Zyio05PNGWELAKBFAUp9v43KPGnTWUWb1x8D8IT8cZ8bkSHyxcxn5sasEgQvS3T4XRT02Am6kguQvRE5KAhQV84hrU6sBrI2UJeioE5Bt1hokSPPRH9SrRPbCCHOc7e4y2FQxXxoKfBMa4p1L3DwqEPaX+J3GffXxus/9BiCz/td3K3ykOtbwAAAABJRU5ErkJggg=="
+                priority
               />
             </div>
           </div>
