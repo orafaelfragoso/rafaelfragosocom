@@ -26,7 +26,7 @@ export default function HireMe() {
           big thing? Are you expanding your business? Let's talk about how I can assist you.
         </Subtitle>
       </section>
-      <section className="flex flex-col gap-4 opacity-0 delay-200 animate-fade-blur-in" aria-label="Contact options">
+      <section className="flex flex-col gap-4" aria-label="Contact options">
         <BentoGrid>
           <BentoGridItem mdColSpan={6} mdRowSpan={1}>
             <div className="flex flex-col justify-start items-start gap-4 p-4">

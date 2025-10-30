@@ -44,37 +44,36 @@ export default function About() {
             the tools I use to build great user experiences.
           </Subtitle>
         </section>
-        <div className="opacity-0 delay-200 animate-fade-blur-in">
-          <BentoGrid className="md:auto-rows-auto">
-            <BentoGridItem mdColSpan={4} mdRowSpan={2} className="w-fit">
-              <div className="p-4 hidden md:flex items-center justify-center opacity-0 animate-[fade-blur-in_0.7s_ease-out_forwards_0.2s]">
-                <Image
-                  src="/profile.webp"
-                  alt="Rafael Fragoso profile picture"
-                  className="object-cover rounded-xl"
-                  width={333}
-                  height={333}
-                  sizes="(max-width: 768px) 100vw, 333px"
-                  priority
-                />
-              </div>
-            </BentoGridItem>
-            <BentoGridItem mdColSpan={8} mdRowSpan={2}>
-              <div className="p-4 flex flex-col gap-4 flex-1">
-                <p className="text-md text-[#4d4357] dark:text-foreground font-sans opacity-0 animate-[fade-blur-in_0.7s_ease-out_forwards_0.2s]">
-                  Hey, I'm Rafael Fragoso. I started as a software engineer back in 2007, working with PHP, HTML & CSS.
-                </p>
-                <p className="text-md text-[#4d4357] dark:text-foreground font-sans opacity-0 animate-[fade-blur-in_0.7s_ease-out_forwards_0.2s]">
-                  I'm Brazilian through and through - born and raised in Rio de Janeiro, the wonderful city I'm proud to
-                  call home. I share my life with my incredible wife and my bright 8-year-old daughter.
-                </p>
-                <p className="text-md text-[#4d4357] dark:text-foreground font-sans opacity-0 animate-[fade-blur-in_0.7s_ease-out_forwards_0.2s]">
-                  I'm passionate about open source projects, crafting great user experiences, and optimizing
-                  performance. When I'm not working or building something new, you'll find me at the beach, gaming,
-                  watching movies, or spending quality time with my family.
-                </p>
-              </div>
-            </BentoGridItem>
+        <BentoGrid className="md:auto-rows-auto">
+          <BentoGridItem mdColSpan={4} mdRowSpan={2} className="w-fit">
+            <div className="p-4 hidden md:flex items-center justify-center">
+              <Image
+                src="/profile.webp"
+                alt="Rafael Fragoso profile picture"
+                className="object-cover rounded-xl"
+                width={333}
+                height={333}
+                sizes="(max-width: 768px) 100vw, 333px"
+                priority
+              />
+            </div>
+          </BentoGridItem>
+          <BentoGridItem mdColSpan={8} mdRowSpan={2}>
+            <div className="p-4 flex flex-col gap-4 flex-1">
+              <p className="text-md text-[#4d4357] dark:text-foreground font-sans">
+                Hey, I'm Rafael Fragoso. I started as a software engineer back in 2007, working with PHP, HTML & CSS.
+              </p>
+              <p className="text-md text-[#4d4357] dark:text-foreground font-sans">
+                I'm Brazilian through and through - born and raised in Rio de Janeiro, the wonderful city I'm proud to
+                call home. I share my life with my incredible wife and my bright 8-year-old daughter.
+              </p>
+              <p className="text-md text-[#4d4357] dark:text-foreground font-sans">
+                I'm passionate about open source projects, crafting great user experiences, and optimizing
+                performance. When I'm not working or building something new, you'll find me at the beach, gaming,
+                watching movies, or spending quality time with my family.
+              </p>
+            </div>
+          </BentoGridItem>
             <BentoGridItem mdColSpan={6} mdRowSpan={2}>
               <div className="p-4 flex flex-col flex-1 gap-4">
                 <Suspense
@@ -136,7 +135,6 @@ export default function About() {
               </div>
             </BentoGridItem>
           </BentoGrid>
-        </div>
       </PageTemplate>
     </>
   )

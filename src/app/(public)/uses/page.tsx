@@ -103,58 +103,56 @@ export default function Uses() {
           list of my favorite apps, hardware, and resources that help me get things done—or at least feel like I am.
         </Subtitle>
       </section>
-      <div className="opacity-0 delay-200 animate-fade-blur-in">
-        <BentoGrid className="md:auto-rows-auto">
-          <BentoGridItem mdColSpan={12} colSpan={12} className="justify-start!">
-            <section aria-labelledby="hardware-heading" className="flex flex-col gap-4 p-4 w-full">
-              <h2 id="hardware-heading" className="text-md font-bold ml-2 text-[#4d4357] dark:text-foreground">
-                Hardware
-              </h2>
-              <VerticalList>
-                {hardware.map((h) => (
-                  <VerticalListItem key={h.title}>
-                    <span className="text-sm text-muted-foreground p-2">
-                      <span className="font-bold text-[#4d4357] dark:text-foreground">{h.title}</span> - {h.description}
-                    </span>
-                  </VerticalListItem>
-                ))}
-              </VerticalList>
-            </section>
-          </BentoGridItem>
-          <BentoGridItem mdColSpan={12} colSpan={12} className="justify-start!">
-            <section aria-labelledby="software-heading" className="flex flex-col gap-4 p-4 w-full">
-              <h2 id="software-heading" className="text-md font-bold ml-2 text-[#4d4357] dark:text-foreground">
-                Software
-              </h2>
-              <VerticalList>
-                {software.map((s) => (
-                  <VerticalListItem key={s.title}>
-                    <span className="text-sm text-muted-foreground p-2">
-                      <span className="font-bold text-[#4d4357] dark:text-foreground">{s.title}</span> - {s.description}
-                    </span>
-                  </VerticalListItem>
-                ))}
-              </VerticalList>
-            </section>
-          </BentoGridItem>
-          <BentoGridItem mdColSpan={12} colSpan={12} className="justify-start!">
-            <section aria-labelledby="tools-heading" className="flex flex-col gap-4 p-4 w-full">
-              <h2 id="tools-heading" className="text-md font-bold ml-2 text-[#4d4357] dark:text-foreground">
-                Tools
-              </h2>
-              <VerticalList>
-                {tools.map((t) => (
-                  <VerticalListItem key={t.title}>
-                    <span className="text-sm text-muted-foreground p-2">
-                      <span className="font-bold text-[#4d4357] dark:text-foreground">{t.title}</span> - {t.description}
-                    </span>
-                  </VerticalListItem>
-                ))}
-              </VerticalList>
-            </section>
-          </BentoGridItem>
-        </BentoGrid>
-      </div>
+      <BentoGrid className="md:auto-rows-auto">
+        <BentoGridItem mdColSpan={12} colSpan={12} className="justify-start!">
+          <section aria-labelledby="hardware-heading" className="flex flex-col gap-4 p-4 w-full">
+            <h2 id="hardware-heading" className="text-md font-bold ml-2 text-[#4d4357] dark:text-foreground">
+              Hardware
+            </h2>
+            <VerticalList>
+              {hardware.map((h) => (
+                <VerticalListItem key={h.title}>
+                  <span className="text-sm text-muted-foreground p-2">
+                    <span className="font-bold text-[#4d4357] dark:text-foreground">{h.title}</span> - {h.description}
+                  </span>
+                </VerticalListItem>
+              ))}
+            </VerticalList>
+          </section>
+        </BentoGridItem>
+        <BentoGridItem mdColSpan={12} colSpan={12} className="justify-start!">
+          <section aria-labelledby="software-heading" className="flex flex-col gap-4 p-4 w-full">
+            <h2 id="software-heading" className="text-md font-bold ml-2 text-[#4d4357] dark:text-foreground">
+              Software
+            </h2>
+            <VerticalList>
+              {software.map((s) => (
+                <VerticalListItem key={s.title}>
+                  <span className="text-sm text-muted-foreground p-2">
+                    <span className="font-bold text-[#4d4357] dark:text-foreground">{s.title}</span> - {s.description}
+                  </span>
+                </VerticalListItem>
+              ))}
+            </VerticalList>
+          </section>
+        </BentoGridItem>
+        <BentoGridItem mdColSpan={12} colSpan={12} className="justify-start!">
+          <section aria-labelledby="tools-heading" className="flex flex-col gap-4 p-4 w-full">
+            <h2 id="tools-heading" className="text-md font-bold ml-2 text-[#4d4357] dark:text-foreground">
+              Tools
+            </h2>
+            <VerticalList>
+              {tools.map((t) => (
+                <VerticalListItem key={t.title}>
+                  <span className="text-sm text-muted-foreground p-2">
+                    <span className="font-bold text-[#4d4357] dark:text-foreground">{t.title}</span> - {t.description}
+                  </span>
+                </VerticalListItem>
+              ))}
+            </VerticalList>
+          </section>
+        </BentoGridItem>
+      </BentoGrid>
     </PageTemplate>
   )
 }

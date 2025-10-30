@@ -17,17 +17,8 @@ const bentoGridVariants = cva('grid w-full auto-rows-auto grid-cols-12 gap-4', {
   },
 })
 
-export interface BentoGridProps extends React.HTMLAttributes<HTMLDivElement>, VariantProps<typeof bentoGridVariants> {}
-
-const BentoGrid = React.forwardRef<HTMLDivElement, BentoGridProps & { as?: React.ElementType }>(
-  ({ className, variant, as: Comp = 'section', ...props }, ref) => {
-    return <Comp ref={ref} className={cn(bentoGridVariants({ variant }), className, 'relative')} {...props} />
-  },
-)
-BentoGrid.displayName = 'BentoGrid'
-
 const bentoGridItemVariants = cva(
-  'group/bento relative col-span-12 flex flex-col justify-between overflow-hidden rounded-xl bg-[#f8f8f8] dark:bg-[#161616] transition-all duration-500 ease-in-out',
+  'group/bento relative col-span-12 flex flex-col justify-between overflow-hidden rounded-xl bg-[#f8f8f8] dark:bg-[#161616] transition-all duration-500 ease-in-out opacity-0 animate-fade-blur-in',
   {
     variants: {
       variant: {
@@ -104,5 +95,34 @@ const BentoGridItem = React.forwardRef<HTMLDivElement, BentoGridItemProps>(
   ),
 )
 BentoGridItem.displayName = 'BentoGridItem'
+
+export interface BentoGridProps extends React.HTMLAttributes<HTMLDivElement>, VariantProps<typeof bentoGridVariants> {}
+
+const BentoGrid = React.forwardRef<HTMLDivElement, BentoGridProps & { as?: React.ElementType }>(
+  ({ className, variant, as: Comp = 'section', children, ...props }, ref) => {
+    let itemIndex = 0
+    const childrenWithDelay = React.Children.map(children, (child) => {
+      if (React.isValidElement(child) && child.type === BentoGridItem) {
+        const delay = 200 + itemIndex * 150
+        itemIndex++
+        return React.cloneElement(child, {
+          ...child.props,
+          style: {
+            ...child.props.style,
+            animationDelay: `${delay}ms`,
+          },
+        } as any)
+      }
+      return child
+    })
+
+    return (
+      <Comp ref={ref} className={cn(bentoGridVariants({ variant }), className, 'relative')} {...props}>
+        {childrenWithDelay}
+      </Comp>
+    )
+  },
+)
+BentoGrid.displayName = 'BentoGrid'
 
 export { BentoGrid, BentoGridItem }
