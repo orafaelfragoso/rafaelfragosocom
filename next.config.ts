@@ -7,15 +7,11 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
   output: 'standalone',
   transpilePackages: ['@t3-oss/env-nextjs', '@t3-oss/env-core'],
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
   typescript: {
     ignoreBuildErrors: true,
   },
-  experimental: {
-    reactCompiler: true,
-  },
+  cacheComponents: true,
+  reactCompiler: true,
   images: {
     qualities: [100, 80],
   },
