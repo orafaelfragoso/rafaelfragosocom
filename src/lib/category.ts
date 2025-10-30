@@ -29,4 +29,3 @@ export function getCategorySlug(category: string): string {
   // Otherwise, convert formatted name to slug
   return categoryNameToSlug(category)
 }
-

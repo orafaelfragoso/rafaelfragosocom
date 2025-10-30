@@ -51,4 +51,3 @@ export interface Pack {
   date?: string
   articleSlug?: string
 }
-

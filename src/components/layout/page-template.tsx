@@ -19,16 +19,12 @@ export function PageTemplate({
 }: PageTemplateProps) {
   return (
     <Component
-      className={cn(
-        'container mx-auto px-4',
-        maxWidth === '5xl' ? 'max-w-5xl' : 'max-w-screen-lg',
-        className
-      )}>
+      className={cn('container mx-auto px-4', maxWidth === '5xl' ? 'max-w-5xl' : 'max-w-screen-lg', className)}>
       <div
         className={cn(
           'mt-16 space-y-6 flex flex-col',
           bottomMargin === 4 ? 'mb-4' : 'mb-16',
-          gap === 4 ? 'gap-4' : 'gap-8'
+          gap === 4 ? 'gap-4' : 'gap-8',
         )}>
         {children}
       </div>

@@ -5,12 +5,13 @@ import { TopArticlesSection } from '@/components/top-articles-section'
 import { Subtitle } from '@/components/ui/subtitle'
 import { Title } from '@/components/ui/title'
 import { createMetadata } from '@/config'
-import { getAllArticles, getAllCategories } from '@/lib/mdx'
 import { createDefaultPacks } from '@/lib/articles'
+import { getAllArticles, getAllCategories } from '@/lib/mdx'
 
 export const metadata: Metadata = createMetadata({
   title: 'Articles',
-  description: 'Explore my articles on web development, programming, and technology. Discover useful guides, tutorials, and insights.',
+  description:
+    'Explore my articles on web development, programming, and technology. Discover useful guides, tutorials, and insights.',
   alternates: {
     canonical: '/articles',
   },
@@ -33,9 +34,10 @@ export default async function ArticlesPage() {
       <header>
         {/* Hero Section */}
         <section aria-labelledby="articles-heading" className="mb-32 text-center">
-          <Title id="articles-heading">See what&apos;s possible</Title>
+          <Title id="articles-heading">Articles & Insights</Title>
           <Subtitle>
-            Articles are shortcuts for your repeatable workflows. Discover and explore the best from the collection.
+            Personal thoughts, career stories, tutorials, and everything in between. My journey through software
+            development, programming, and life.
           </Subtitle>
         </section>
 

@@ -12,7 +12,9 @@ export function TopArticlesSection({ packs }: TopArticlesSectionProps) {
 
   return (
     <section aria-labelledby="top-articles-heading" className="mb-32">
-      <h2 id="top-articles-heading" className="text-4xl font-normal text-foreground mb-16 text-center">
+      <h2
+        id="top-articles-heading"
+        className="text-4xl font-normal text-[#4d4357] dark:text-foreground mb-16 text-center">
         Top articles
       </h2>
       <nav aria-label="Featured article collections" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">

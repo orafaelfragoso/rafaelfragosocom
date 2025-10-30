@@ -62,4 +62,3 @@ export function createDefaultPacks(articles: ArticleListItem[]): Pack[] {
     }
   })
 }
-

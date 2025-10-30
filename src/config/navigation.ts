@@ -1,4 +1,4 @@
-import { Github, Home, Linkedin, NotebookTabs, ToolCase, Twitter, User, FileText } from 'lucide-react'
+import { FileText, Github, Home, Linkedin, NotebookTabs, ToolCase, Twitter, User } from 'lucide-react'
 import type { NavConfig } from '@/types/config'
 import { siteConfig } from './site'
 

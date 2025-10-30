@@ -1,6 +1,6 @@
 import type { MetadataRoute } from 'next'
-import { getAllArticles, getAllArticlePaths, getAllCategories } from '@/lib/mdx'
 import config from '@/config'
+import { getAllArticles, getAllCategories } from '@/lib/mdx'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = config.site.url

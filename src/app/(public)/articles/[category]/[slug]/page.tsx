@@ -3,11 +3,11 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { MDXRemote } from 'next-mdx-remote/rsc'
 import { PageTemplate } from '@/components/layout/page-template'
-import { getAllArticlePaths, getArticleBySlug } from '@/lib/mdx'
 import { Title } from '@/components/ui/title'
-import { cn } from '@/lib/utils'
 import { createMetadata } from '@/config'
 import { formatCategoryName, getCategorySlug } from '@/lib/category'
+import { getAllArticlePaths, getArticleBySlug } from '@/lib/mdx'
+import { cn } from '@/lib/utils'
 
 interface ArticlePageProps {
   params: Promise<{ category: string; slug: string }>
@@ -33,7 +33,6 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
   }
 
   const categorySlug = getCategorySlug(article.category)
-  const categoryName = formatCategoryName(categorySlug)
 
   return createMetadata({
     title: article.title,
@@ -73,35 +72,20 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
   // Import components directly for server component usage
   const mdxComponents = {
     h1: ({ className, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => (
-      <h1
-        className={cn('text-4xl font-bold tracking-tight mt-8 mb-4 font-sans', className)}
-        {...props}
-      />
+      <h1 className={cn('text-4xl font-bold tracking-tight mt-8 mb-4 font-sans', className)} {...props} />
     ),
     h2: ({ className, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => (
-      <h2
-        className={cn('text-3xl font-bold tracking-tight mt-6 mb-3 font-sans', className)}
-        {...props}
-      />
+      <h2 className={cn('text-3xl font-bold tracking-tight mt-6 mb-3 font-sans', className)} {...props} />
     ),
     h3: ({ className, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => (
-      <h3
-        className={cn('text-2xl font-semibold tracking-tight mt-5 mb-2 font-sans', className)}
-        {...props}
-      />
+      <h3 className={cn('text-2xl font-semibold tracking-tight mt-5 mb-2 font-sans', className)} {...props} />
     ),
     p: ({ className, ...props }: React.HTMLAttributes<HTMLParagraphElement>) => (
-      <p
-        className={cn('text-md text-foreground leading-7 mb-4 font-sans', className)}
-        {...props}
-      />
+      <p className={cn('text-md text-foreground leading-7 mb-4 font-sans', className)} {...props} />
     ),
     a: ({ className, ...props }: React.AnchorHTMLAttributes<HTMLAnchorElement>) => (
       <a
-        className={cn(
-          'text-primary underline underline-offset-4 hover:text-primary/80 transition-colors',
-          className
-        )}
+        className={cn('text-primary underline underline-offset-4 hover:text-primary/80 transition-colors', className)}
         {...props}
       />
     ),
@@ -116,18 +100,12 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
     ),
     code: ({ className, ...props }: React.HTMLAttributes<HTMLElement>) => (
       <code
-        className={cn(
-          'relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold',
-          className
-        )}
+        className={cn('relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold', className)}
         {...props}
       />
     ),
     pre: ({ className, ...props }: React.HTMLAttributes<HTMLPreElement>) => (
-      <pre
-        className={cn('overflow-x-auto rounded-lg bg-muted p-4 mb-4 font-mono text-sm', className)}
-        {...props}
-      />
+      <pre className={cn('overflow-x-auto rounded-lg bg-muted p-4 mb-4 font-mono text-sm', className)} {...props} />
     ),
   }
 
@@ -175,7 +153,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
               </span>
             )}
             {article.tags && article.tags.length > 0 && (
-              <div className="flex flex-wrap gap-2" aria-label="Article tags">
+              <section aria-label="Article tags" className="flex flex-wrap gap-2">
                 {article.tags.map((tag) => (
                   <span
                     key={tag}
@@ -184,7 +162,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                     {tag}
                   </span>
                 ))}
-              </div>
+              </section>
             )}
           </div>
         </header>
@@ -194,7 +172,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
           <MDXRemote source={article.content} components={mdxComponents} />
         </div>
         <footer className="flex flex-col gap-4 opacity-0 delay-300 animate-fade-blur-in">
-          <hr className="border-t border-border" aria-hidden="true" />
+          <hr className="border-t border-border" />
           <nav aria-label="Article navigation">
             <ul className="flex flex-row gap-4 flex-wrap">
               <li>
@@ -220,4 +198,3 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
     </PageTemplate>
   )
 }
-

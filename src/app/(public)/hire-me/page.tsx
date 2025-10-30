@@ -32,8 +32,8 @@ export default function HireMe() {
             <div className="flex flex-col justify-start items-start gap-4 p-4">
               <h2 className="text-md font-semibold text-[#4d4357] dark:text-foreground">Schedule a Meeting</h2>
               <p className="text-sm text-[#4d4357] dark:text-foreground font-sans">
-                Book a meeting with me so we can get to know each other and discuss your project and how I can help
-                you achieve your goals.
+                Book a meeting with me so we can get to know each other and discuss your project and how I can help you
+                achieve your goals.
               </p>
               <Button
                 variant="link"

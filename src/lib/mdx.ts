@@ -1,7 +1,7 @@
-import { unstable_cache } from 'next/cache'
-import matter from 'gray-matter'
 import { readdir, readFile } from 'node:fs/promises'
 import { join } from 'node:path'
+import matter from 'gray-matter'
+import { unstable_cache } from 'next/cache'
 import type { Article, ArticleListItem, ArticleMetadata } from '@/types/article'
 import { getCategorySlug } from './category'
 
@@ -29,37 +29,37 @@ const readArticleFile = async (category: string, slug: string): Promise<Article>
 
 const getAllArticleFiles = unstable_cache(
   async (): Promise<Article[]> => {
-  const categories = await readdir(articlesDirectory, { withFileTypes: true })
+    const categories = await readdir(articlesDirectory, { withFileTypes: true })
 
-  const articles: Article[] = []
+    const articles: Article[] = []
 
-  for (const category of categories) {
-    if (!category.isDirectory()) continue
+    for (const category of categories) {
+      if (!category.isDirectory()) continue
 
-    const categoryName = category.name
-    const categoryPath = join(articlesDirectory, categoryName)
+      const categoryName = category.name
+      const categoryPath = join(articlesDirectory, categoryName)
 
-    const files = await readdir(categoryPath)
-    const mdxFiles = files.filter((file) => file.endsWith('.mdx'))
+      const files = await readdir(categoryPath)
+      const mdxFiles = files.filter((file) => file.endsWith('.mdx'))
 
-    for (const file of mdxFiles) {
-      const slug = file.replace(/\.mdx$/, '')
-      try {
-        const article = await readArticleFile(categoryName, slug)
-        articles.push(article)
-      } catch (error) {
-        console.error(`Error reading article ${categoryName}/${slug}:`, error)
+      for (const file of mdxFiles) {
+        const slug = file.replace(/\.mdx$/, '')
+        try {
+          const article = await readArticleFile(categoryName, slug)
+          articles.push(article)
+        } catch (error) {
+          console.error(`Error reading article ${categoryName}/${slug}:`, error)
+        }
       }
     }
-  }
 
-  return articles.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+    return articles.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
   },
   ['all-articles'],
   {
     tags: ['articles'],
     revalidate: false,
-  }
+  },
 )
 
 export const getAllArticles = unstable_cache(
@@ -70,7 +70,7 @@ export const getAllArticles = unstable_cache(
   {
     tags: ['articles'],
     revalidate: false,
-  }
+  },
 )
 
 export const getArticleBySlug = async (category: string, slug: string): Promise<Article | null> => {
@@ -78,7 +78,7 @@ export const getArticleBySlug = async (category: string, slug: string): Promise<
     async () => {
       try {
         return await readArticleFile(category, slug)
-      } catch (error) {
+      } catch (_error) {
         return null
       }
     },
@@ -86,7 +86,7 @@ export const getArticleBySlug = async (category: string, slug: string): Promise<
     {
       tags: ['articles'],
       revalidate: false,
-    }
+    },
   )()
 }
 
@@ -106,23 +106,21 @@ export const getArticlesByCategory = async (category: string): Promise<ArticleLi
     {
       tags: ['articles'],
       revalidate: false,
-    }
+    },
   )()
 }
 
 export const getAllCategories = unstable_cache(
   async (): Promise<string[]> => {
     const allArticles = await getAllArticleFiles()
-    const categories = new Set(
-      allArticles.map((article) => getCategorySlug(article.category))
-    )
+    const categories = new Set(allArticles.map((article) => getCategorySlug(article.category)))
     return Array.from(categories).sort()
   },
   ['all-categories'],
   {
     tags: ['articles'],
     revalidate: false,
-  }
+  },
 )
 
 export const getAllArticlePaths = unstable_cache(
@@ -137,6 +135,5 @@ export const getAllArticlePaths = unstable_cache(
   {
     tags: ['articles'],
     revalidate: false,
-  }
+  },
 )
-
