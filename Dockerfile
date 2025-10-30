@@ -1,9 +1,9 @@
 # Build stage
-FROM oven/bun:1.2-slim AS builder
+FROM oven/bun:1.3-slim AS builder
 WORKDIR /app
 
 # Copy only package files for better caching
-COPY package.json bun.lockb* ./
+COPY package.json bun.lock* ./
 RUN bun install --frozen-lockfile
 
 # Disable telemetry during runtime if desired
@@ -14,7 +14,7 @@ COPY . .
 RUN bun run build
 
 # Production stage
-FROM oven/bun:1.2-slim AS runner
+FROM oven/bun:1.3-slim AS runner
 WORKDIR /app
 ENV NODE_ENV=production
 
@@ -41,4 +41,4 @@ ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
 
 # Start the application
-CMD ["bun", "server.js"]
+CMD ["bun", "--bun", "server.js"]
