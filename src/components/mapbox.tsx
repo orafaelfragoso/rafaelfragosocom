@@ -3,7 +3,7 @@
 import type { LngLatBoundsLike, LngLatLike } from 'mapbox-gl'
 import mapboxgl from 'mapbox-gl'
 import { useTheme } from 'next-themes'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { Activity, useEffect, useMemo, useRef, useState } from 'react'
 import { env } from '@/env'
 import { useDistance } from '@/hooks/use-distance'
 import { useIpLocation } from '@/hooks/use-ip-location'
@@ -71,7 +71,7 @@ export function Mapbox({ showDistance }: MapboxProps) {
             headers: {},
           }
         }
-        return null
+        return { url, headers: {} }
       },
     })
 
@@ -154,7 +154,9 @@ export function Mapbox({ showDistance }: MapboxProps) {
               </>
             ) : (
               <>
-                <span className="inline-block w-16 h-4 bg-muted animate-pulse rounded mx-1" aria-hidden="true" />
+                <Activity aria-label="Loading distance">
+                  <span className="inline-block w-16 h-4 bg-muted animate-pulse rounded mx-1" />
+                </Activity>
                 according to your ip address.
               </>
             )}

@@ -1,6 +1,6 @@
 import dynamic from 'next/dynamic'
 import type { Metadata } from 'next'
-import { Suspense } from 'react'
+import { Activity, Suspense } from 'react'
 import Image from 'next/image'
 import { BentoGrid, BentoGridItem } from '@/components/ui/bento-grid'
 import { Button } from '@/components/ui/button'
@@ -9,9 +9,10 @@ import { createMetadata } from '@/config/metadata'
 
 const Mapbox = dynamic(() => import('@/components/mapbox').then((mod) => mod.Mapbox), {
   loading: () => (
-    <div className="flex flex-col gap-4">
-      <div className="flex-1 rounded-md overflow-hidden min-h-32 bg-muted animate-pulse" />
-      <div className="h-6 w-64 bg-muted animate-pulse rounded" />
+    <div className="flex flex-col gap-4 items-center justify-center min-h-32">
+      <Activity aria-label="Loading map">
+        <div className="flex-1 rounded-md overflow-hidden min-h-32 bg-muted animate-pulse" />
+      </Activity>
     </div>
   ),
 })
@@ -63,9 +64,10 @@ export default function About() {
           <div className="p-4 flex flex-col flex-1 gap-4">
             <Suspense
               fallback={
-                <div className="flex flex-col gap-4">
-                  <div className="flex-1 rounded-md overflow-hidden min-h-32 bg-muted animate-pulse" />
-                  <div className="h-6 w-64 bg-muted animate-pulse rounded" />
+                <div className="flex flex-col gap-4 items-center justify-center min-h-32">
+                  <Activity aria-label="Loading map">
+                    <div className="flex-1 rounded-md overflow-hidden min-h-32 bg-muted animate-pulse" />
+                  </Activity>
                 </div>
               }>
               <Mapbox showDistance />

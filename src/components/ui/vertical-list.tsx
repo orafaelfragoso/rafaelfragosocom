@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useEffect, useRef } from 'react'
+import { useCallback, useEffect, useEffectEvent, useRef } from 'react'
 import { cn } from '@/lib/utils'
 
 type VerticalListProps = {
@@ -20,7 +20,7 @@ export function VerticalList({ children, className }: VerticalListProps) {
   const rafRef = useRef<number | null>(null)
   const isHighlightVisibleRef = useRef(false)
 
-  const updateHighlightPosition = useCallback((target: HTMLElement, shouldAnimate = true) => {
+  const updateHighlightPosition = useEffectEvent((target: HTMLElement, shouldAnimate = true) => {
     const list = listRef.current
     const highlight = highlightRef.current
     if (!list || !highlight) return
@@ -47,9 +47,9 @@ export function VerticalList({ children, className }: VerticalListProps) {
 
       isHighlightVisibleRef.current = true
     })
-  }, [])
+  })
 
-  const hideHighlightPosition = useCallback(() => {
+  const hideHighlightPosition = useEffectEvent(() => {
     const highlight = highlightRef.current
     if (!highlight) return
 
@@ -62,9 +62,9 @@ export function VerticalList({ children, className }: VerticalListProps) {
       highlight.style.opacity = '0'
       isHighlightVisibleRef.current = false
     })
-  }, [])
+  })
 
-  const handleKeyDown = useCallback((event: KeyboardEvent) => {
+  const handleKeyDown = useEffectEvent((event: KeyboardEvent) => {
     if (!listRef.current) return
 
     const listItems = Array.from(listRef.current.children) as HTMLElement[]
@@ -104,7 +104,7 @@ export function VerticalList({ children, className }: VerticalListProps) {
     if (nextItem) {
       nextItem.focus()
     }
-  }, [])
+  })
 
   useEffect(() => {
     const list = listRef.current
@@ -160,7 +160,7 @@ export function VerticalList({ children, className }: VerticalListProps) {
 
       list.removeEventListener('keydown', handleKeyDown)
     }
-  }, [updateHighlightPosition, hideHighlightPosition, handleKeyDown])
+  }, [])
 
   return (
     <div ref={listRef} className={cn('relative inline-flex flex-col items-start ml-4', className)}>

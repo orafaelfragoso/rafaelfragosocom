@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { useCallback, useEffect, useRef } from 'react'
+import { useCallback, useEffect, useEffectEvent, useRef } from 'react'
 import colors from 'tailwindcss/colors'
 import { Highlighter } from '@/components/ui/highlighter'
 import type { NavItem } from '@/config/navigation'
@@ -19,7 +19,7 @@ export function NavigationMenu({ pages }: NavbarProps) {
   const rafRef = useRef<number | null>(null)
   const isLineVisibleRef = useRef(false)
 
-  const updateLinePosition = useCallback((target: HTMLElement, shouldAnimate = true) => {
+  const updateLinePosition = useEffectEvent((target: HTMLElement, shouldAnimate = true) => {
     const nav = navRef.current
     const line = lineRef.current
     if (!nav || !line) return
@@ -44,9 +44,9 @@ export function NavigationMenu({ pages }: NavbarProps) {
 
       isLineVisibleRef.current = true
     })
-  }, [])
+  })
 
-  const hideLinePosition = useCallback(() => {
+  const hideLinePosition = useEffectEvent(() => {
     const line = lineRef.current
     if (!line) return
 
@@ -59,7 +59,7 @@ export function NavigationMenu({ pages }: NavbarProps) {
       line.style.opacity = '0'
       isLineVisibleRef.current = false
     })
-  }, [])
+  })
 
   useEffect(() => {
     const nav = navRef.current
@@ -92,7 +92,7 @@ export function NavigationMenu({ pages }: NavbarProps) {
       })
       nav.removeEventListener('mouseleave', handleMouseLeave)
     }
-  }, [updateLinePosition, hideLinePosition])
+  }, [])
 
   return (
     <nav className="hidden md:flex justify-center absolute left-1/2 translate-x-[-50%]" aria-label="Navigation">

@@ -1,6 +1,6 @@
 'use client'
 
-import { createContext, type ReactNode, useCallback, useEffect, useState } from 'react'
+import { createContext, type ReactNode, useCallback, useEffect, useEffectEvent, useState } from 'react'
 
 interface CommandContextType {
   isOpen: boolean
@@ -30,24 +30,24 @@ export function CommandProvider({ children }: CommandProviderProps) {
     setIsOpen((prev) => !prev)
   }, [])
 
-  // Handle keyboard shortcuts
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      // Cmd+K (Mac) or Ctrl+K (Windows/Linux)
-      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
-        e.preventDefault()
-        toggle()
-      }
-
-      // Escape to close
-      if (e.key === 'Escape' && isOpen) {
-        close()
-      }
+  const handleKeyDown = useEffectEvent((e: KeyboardEvent) => {
+    // Cmd+K (Mac) or Ctrl+K (Windows/Linux)
+    if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+      e.preventDefault()
+      toggle()
     }
 
+    // Escape to close
+    if (e.key === 'Escape' && isOpen) {
+      close()
+    }
+  })
+
+  // Handle keyboard shortcuts
+  useEffect(() => {
     document.addEventListener('keydown', handleKeyDown)
     return () => document.removeEventListener('keydown', handleKeyDown)
-  }, [isOpen, toggle, close])
+  }, [handleKeyDown])
 
   // Prevent body scroll when command menu is open
   useEffect(() => {
