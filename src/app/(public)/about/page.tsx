@@ -3,6 +3,7 @@ import dynamic from 'next/dynamic'
 import Image from 'next/image'
 import { Activity, Suspense } from 'react'
 import { StructuredData } from '@/components/structured-data'
+import { PageTemplate } from '@/components/layout/page-template'
 import { BentoGrid, BentoGridItem } from '@/components/ui/bento-grid'
 import { Button } from '@/components/ui/button'
 import { Title } from '@/components/ui/title'
@@ -34,35 +35,33 @@ export default function About() {
   return (
     <>
       <StructuredData data={structuredData} />
-      <div className="container mx-auto max-w-5xl px-4">
-        <div className="mt-16 mb-4 space-y-6 flex flex-col gap-8">
-          <Title>Stay Hungry. Stay Foolish.</Title>
-          <div className="flex flex-row gap-8">
-            <div className="flex flex-1 gap-8 flex-col items-center justify-center">
-              <p className="mx-auto text-md text-secondary-foreground lg:mx-0 leading-7 font-sans opacity-0 animate-[fade-blur-in_0.7s_ease-out_forwards_0.2s]">
-                Hey, I'm Rafael Fragoso. I started as a software engineer back in 2007, working with PHP, HTML & CSS.
-              </p>
-              <p className="mx-auto text-md text-secondary-foreground lg:mx-0 leading-7 font-sans opacity-0 animate-[fade-blur-in_0.7s_ease-out_forwards_0.2s]">
-                I'm Brazilian through and through - born and raised in Rio de Janeiro, the wonderful city I'm proud to
-                call home. I share my life with my incredible wife and my bright 8-year-old daughter.
-              </p>
-              <p className="mx-auto text-md text-secondary-foreground lg:mx-0 leading-7 font-sans opacity-0 animate-[fade-blur-in_0.7s_ease-out_forwards_0.2s]">
-                I'm passionate about open source projects, crafting great user experiences, and optimizing performance.
-                When I'm not working or building something new, you'll find me at the beach, gaming, watching movies, or
-                spending quality time with my family.
-              </p>
-            </div>
-            <div className="hidden md:flex items-center justify-center opacity-0 animate-[fade-blur-in_0.7s_ease-out_forwards_0.6s]">
-              <Image
-                src="/profile.webp"
-                alt="Rafael Fragoso profile picture"
-                className="object-cover rounded-xl"
-                width={333}
-                height={333}
-                sizes="(max-width: 768px) 100vw, 333px"
-                priority
-              />
-            </div>
+      <PageTemplate gap={8} as="div">
+        <Title>Stay Hungry. Stay Foolish.</Title>
+        <div className="flex flex-row gap-8">
+          <div className="flex flex-1 gap-8 flex-col items-center justify-center">
+            <p className="mx-auto text-md text-secondary-foreground lg:mx-0 leading-7 font-sans opacity-0 animate-[fade-blur-in_0.7s_ease-out_forwards_0.2s]">
+              Hey, I'm Rafael Fragoso. I started as a software engineer back in 2007, working with PHP, HTML & CSS.
+            </p>
+            <p className="mx-auto text-md text-secondary-foreground lg:mx-0 leading-7 font-sans opacity-0 animate-[fade-blur-in_0.7s_ease-out_forwards_0.2s]">
+              I'm Brazilian through and through - born and raised in Rio de Janeiro, the wonderful city I'm proud to
+              call home. I share my life with my incredible wife and my bright 8-year-old daughter.
+            </p>
+            <p className="mx-auto text-md text-secondary-foreground lg:mx-0 leading-7 font-sans opacity-0 animate-[fade-blur-in_0.7s_ease-out_forwards_0.2s]">
+              I'm passionate about open source projects, crafting great user experiences, and optimizing performance.
+              When I'm not working or building something new, you'll find me at the beach, gaming, watching movies, or
+              spending quality time with my family.
+            </p>
+          </div>
+          <div className="hidden md:flex items-center justify-center opacity-0 animate-[fade-blur-in_0.7s_ease-out_forwards_0.6s]">
+            <Image
+              src="/profile.webp"
+              alt="Rafael Fragoso profile picture"
+              className="object-cover rounded-xl"
+              width={333}
+              height={333}
+              sizes="(max-width: 768px) 100vw, 333px"
+              priority
+            />
           </div>
         </div>
         <BentoGrid>
@@ -127,7 +126,7 @@ export default function About() {
             </div>
           </BentoGridItem>
         </BentoGrid>
-      </div>
+      </PageTemplate>
     </>
   )
 }

@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
+import { PageTemplate } from '@/components/layout/page-template'
 import { TopArticlesSection } from '@/components/top-articles-section'
 import { Title } from '@/components/ui/title'
 import { VerticalList } from '@/components/ui/vertical-list'
@@ -52,8 +53,8 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   const packs = createDefaultPacks(articles)
 
   return (
-    <main className="container mx-auto max-w-5xl px-4">
-      <header className="mt-16 mb-4 space-y-6 flex flex-col gap-4">
+    <PageTemplate>
+      <header>
         <nav aria-label="Breadcrumb" className="text-sm">
           <ol className="flex items-center gap-2 text-muted-foreground">
             <li>
@@ -92,6 +93,6 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
           </nav>
         </div>
       </header>
-    </main>
+    </PageTemplate>
   )
 }

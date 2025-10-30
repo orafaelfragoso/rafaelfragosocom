@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { PageTemplate } from '@/components/layout/page-template'
 import { Title } from '@/components/ui/title'
 import { VerticalList, VerticalListItem } from '@/components/ui/vertical-list'
 import { createMetadata } from '@/config'
@@ -91,59 +92,57 @@ const tools = [
 
 export default function Uses() {
   return (
-    <article className="container mx-auto max-w-screen-lg px-4">
-      <div className="mt-16 mb-4 space-y-6 flex flex-col gap-4">
-        <Title>Tools, Apps & Gear</Title>
-        <p className="text-md text-foreground leading-7 font-sans opacity-0 delay-100 animate-fade-blur-in">
-          People often ask me about the tools and gear I use to build software, stay productive, or sometimes just
-          indulge my love for new gadgets. Whether it's for real work or just a bit of procrastination, here's a curated
-          list of my favorite apps, hardware, and resources that help me get things done—or at least feel like I am.
-        </p>
-        <div className="flex flex-col gap-4 opacity-0 delay-200 animate-fade-blur-in">
-          <section aria-labelledby="hardware-heading">
-            <h2 id="hardware-heading" className="text-2xl font-bold text-foreground">
-              Hardware
-            </h2>
-            <VerticalList>
-              {hardware.map((h) => (
-                <VerticalListItem key={h.title}>
-                  <span className="text-sm text-foreground p-2">
-                    <span className="font-bold">{h.title}</span> - {h.description}
-                  </span>
-                </VerticalListItem>
-              ))}
-            </VerticalList>
-          </section>
-          <section aria-labelledby="software-heading">
-            <h2 id="software-heading" className="text-2xl font-bold text-foreground">
-              Software
-            </h2>
-            <VerticalList>
-              {software.map((s) => (
-                <VerticalListItem key={s.title}>
-                  <span className="text-sm text-foreground p-2">
-                    <span className="font-bold">{s.title}</span> - {s.description}
-                  </span>
-                </VerticalListItem>
-              ))}
-            </VerticalList>
-          </section>
-          <section aria-labelledby="tools-heading">
-            <h2 id="tools-heading" className="text-2xl font-bold text-foreground">
-              Tools
-            </h2>
-            <VerticalList>
-              {tools.map((t) => (
-                <VerticalListItem key={t.title}>
-                  <span className="text-sm text-foreground p-2">
-                    <span className="font-bold">{t.title}</span> - {t.description}
-                  </span>
-                </VerticalListItem>
-              ))}
-            </VerticalList>
-          </section>
-        </div>
+    <PageTemplate maxWidth="screen-lg" as="article">
+      <Title>Tools, Apps & Gear</Title>
+      <p className="text-md text-foreground leading-7 font-sans opacity-0 delay-100 animate-fade-blur-in">
+        People often ask me about the tools and gear I use to build software, stay productive, or sometimes just
+        indulge my love for new gadgets. Whether it's for real work or just a bit of procrastination, here's a curated
+        list of my favorite apps, hardware, and resources that help me get things done—or at least feel like I am.
+      </p>
+      <div className="flex flex-col gap-4 opacity-0 delay-200 animate-fade-blur-in">
+        <section aria-labelledby="hardware-heading">
+          <h2 id="hardware-heading" className="text-2xl font-bold text-foreground">
+            Hardware
+          </h2>
+          <VerticalList>
+            {hardware.map((h) => (
+              <VerticalListItem key={h.title}>
+                <span className="text-sm text-foreground p-2">
+                  <span className="font-bold">{h.title}</span> - {h.description}
+                </span>
+              </VerticalListItem>
+            ))}
+          </VerticalList>
+        </section>
+        <section aria-labelledby="software-heading">
+          <h2 id="software-heading" className="text-2xl font-bold text-foreground">
+            Software
+          </h2>
+          <VerticalList>
+            {software.map((s) => (
+              <VerticalListItem key={s.title}>
+                <span className="text-sm text-foreground p-2">
+                  <span className="font-bold">{s.title}</span> - {s.description}
+                </span>
+              </VerticalListItem>
+            ))}
+          </VerticalList>
+        </section>
+        <section aria-labelledby="tools-heading">
+          <h2 id="tools-heading" className="text-2xl font-bold text-foreground">
+            Tools
+          </h2>
+          <VerticalList>
+            {tools.map((t) => (
+              <VerticalListItem key={t.title}>
+                <span className="text-sm text-foreground p-2">
+                  <span className="font-bold">{t.title}</span> - {t.description}
+                </span>
+              </VerticalListItem>
+            ))}
+          </VerticalList>
+        </section>
       </div>
-    </article>
+    </PageTemplate>
   )
 }

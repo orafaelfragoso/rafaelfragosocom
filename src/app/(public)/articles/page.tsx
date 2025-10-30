@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { ExploreCategories } from '@/components/explore-categories'
+import { PageTemplate } from '@/components/layout/page-template'
 import { TopArticlesSection } from '@/components/top-articles-section'
 import { createMetadata } from '@/config'
 import { getAllArticles, getAllCategories } from '@/lib/mdx'
@@ -26,8 +27,8 @@ export default async function ArticlesPage() {
   const packs = createDefaultPacks(articlesWithoutContent)
 
   return (
-    <main className="container mx-auto max-w-5xl px-4">
-      <header className="mt-16 mb-16">
+    <PageTemplate bottomMargin={16}>
+      <header>
         {/* Hero Section */}
         <section aria-labelledby="articles-heading" className="mb-32 text-center">
           <h1 id="articles-heading" className="text-4xl md:text-5xl font-bold text-foreground mb-4">
@@ -44,6 +45,6 @@ export default async function ArticlesPage() {
         {/* Explore Categories Section */}
         <ExploreCategories articles={articlesWithoutContent} categories={categories} />
       </header>
-    </main>
+    </PageTemplate>
   )
 }

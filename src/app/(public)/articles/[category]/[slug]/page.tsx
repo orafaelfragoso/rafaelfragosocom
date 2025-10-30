@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { MDXRemote } from 'next-mdx-remote/rsc'
+import { PageTemplate } from '@/components/layout/page-template'
 import { getAllArticlePaths, getArticleBySlug } from '@/lib/mdx'
 import { Title } from '@/components/ui/title'
 import { cn } from '@/lib/utils'
@@ -131,8 +132,8 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
   }
 
   return (
-    <main className="container mx-auto max-w-screen-lg px-4">
-      <article itemScope itemType="https://schema.org/BlogPosting" className="mt-16 mb-4 space-y-6 flex flex-col gap-4">
+    <PageTemplate maxWidth="screen-lg">
+      <article itemScope itemType="https://schema.org/BlogPosting">
         <header className="flex flex-col gap-2 opacity-0 delay-100 animate-fade-blur-in">
           <nav aria-label="Breadcrumb" className="text-sm">
             <ol className="flex items-center gap-2 text-muted-foreground">
@@ -216,7 +217,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
           </nav>
         </footer>
       </article>
-    </main>
+    </PageTemplate>
   )
 }
 
