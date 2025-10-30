@@ -14,7 +14,7 @@ export default function AboutError({ error, reset }: ErrorProps) {
   }, [error])
 
   return (
-    <div className="container mx-auto max-w-screen-lg px-4 mt-16">
+    <div className="container mx-auto max-w-5xl px-4 mt-16">
       <div className="flex flex-col items-center justify-center gap-4 py-16">
         <h2 className="text-2xl font-bold text-foreground">Something went wrong!</h2>
         <p className="text-muted-foreground text-center max-w-md">

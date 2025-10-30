@@ -2,7 +2,7 @@ import { BentoGrid, BentoGridItem } from '@/components/ui/bento-grid'
 
 export default function AboutLoading() {
   return (
-    <div className="container mx-auto max-w-screen-lg px-4">
+    <div className="container mx-auto max-w-5xl px-4">
       <div className="mt-16 mb-4 space-y-6 flex flex-col gap-8">
         <div className="h-12 w-64 bg-muted animate-pulse rounded" />
         <div className="flex flex-row gap-8">
