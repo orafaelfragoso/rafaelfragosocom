@@ -33,6 +33,9 @@
       "complexity": {
         "noForEach": "off"
       },
+      "security": {
+        "noDangerouslySetInnerHtml": "off"
+      },
       "style": {
         "noNonNullAssertion": "off"
       }

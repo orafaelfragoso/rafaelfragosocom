@@ -39,7 +39,6 @@ export function CommandMenu({ articles, ...props }: CommandMenuProps) {
     [command],
   )
 
-  // Reset search when dialog closes
   React.useEffect(() => {
     if (!command.isOpen) {
       setSearch('')

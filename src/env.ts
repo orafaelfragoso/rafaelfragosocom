@@ -1,6 +1,3 @@
-// TypeScript-based environment variable handling - no zod dependency
-// Validates at build time and provides type-safe access
-
 function getClientEnv() {
   const mapboxToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN
 
@@ -21,10 +18,8 @@ function getServerEnv() {
   }
 }
 
-// Validate client env at module load time (build/runtime)
 const clientEnv = getClientEnv()
 
-// Server env is always available
 const serverEnv = getServerEnv()
 
 export const env = {

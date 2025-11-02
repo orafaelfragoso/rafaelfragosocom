@@ -1,6 +1,5 @@
 import type { LucideProps } from 'lucide-react'
 
-// Navigation Types
 export type NavItem = {
   title: string
   description: string
@@ -17,7 +16,6 @@ export type NavConfig = {
   social: SocialNavItem[]
 }
 
-// Site Configuration Types
 export type SiteConfigType = {
   readonly name: string
   readonly url: string
@@ -41,7 +39,6 @@ export type SiteConfigType = {
   }
 }
 
-// App Configuration Types
 export type AppConfigType = {
   readonly name: string
   readonly version: string
@@ -56,7 +53,6 @@ export type AppConfigType = {
   }
 }
 
-// Combined Config Type
 export type ConfigDataType = {
   readonly site: SiteConfigType
   readonly navigation: NavConfig

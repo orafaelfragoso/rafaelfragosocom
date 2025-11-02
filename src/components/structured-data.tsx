@@ -12,7 +12,6 @@ export function StructuredData({ data }: StructuredDataProps) {
       {schemas.map((schema) => {
         const key = `${schema['@type']}-${schema['@context']}`
         return (
-          // biome-ignore lint/security/noDangerouslySetInnerHtml: Required for JSON-LD
           <script key={key} type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
         )
       })}

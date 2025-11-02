@@ -1,4 +1,3 @@
-// Centralized type exports
 export type {
   AppConfigType,
   ConfigDataType,

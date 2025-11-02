@@ -27,7 +27,7 @@ export default async function ArticlesPage() {
   const categories = await getAllCategories()
 
   return (
-    <PageTemplate bottomMargin={16}>
+    <PageTemplate as="div" bottomMargin={16}>
       <header>
         <section aria-labelledby="articles-heading" className="mb-32 text-center">
           <Title id="articles-heading" className="text-center">

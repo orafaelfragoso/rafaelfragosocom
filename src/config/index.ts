@@ -19,7 +19,6 @@ const app: AppConfigType = {
   },
 }
 
-// TypeScript will validate structure matches types at compile time
 const configData: ConfigDataType = {
   site: siteConfig satisfies SiteConfigType,
   navigation: navConfig,

@@ -15,7 +15,10 @@ export function TopArticlesSection({ articles }: TopArticlesSectionProps) {
 
   return (
     <section aria-labelledby="top-articles-heading" className="mb-32">
-      <nav aria-label="Featured article collections" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+      <h2 id="top-articles-heading" className="sr-only">
+        Featured Articles
+      </h2>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
         {articles.slice(0, 4).map((article, index) => (
           <CardStack
             key={`${article.slug}-${index}`}
@@ -31,7 +34,7 @@ export function TopArticlesSection({ articles }: TopArticlesSectionProps) {
             </div>
           </CardStack>
         ))}
-      </nav>
+      </div>
     </section>
   )
 }

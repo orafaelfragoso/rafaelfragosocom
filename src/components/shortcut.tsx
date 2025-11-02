@@ -26,6 +26,7 @@ export function Shortcut({ className }: ShortcutProps) {
     <Button
       variant="ghost"
       onClick={command.open}
+      aria-label="Open command menu - Press Command K or Control K"
       className={cn(
         'ml-[-8px] px-2 flex items-center gap-2 py-3 text-md font-medium text-foreground/80 cursor-pointer',
         className,

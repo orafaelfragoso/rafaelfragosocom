@@ -50,6 +50,7 @@ export function NavbarItems({ articles }: NavbarItemsProps) {
                 aria-current={isActive ? 'page' : undefined}
                 className={cn(
                   'relative z-10 text-base font-medium text-black/85 dark:text-white/85 hover:opacity-100 cursor-pointer transition-all duration-200',
+                  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-sm',
                   isActive ? 'opacity-100' : 'opacity-64',
                 )}>
                 {page.title}

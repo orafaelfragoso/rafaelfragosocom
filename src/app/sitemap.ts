@@ -22,7 +22,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       })),
   ]
 
-  // Add articles index page
   const articlesRoutes: MetadataRoute.Sitemap = [
     {
       url: `${baseUrl}/articles`,
@@ -32,7 +31,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   ]
 
-  // Add category pages
   const categories = await getAllCategories()
   const categoryRoutes: MetadataRoute.Sitemap = categories.map((category) => ({
     url: `${baseUrl}/articles/${category}`,
@@ -41,7 +39,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.6,
   }))
 
-  // Add individual article pages
   const articles = await getAllArticles()
   const articleRoutes: MetadataRoute.Sitemap = articles.map((article) => ({
     url: `${baseUrl}/articles/${article.category}/${article.slug}`,

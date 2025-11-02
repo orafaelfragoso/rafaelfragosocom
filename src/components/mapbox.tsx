@@ -111,12 +111,15 @@ export function Mapbox() {
 
         markerB.getElement().setAttribute('aria-hidden', 'true')
 
-        // Make attribution controls unfocusable
-        const controls = mapContainerRef.current?.querySelectorAll('.mapboxgl-ctrl a, .mapboxgl-ctrl button')
-        controls?.forEach((element) => {
-          element.setAttribute('tabindex', '-1')
-          element.setAttribute('aria-hidden', 'true')
-        })
+        setTimeout(() => {
+          const controls = mapContainerRef.current?.querySelectorAll(
+            '.mapboxgl-ctrl a, .mapboxgl-ctrl button, .mapboxgl-ctrl-logo',
+          )
+          controls?.forEach((element) => {
+            element.setAttribute('tabindex', '-1')
+            element.setAttribute('aria-hidden', 'true')
+          })
+        }, 100)
 
         mapRef.current.fitBounds(fullCoordinates)
 
@@ -157,12 +160,10 @@ export function Mapbox() {
       isMounted = false
       if (mapRef.current) {
         try {
-          // Only remove if map is fully initialized
           if (mapRef.current.getContainer()) {
             mapRef.current.remove()
           }
         } catch (error) {
-          // Silently handle cleanup errors during unmount
           console.debug('Map cleanup error:', error)
         }
         mapRef.current = null

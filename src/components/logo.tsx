@@ -14,6 +14,6 @@ export const Logo: LogoProps = ({ className, ...props }) => (
       className,
     )}
     {...props}>
-    <span aria-hidden="true">{config.site.name}</span>
+    {config.site.name}
   </Link>
 )
