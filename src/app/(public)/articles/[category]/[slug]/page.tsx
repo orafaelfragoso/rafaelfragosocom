@@ -2,6 +2,8 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { MDXRemote } from 'next-mdx-remote/rsc'
+import rehypePrettyCode from 'rehype-pretty-code'
+
 import { ArticleTOC } from '@/components/article-toc'
 import { Button } from '@/components/ui/button'
 import { createMetadata } from '@/config'
@@ -126,9 +128,25 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
 
             <article itemScope itemType="https://schema.org/BlogPosting" className="flex-1 min-w-0">
               <div itemProp="articleBody" className="prose prose-neutral dark:prose-invert max-w-none">
-                <MDXRemote source={article.content} components={components} />
+                <MDXRemote
+                  source={article.content}
+                  components={components}
+                  options={{
+                    mdxOptions: {
+                      rehypePlugins: [
+                        [
+                          rehypePrettyCode,
+                          {
+                            theme: 'dracula',
+                            keepBackground: true,
+                          },
+                        ],
+                      ],
+                    },
+                  }}
+                />
               </div>
-              <footer className="flex flex-col gap-4 mt-8">
+              <footer className="flex flex-col gap-4 mt-8 mb-30">
                 <hr className="border-t border-border" />
                 <nav aria-label="Article navigation" className="flex justify-center">
                   <Button variant="outline" asChild>

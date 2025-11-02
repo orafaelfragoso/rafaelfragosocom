@@ -3,8 +3,8 @@ import type { Metadata } from 'next'
 import { PageTemplate } from '@/components/layout/page-template'
 import { Subtitle } from '@/components/subtitle'
 import { Title } from '@/components/title'
-import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
+import { Card } from '@/components/ui/card'
 import { createMetadata } from '@/config'
 
 export const metadata: Metadata = createMetadata({
@@ -24,8 +24,7 @@ export default function HireMe() {
           Lean Forward. I Got You.
         </Title>
         <Subtitle>
-          I have the skills and experience to help you achieve your goals.
-          Working on something big? Let's talk.
+          I have the skills and experience to help you achieve your goals. Working on something big? Let's talk.
         </Subtitle>
       </section>
       <section className="flex flex-col gap-4" aria-label="Contact options">

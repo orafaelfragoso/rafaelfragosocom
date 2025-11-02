@@ -1,6 +1,6 @@
+import type { Coordinates } from '@/types/location'
 import { useDistance } from './use-distance'
 import { useIpLocation } from './use-ip-location'
-import type { Coordinates } from '@/types/location'
 
 const RIO_COORDINATES: Coordinates = {
   latitude: -23.0225742,
@@ -18,4 +18,3 @@ export function useLocationDistance() {
     loading,
   }
 }
-

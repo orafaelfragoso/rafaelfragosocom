@@ -16,11 +16,10 @@ export function LocationDistance() {
       I'm from Rio de Janeiro, Brazil
       {isMounted && formattedDistance && (
         <>
-          , roughly <span className="font-bold">{formattedDistance}</span> away from your current location,
-          according to your ip address.
+          , roughly <span className="font-bold">{formattedDistance}</span> away from your current location, according to
+          your ip address.
         </>
       )}
     </div>
   )
 }
-

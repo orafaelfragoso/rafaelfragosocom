@@ -1,6 +1,8 @@
 import bundleAnalyzer from '@next/bundle-analyzer'
 import createMDX from '@next/mdx'
 import type { NextConfig } from 'next'
+import type { Options } from 'rehype-pretty-code'
+
 import '@/env'
 
 const nextConfig: NextConfig = {
@@ -60,10 +62,15 @@ const nextConfig: NextConfig = {
   ],
 }
 
+const options: Options = {
+  theme: 'dracula',
+}
+
 const withMDX = createMDX({
+  extension: /\.mdx?$/,
   options: {
     remarkPlugins: [],
-    rehypePlugins: [],
+    rehypePlugins: [['rehype-pretty-code', options]],
   },
 })
 

@@ -70,4 +70,3 @@ export function NavbarItems({ articles }: NavbarItemsProps) {
     </nav>
   )
 }
-

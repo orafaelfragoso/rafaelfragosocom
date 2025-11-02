@@ -7,7 +7,7 @@ export const siteConfig = {
   author: {
     name: 'Rafael Fragoso',
     twitter: '@orafaelfragoso',
-    email: 'hello@rafaelfragoso.com',
+    email: 'rafael@workbits.io',
   },
   links: {
     twitter: 'https://x.com/orafaelfragoso',
