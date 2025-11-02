@@ -1,14 +1,7 @@
 import type { MDXComponents } from 'mdx/types'
-import { cn } from '@/lib/utils'
 
-const slugify = (text: string): string => {
-  return text
-    .toLowerCase()
-    .trim()
-    .replace(/[^\w\s-]/g, '')
-    .replace(/\s+/g, '-')
-    .replace(/-+/g, '-')
-}
+import { slugify } from '@/lib/articles'
+import { cn } from '@/lib/utils'
 
 const extractTextFromChildren = (children: React.ReactNode): string => {
   if (typeof children === 'string') {
@@ -26,7 +19,7 @@ const extractTextFromChildren = (children: React.ReactNode): string => {
   return ''
 }
 
-export const baseMDXComponents: MDXComponents = {
+export const components: MDXComponents = {
   h1: ({ className, children, ...props }) => {
     const textContent = extractTextFromChildren(children)
     const id = textContent ? slugify(textContent) : undefined
@@ -127,9 +120,6 @@ export const baseMDXComponents: MDXComponents = {
   hr: ({ className, ...props }) => <hr className={cn('mb-8 border-t border-border', className)} {...props} />,
 }
 
-export function useMDXComponents(components: MDXComponents): MDXComponents {
-  return {
-    ...baseMDXComponents,
-    ...components,
-  }
+export function useMDXComponents(): MDXComponents {
+  return components
 }

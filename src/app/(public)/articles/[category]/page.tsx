@@ -1,15 +1,15 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
+
+import { LatestArticlesSection } from '@/components/latest-articles-section'
 import { PageTemplate } from '@/components/layout/page-template'
+import { Subtitle } from '@/components/subtitle'
+import { Title } from '@/components/title'
 import { TopArticlesSection } from '@/components/top-articles-section'
 import { Button } from '@/components/ui/button'
-import { Subtitle } from '@/components/ui/subtitle'
-import { Title } from '@/components/ui/title'
-import { VerticalList } from '@/components/ui/vertical-list'
 import { createMetadata } from '@/config'
-import { createDefaultPacks } from '@/lib/articles'
-import { formatCategoryName, getCategorySlug } from '@/lib/category'
+import { formatCategoryName } from '@/lib/articles'
 import { getAllCategories, getArticlesByCategory } from '@/lib/mdx'
 
 interface CategoryPageProps {
@@ -25,7 +25,7 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: CategoryPageProps): Promise<Metadata> {
   const { category } = await params
-  const categorySlug = getCategorySlug(category)
+  const categorySlug = category
   const categoryName = formatCategoryName(categorySlug)
 
   return createMetadata({
@@ -44,15 +44,13 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
 
 export default async function CategoryPage({ params }: CategoryPageProps) {
   const { category } = await params
-  const categorySlug = getCategorySlug(category)
-  const articles = await getArticlesByCategory(categorySlug)
+  const articles = await getArticlesByCategory(category)
 
   if (articles.length === 0) {
     notFound()
   }
 
-  const categoryName = formatCategoryName(categorySlug)
-  const packs = createDefaultPacks(articles)
+  const categoryName = formatCategoryName(category)
 
   return (
     <PageTemplate>
@@ -61,15 +59,10 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
           <Title id="category-heading">{categoryName} Articles</Title>
           <Subtitle>Explore all articles about {categoryName} and related topics.</Subtitle>
         </section>
-        <div className="opacity-0 delay-200 animate-fade-blur-in">
-          <TopArticlesSection packs={packs} />
-        </div>
-        <div className="flex flex-col gap-4 opacity-0 delay-300 animate-fade-blur-in">
-          <VerticalList>
-            {articles.map((article) => (
-              <div key={article.slug}></div>
-            ))}
-          </VerticalList>
+        <div className="flex flex-col gap-4">
+          <TopArticlesSection articles={articles} />
+          <LatestArticlesSection articles={articles} />
+
           <nav aria-label="Category navigation" className="flex justify-center mt-4">
             <Button variant="outline" asChild>
               <Link href="/articles" aria-label="Go back to all articles">

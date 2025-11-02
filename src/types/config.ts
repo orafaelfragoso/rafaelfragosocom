@@ -9,7 +9,7 @@ export type NavItem = {
 }
 
 export type SocialNavItem = Omit<NavItem, 'description'> & {
-  icon: React.JSXElementConstructor<{ className?: string }>
+  icon: React.ForwardRefExoticComponent<Omit<LucideProps, 'ref'> & React.RefAttributes<SVGSVGElement>>
 }
 
 export type NavConfig = {

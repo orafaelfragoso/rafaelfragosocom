@@ -1,4 +1,4 @@
-import { FileText, Github, Home, Linkedin, NotebookTabs, ToolCase, Twitter, User } from 'lucide-react'
+import { FileText, Github, Linkedin, NotebookTabs, ToolCase, Twitter, User } from 'lucide-react'
 import type { NavConfig } from '@/types/config'
 import { siteConfig } from './site'
 
@@ -6,12 +6,6 @@ export type { NavConfig, NavItem, SocialNavItem } from '@/types/config'
 
 export const navConfig: NavConfig = {
   main: [
-    {
-      title: 'Home',
-      href: '/',
-      description: 'Return to the homepage',
-      icon: Home,
-    },
     {
       title: 'About',
       href: '/about',

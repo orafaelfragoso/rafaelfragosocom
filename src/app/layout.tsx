@@ -1,11 +1,12 @@
 import type { Metadata } from 'next'
 import Script from 'next/script'
+
 import { Footer } from '@/components/footer'
 import { Navbar } from '@/components/navbar'
 import { ThemeProvider } from '@/components/providers'
 import { StructuredData } from '@/components/structured-data'
 import config from '@/config'
-import { fontHeading, fontSans } from '@/lib/fonts'
+import { fontSans } from '@/lib/fonts'
 import { createOrganizationSchema, createPersonSchema, createWebsiteSchema } from '@/lib/structured-data'
 import { cn } from '@/lib/utils'
 
@@ -21,8 +22,8 @@ export default function RootLayout({ children }: RootLayoutProps) {
   const structuredData = [createOrganizationSchema(), createPersonSchema(), createWebsiteSchema()]
 
   return (
-    <html lang="en" suppressHydrationWarning className={cn(fontSans.variable, fontHeading.variable)}>
-      <body className="min-h-screen bg-background font-sans antialiased">
+    <html lang="en" suppressHydrationWarning className={cn(fontSans.className)}>
+      <body className="min-h-screen bg-background font-body antialiased">
         <StructuredData data={structuredData} />
         <a
           href="#main-content"
@@ -36,7 +37,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
           disableTransitionOnChange={!config.app.theme.enableTransitions}>
           <div className="relative min-h-screen flex flex-col">
             <Navbar />
-            <main id="main-content" className="relative flex flex-1">
+            <main id="main-content" className="relative flex flex-col flex-1">
               {children}
             </main>
             <Footer />

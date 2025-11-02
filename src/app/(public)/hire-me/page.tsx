@@ -1,10 +1,10 @@
 import { CalendarDays, FileDown } from 'lucide-react'
 import type { Metadata } from 'next'
 import { PageTemplate } from '@/components/layout/page-template'
-import { BentoGrid, BentoGridItem } from '@/components/ui/bento-grid'
+import { Subtitle } from '@/components/subtitle'
+import { Title } from '@/components/title'
+import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { Subtitle } from '@/components/ui/subtitle'
-import { Title } from '@/components/ui/title'
 import { createMetadata } from '@/config'
 
 export const metadata: Metadata = createMetadata({
@@ -20,18 +20,20 @@ export default function HireMe() {
   return (
     <PageTemplate maxWidth="screen-lg" as="article">
       <section aria-labelledby="hire-me-heading" className="mb-32 text-center">
-        <Title id="hire-me-heading">Lean Forward. I Got You.</Title>
+        <Title id="hire-me-heading" className="text-center">
+          Lean Forward. I Got You.
+        </Title>
         <Subtitle>
-          Do you believe I have the skills and experience to help you achieve your goals? Are you working on the next
-          big thing? Are you expanding your business? Let's talk about how I can assist you.
+          I have the skills and experience to help you achieve your goals.
+          Working on something big? Let's talk.
         </Subtitle>
       </section>
       <section className="flex flex-col gap-4" aria-label="Contact options">
-        <BentoGrid>
-          <BentoGridItem mdColSpan={6} mdRowSpan={1}>
+        <section className="grid w-full auto-rows-auto grid-cols-12 gap-4">
+          <Card className="col-span-12 md:col-span-6 md:row-span-1">
             <div className="flex flex-col justify-start items-start gap-4 p-4">
               <h2 className="text-md font-semibold text-[#4d4357] dark:text-foreground">Schedule a Meeting</h2>
-              <p className="text-sm text-[#4d4357] dark:text-foreground font-sans">
+              <p className="text-sm text-[#4d4357] dark:text-foreground font-body">
                 Book a meeting with me so we can get to know each other and discuss your project and how I can help you
                 achieve your goals.
               </p>
@@ -49,11 +51,11 @@ export default function HireMe() {
                 </a>
               </Button>
             </div>
-          </BentoGridItem>
-          <BentoGridItem mdColSpan={6} mdRowSpan={1}>
+          </Card>
+          <Card className="col-span-12 md:col-span-6 md:row-span-1">
             <div className="flex flex-col justify-start items-start gap-4 p-4">
               <h2 className="text-md font-semibold text-[#4d4357] dark:text-foreground">Download my resume</h2>
-              <p className="text-sm text-[#4d4357] dark:text-foreground font-sans">
+              <p className="text-sm text-[#4d4357] dark:text-foreground font-body">
                 If you're interested in working together, feel free to download my resume and reach out to me. I'm
                 always open to new opportunities.
               </p>
@@ -71,8 +73,8 @@ export default function HireMe() {
                 </a>
               </Button>
             </div>
-          </BentoGridItem>
-        </BentoGrid>
+          </Card>
+        </section>
       </section>
     </PageTemplate>
   )

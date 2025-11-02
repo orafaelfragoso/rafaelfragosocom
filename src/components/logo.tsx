@@ -1,9 +1,19 @@
-import Image from 'next/image'
+import Link, { type LinkProps } from 'next/link'
 
-interface LogoProps {
-  className?: string
-}
+import config from '@/config'
+import { fontHeading } from '@/lib/fonts'
+import { cn } from '@/lib/utils'
 
-export const Logo = ({ className }: LogoProps) => (
-  <Image src="/apple-touch-icon.png" alt="Logo" width={32} height={32} className={className} priority />
+type LogoProps = React.FC<LinkProps & React.HTMLProps<HTMLAnchorElement>>
+
+export const Logo: LogoProps = ({ className, ...props }) => (
+  <Link
+    className={cn(
+      'font-bold text-xl text-foreground/80 hover:text-foreground transition-colors duration-200 ease-in-out flex items-center space-x-4',
+      fontHeading.className,
+      className,
+    )}
+    {...props}>
+    <span aria-hidden="true">{config.site.name}</span>
+  </Link>
 )

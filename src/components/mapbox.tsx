@@ -193,10 +193,10 @@ export function Mapbox({ showDistance }: MapboxProps) {
 
   return (
     <>
-      <div className="flex-1 rounded-md overflow-hidden min-h-32">
-        <div className="map-container w-full h-full" ref={mapContainerRef} aria-hidden="true" />
+      <div className="flex-1 rounded-md overflow-hidden min-h-64">
+        <div className="map-container w-full h-64" ref={mapContainerRef} aria-hidden="true" />
       </div>
-      <div className="text-md text-[#4d4357] dark:text-foreground font-sans">
+      <div className="text-md text-[#4d4357] dark:text-foreground font-body">
         {showDistance && (
           <div>
             I'm from Rio de Janeiro, Brazil

@@ -1,9 +1,9 @@
 import type { Metadata } from 'next'
 import { PageTemplate } from '@/components/layout/page-template'
-import { BentoGrid, BentoGridItem } from '@/components/ui/bento-grid'
-import { Subtitle } from '@/components/ui/subtitle'
-import { Title } from '@/components/ui/title'
-import { VerticalList, VerticalListItem } from '@/components/ui/vertical-list'
+import { Subtitle } from '@/components/subtitle'
+import { Title } from '@/components/title'
+import { Card } from '@/components/ui/card'
+import { VerticalList, VerticalListItem } from '@/components/vertical-list'
 import { createMetadata } from '@/config'
 
 export const metadata: Metadata = createMetadata({
@@ -96,15 +96,16 @@ export default function Uses() {
   return (
     <PageTemplate maxWidth="screen-lg" as="article">
       <section aria-labelledby="uses-heading" className="mb-16 text-center">
-        <Title id="uses-heading">Tools, Apps & Gear</Title>
+        <Title id="uses-heading" className="text-center">
+          Tools, Apps & Gear
+        </Title>
         <Subtitle>
-          People often ask me about the tools and gear I use to build software, stay productive, or sometimes just
-          indulge my love for new gadgets. Whether it's for real work or just a bit of procrastination, here's a curated
-          list of my favorite apps, hardware, and resources that help me get things done—or at least feel like I am.
+          A curated list of tools, apps, and gear I use daily. Hardware, software,
+          and everything that helps me build and stay productive.
         </Subtitle>
       </section>
-      <BentoGrid className="md:auto-rows-auto">
-        <BentoGridItem mdColSpan={12} colSpan={12} className="justify-start!">
+      <section className="grid w-full auto-rows-auto grid-cols-12 gap-4 md:auto-rows-auto">
+        <Card className="col-span-12 md:col-span-12 justify-start!">
           <section aria-labelledby="hardware-heading" className="flex flex-col gap-4 p-4 w-full">
             <h2 id="hardware-heading" className="text-md font-bold ml-2 text-[#4d4357] dark:text-foreground">
               Hardware
@@ -119,8 +120,8 @@ export default function Uses() {
               ))}
             </VerticalList>
           </section>
-        </BentoGridItem>
-        <BentoGridItem mdColSpan={12} colSpan={12} className="justify-start!">
+        </Card>
+        <Card className="col-span-12 md:col-span-12 justify-start!">
           <section aria-labelledby="software-heading" className="flex flex-col gap-4 p-4 w-full">
             <h2 id="software-heading" className="text-md font-bold ml-2 text-[#4d4357] dark:text-foreground">
               Software
@@ -135,8 +136,8 @@ export default function Uses() {
               ))}
             </VerticalList>
           </section>
-        </BentoGridItem>
-        <BentoGridItem mdColSpan={12} colSpan={12} className="justify-start!">
+        </Card>
+        <Card className="col-span-12 md:col-span-12 justify-start!">
           <section aria-labelledby="tools-heading" className="flex flex-col gap-4 p-4 w-full">
             <h2 id="tools-heading" className="text-md font-bold ml-2 text-[#4d4357] dark:text-foreground">
               Tools
@@ -151,8 +152,8 @@ export default function Uses() {
               ))}
             </VerticalList>
           </section>
-        </BentoGridItem>
-      </BentoGrid>
+        </Card>
+      </section>
     </PageTemplate>
   )
 }

@@ -2,25 +2,26 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { MDXRemote } from 'next-mdx-remote/rsc'
-import { PageTemplate } from '@/components/layout/page-template'
-import { Title } from '@/components/ui/title'
+import { ArticleTOC } from '@/components/article-toc'
+import { Button } from '@/components/ui/button'
 import { createMetadata } from '@/config'
-import { formatCategoryName, getCategorySlug } from '@/lib/category'
-import { getAllArticlePaths, getArticleBySlug } from '@/lib/mdx'
+import { formatCategoryName, slugify } from '@/lib/articles'
+import { getGradient } from '@/lib/gradients'
+import { getAllArticleFiles, getArticleBySlug } from '@/lib/mdx'
 import { cn } from '@/lib/utils'
+import { components } from '@/mdx-components'
 
 interface ArticlePageProps {
   params: Promise<{ category: string; slug: string }>
 }
 
 export async function generateStaticParams() {
-  const paths = await getAllArticlePaths()
-  return paths
+  return await getAllArticleFiles()
 }
 
 export async function generateMetadata({ params }: ArticlePageProps): Promise<Metadata> {
-  const { category, slug } = await params
-  const article = await getArticleBySlug(category, slug)
+  const { slug } = await params
+  const article = await getArticleBySlug(slug)
 
   if (!article) {
     return createMetadata({
@@ -32,13 +33,11 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
     })
   }
 
-  const categorySlug = getCategorySlug(article.category)
-
   return createMetadata({
     title: article.title,
     description: article.description,
     alternates: {
-      canonical: `/articles/${categorySlug}/${article.slug}`,
+      canonical: `/articles/${article.category}/${article.slug}`,
     },
     openGraph: {
       title: article.title,
@@ -47,7 +46,7 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
       publishedTime: article.date,
       authors: [article.author || 'Rafael Fragoso'],
       tags: article.tags,
-      url: `/articles/${categorySlug}/${article.slug}`,
+      url: `/articles/${article.category}/${article.slug}`,
     },
     twitter: {
       card: 'summary_large_image',
@@ -59,119 +58,90 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
 }
 
 export default async function ArticlePage({ params }: ArticlePageProps) {
-  const { category, slug } = await params
-  const categorySlug = getCategorySlug(category)
-  const article = await getArticleBySlug(categorySlug, slug)
+  const { slug } = await params
+  const article = await getArticleBySlug(slug)
 
   if (!article) {
     notFound()
   }
 
-  const categoryName = formatCategoryName(categorySlug)
-
-  // Import components directly for server component usage
-  const mdxComponents = {
-    h1: ({ className, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => (
-      <h1 className={cn('text-4xl font-bold tracking-tight mt-8 mb-4 font-sans', className)} {...props} />
-    ),
-    h2: ({ className, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => (
-      <h2 className={cn('text-3xl font-bold tracking-tight mt-6 mb-3 font-sans', className)} {...props} />
-    ),
-    h3: ({ className, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => (
-      <h3 className={cn('text-2xl font-semibold tracking-tight mt-5 mb-2 font-sans', className)} {...props} />
-    ),
-    p: ({ className, ...props }: React.HTMLAttributes<HTMLParagraphElement>) => (
-      <p className={cn('text-md text-foreground leading-7 mb-4 font-sans', className)} {...props} />
-    ),
-    a: ({ className, ...props }: React.AnchorHTMLAttributes<HTMLAnchorElement>) => (
-      <a
-        className={cn('text-primary underline underline-offset-4 hover:text-primary/80 transition-colors', className)}
-        {...props}
-      />
-    ),
-    ul: ({ className, ...props }: React.HTMLAttributes<HTMLUListElement>) => (
-      <ul className={cn('list-disc list-inside mb-4 space-y-2 ml-4', className)} {...props} />
-    ),
-    ol: ({ className, ...props }: React.OlHTMLAttributes<HTMLOListElement>) => (
-      <ol className={cn('list-decimal list-inside mb-4 space-y-2 ml-4', className)} {...props} />
-    ),
-    li: ({ className, ...props }: React.LiHTMLAttributes<HTMLLIElement>) => (
-      <li className={cn('text-md text-foreground leading-7 font-sans', className)} {...props} />
-    ),
-    code: ({ className, ...props }: React.HTMLAttributes<HTMLElement>) => (
-      <code
-        className={cn('relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold', className)}
-        {...props}
-      />
-    ),
-    pre: ({ className, ...props }: React.HTMLAttributes<HTMLPreElement>) => (
-      <pre className={cn('overflow-x-auto rounded-lg bg-muted p-4 mb-4 font-mono text-sm', className)} {...props} />
-    ),
-  }
+  const categoryName = formatCategoryName(article.category)
+  const gradient = getGradient(article.category)
+  const headings = article.content
+    .split('\n')
+    .filter((line) => /^#{1,6}\s/.test(line))
+    .map((line) => {
+      const match = /^#{1,6}/.exec(line)
+      const level = match ? match[0].length : 1
+      const text = line.replace(/^#{1,6}\s/, '').trim()
+      return {
+        id: slugify(text),
+        text,
+        level,
+      }
+    })
 
   return (
-    <PageTemplate maxWidth="screen-lg">
-      <article itemScope itemType="https://schema.org/BlogPosting">
-        <header className="flex flex-col gap-2 opacity-0 delay-100 animate-fade-blur-in">
-          <Title itemProp="headline">{article.title}</Title>
-          <div className="flex flex-col gap-2 text-sm text-muted-foreground">
-            <time itemProp="datePublished" dateTime={article.date}>
-              {new Date(article.date).toLocaleDateString('en-US', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric',
-              })}
-            </time>
-            {article.author && (
-              <span itemProp="author" itemScope itemType="https://schema.org/Person">
-                <span itemProp="name" className="sr-only">
-                  {article.author}
-                </span>
-              </span>
-            )}
-            {article.tags && article.tags.length > 0 && (
-              <section aria-label="Article tags" className="flex flex-wrap gap-2">
-                {article.tags.map((tag) => (
-                  <span
-                    key={tag}
-                    itemProp="keywords"
-                    className="px-2 py-1 rounded bg-muted text-xs text-muted-foreground">
-                    {tag}
-                  </span>
-                ))}
-              </section>
-            )}
+    <>
+      <section
+        className={cn(
+          'flex-1 relative z-40 mt-4 mx-4 rounded-[2.4rem] bg-linear-to-br',
+          gradient.background,
+          gradient.text,
+        )}
+        aria-labelledby="article-hero-title">
+        <div className="w-full px-4 py-24 md:py-32 lg:py-40">
+          <div className="max-w-5xl mx-auto">
+            <header className="flex flex-col gap-6">
+              <div className="flex flex-col gap-3">
+                <span className="text-xs font-medium uppercase tracking-wider">{categoryName}</span>
+                <h1
+                  id="article-hero-title"
+                  itemProp="headline"
+                  className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold tracking-tight font-body leading-tight">
+                  {article.title}
+                </h1>
+              </div>
+              {article.description && (
+                <p className="text-sm md:text-base max-w-3xl leading-normal">{article.description}</p>
+              )}
+              <div className="flex flex-col sm:flex-row sm:items-center gap-4 text-xs uppercase tracking-wider">
+                <time itemProp="datePublished" dateTime={article.date}>
+                  {new Date(article.date).toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                  })}
+                </time>
+              </div>
+            </header>
           </div>
-        </header>
-        <div
-          itemProp="articleBody"
-          className="prose prose-neutral dark:prose-invert max-w-none opacity-0 delay-200 animate-fade-blur-in">
-          <MDXRemote source={article.content} components={mdxComponents} />
         </div>
-        <footer className="flex flex-col gap-4 opacity-0 delay-300 animate-fade-blur-in">
-          <hr className="border-t border-border" />
-          <nav aria-label="Article navigation">
-            <ul className="flex flex-row gap-4 flex-wrap">
-              <li>
-                <Link
-                  href={`/articles/${categorySlug}`}
-                  className="text-sm text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:rounded"
-                  aria-label={`Browse more ${categoryName} articles`}>
-                  ← More {categoryName} articles
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/articles"
-                  className="text-sm text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:rounded"
-                  aria-label="Browse all articles">
-                  All articles →
-                </Link>
-              </li>
-            </ul>
-          </nav>
-        </footer>
-      </article>
-    </PageTemplate>
+      </section>
+
+      <div className="relative pt-16 w-full">
+        <div className="w-full max-w-6xl mx-auto px-4">
+          <div className="lg:flex lg:items-start lg:gap-12">
+            <ArticleTOC initialHeadings={headings} />
+
+            <article itemScope itemType="https://schema.org/BlogPosting" className="flex-1 min-w-0">
+              <div itemProp="articleBody" className="prose prose-neutral dark:prose-invert max-w-none">
+                <MDXRemote source={article.content} components={components} />
+              </div>
+              <footer className="flex flex-col gap-4 mt-8">
+                <hr className="border-t border-border" />
+                <nav aria-label="Article navigation" className="flex justify-center">
+                  <Button variant="outline" asChild>
+                    <Link href="/articles" aria-label="Go back to all articles">
+                      ← Back to all articles
+                    </Link>
+                  </Button>
+                </nav>
+              </footer>
+            </article>
+          </div>
+        </div>
+      </div>
+    </>
   )
 }

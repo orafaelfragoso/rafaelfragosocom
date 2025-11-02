@@ -1,11 +1,12 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+@plugin "@tailwindcss/typography";
 
 @custom-variant dark (&:is(.dark *));
 
 :root {
   --radius: 0.625rem;
-  --background: oklch(1 0 0);
+  --background: oklch(97.913% 0.00011 271.152);
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
@@ -36,6 +37,7 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+  --dark-purple: oklch(39.539% 0.06995 306.412);
 }
 
 .dark {
@@ -70,6 +72,7 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.439 0 0);
+  --dark-purple: oklch(78.76% 0.08359 307.246);
 }
 
 @theme inline {
@@ -109,68 +112,26 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+  --color-dark-purple: var(--dark-purple);
 
-  --font-heading: var(--font-heading);
+  --shadow-basic: 0px 4px 12px 0px rgba(0, 0, 0, 0.12);
+  --shadow-expand: 0px 12px 20px 0px rgba(10, 18, 36, 0.10);
+
   --animate-float: float 3s ease-in-out infinite;
-  --animate-fade-blur-in: fade-blur-in 0.7s ease-out forwards;
 
   @keyframes float {
     0%, 100% { transform: translateY(0); }
     50% { transform: translateY(-5%); }
   }
-
-  @keyframes fade-blur-in {
-    0% {
-      opacity: 0;
-      filter: blur(8px);
-      transform: translateY(-10px);
-    }
-    100% {
-      opacity: 1;
-      filter: blur(0);
-      transform: translateY(0);
-    }
-  }
-
-  @keyframes aurora-pulse {
-    0% {
-      opacity: 0.6;
-    }
-    50% {
-      opacity: 0.8;
-    }
-    100% {
-      opacity: 0.5;
-    }
-  }
-
-  @keyframes aurora-move {
-    0% {
-      transform: translateX(0) scaleX(1);
-      opacity: 0.3;
-    }
-    50% {
-      opacity: 0.6;
-    }
-    100% {
-      transform: translateX(25%) scaleX(1.1);
-      opacity: 0.2;
-    }
-  }
 }
 
 @layer base {
   * {
-    @apply border-border outline-ring/50;
+    @apply border-border outline-ring/50 antialiased;
   }
 
   body {
     @apply bg-background text-foreground;
-  }
-
-  .logo {
-    font-family: var(--font-heading);
-    @apply font-bold text-2xl leading-normal text-foreground/80 hover:text-foreground transition-colors duration-200 ease-in-out;
   }
 
   .northern-lights::before {
@@ -200,6 +161,24 @@
     animation: aurora-move 15s linear infinite alternate;
   }
 
+  @view-transition {
+    navigation: auto;
+  }
+
+  ::view-transition-group(navbar) {
+    z-index: 9999;
+  }
+
+  ::view-transition-group(*) {
+    animation-duration: 0.6s;
+    animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation-duration: 0.6s;
+    animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  }
 
   @media (prefers-reduced-motion: reduce) {
     .northern-lights::before,
@@ -215,5 +194,25 @@
       opacity: 0.4;
       transform: translateX(12%) scaleX(1.05);
     }
+
+    ::view-transition-group(*),
+    ::view-transition-old(*),
+    ::view-transition-new(*) {
+      animation-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer components {
+  .card {
+    @apply relative z-10 bg-white dark:bg-white/5 rounded-[2.4rem] p-2 shadow-basic hover:shadow-expand transition-shadow;
+  }
+
+  .card::before {
+    @apply content-[''] z-0 absolute inset-0 rounded-[2.4rem] border border-[rgba(0,0,0,0.06)] transition-[border-color] duration-200 ease-[cubic-bezier(.87,0,.13,1)] pointer-events-none;
+  }
+
+  .card:hover::before {
+    @apply border-[rgba(0,0,0,0.12)];
   }
 }

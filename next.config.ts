@@ -3,17 +3,6 @@ import createMDX from '@next/mdx'
 import type { NextConfig } from 'next'
 import '@/env'
 
-const securityHeaders = [
-  {
-    key: 'X-Frame-Options',
-    value: 'DENY',
-  },
-  {
-    key: 'X-Content-Type-Options',
-    value: 'nosniff',
-  },
-]
-
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   reactCompiler: true,
@@ -22,6 +11,7 @@ const nextConfig: NextConfig = {
   productionBrowserSourceMaps: true,
   experimental: {
     viewTransition: true,
+    mdxRs: true,
   },
   output: 'standalone',
   cacheComponents: true,
@@ -45,7 +35,14 @@ const nextConfig: NextConfig = {
     {
       source: '/(.*)',
       headers: [
-        ...securityHeaders,
+        {
+          key: 'X-Frame-Options',
+          value: 'DENY',
+        },
+        {
+          key: 'X-Content-Type-Options',
+          value: 'nosniff',
+        },
         {
           key: 'Content-Security-Policy',
           value: [

@@ -27,7 +27,7 @@ export function Shortcut({ className }: ShortcutProps) {
       variant="ghost"
       onClick={command.open}
       className={cn(
-        'ml-[-8px] px-2 flex items-center gap-2 py-3 text-md font-semibold text-foreground/80 cursor-pointer',
+        'ml-[-8px] px-2 flex items-center gap-2 py-3 text-md font-medium text-foreground/80 cursor-pointer',
         className,
       )}>
       <span>Press</span>

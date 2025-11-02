@@ -166,7 +166,7 @@ export function VerticalList({ children, className }: VerticalListProps) {
     <div ref={listRef} className={cn('relative inline-flex flex-col items-start', className)}>
       {children}
       <span
-        className="absolute bg-purple-300/20 rounded opacity-0 pointer-events-none"
+        className="absolute bg-purple-300/20 rounded-2xl opacity-0 pointer-events-none"
         style={{ transform: 'translate(0, 0) scale(0.95)' }}
         ref={highlightRef}
         aria-hidden="true"
