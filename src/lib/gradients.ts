@@ -1,14 +1,14 @@
 export const gradients = {
   javascript: {
-    background: 'from-yellow-500 to-yellow-300',
+    background: 'from-[#FF6F3C] to-[#FFF1AC]',
     text: 'text-black',
   },
   python: {
-    background: 'from-blue-500 to-yellow-400',
-    text: 'text-black',
+    background: 'from-[#5092C7] to-[#FFB005]',
+    text: 'text-white',
   },
   react: {
-    background: 'from-blue-500 to-cyan-400',
+    background: 'from-[#646cff] to-[#bfdbfe]',
     text: 'text-black',
   },
   development: {
@@ -16,8 +16,8 @@ export const gradients = {
     text: 'text-white',
   },
   'web-development': {
-    background: 'from-orange-500 to-yellow-300',
-    text: 'text-black',
+    background: 'from-[#340B05] to-[#5092C7]',
+    text: 'text-white',
   },
   design: {
     background: 'from-purple-500 to-pink-400',

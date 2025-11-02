@@ -14,7 +14,7 @@ export function LatestArticlesSection({ articles }: LatestArticlesSectionProps) 
 
   return (
     <section aria-labelledby="latest-articles-heading" className="mb-12">
-      <h2 id="latest-articles-heading" className="text-xl font-bold text-[#4d4357] dark:text-foreground mb-4 ml-4">
+      <h2 id="latest-articles-heading" className="text-xl font-bold text-dark-purple mb-4 ml-4">
         Latest Articles
       </h2>
       <VerticalList className="w-full flex">
@@ -31,13 +31,11 @@ export function LatestArticlesSection({ articles }: LatestArticlesSectionProps) 
             <VerticalListItem key={article.slug} className="w-full">
               <Link
                 href={`/articles/${categorySlug}/${article.slug}`}
-                className="block w-full h-32 p-4 rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                className="block w-full p-4 rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                 aria-label={`Read article: ${article.title}`}>
                 <div className="flex flex-col h-full">
                   <div className="flex items-start justify-between gap-4 mb-2">
-                    <h3 className="text-lg font-normal text-[#4d4357] dark:text-foreground flex-1 line-clamp-2">
-                      {article.title}
-                    </h3>
+                    <h3 className="text-lg font-normal text-dark-purple flex-1 line-clamp-2">{article.title}</h3>
                     <time dateTime={article.date} className="text-xs text-muted-foreground whitespace-nowrap shrink-0">
                       {formattedDate}
                     </time>

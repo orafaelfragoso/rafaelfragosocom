@@ -195,7 +195,7 @@ export function ArticleTOC({ initialHeadings = [], className }: ArticleTOCProps)
                   type="button"
                   onClick={() => handleHeadingClick(heading.id)}
                   className={cn(
-                    'text-left w-full py-1 px-2 rounded-md transition-colors text-xs',
+                    'text-left w-full py-1 px-2 rounded-md transition-colors text-sm',
                     'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
                     'cursor-pointer',
                     isActive ? 'text-purple-400' : 'text-muted-foreground hover:text-purple-400',

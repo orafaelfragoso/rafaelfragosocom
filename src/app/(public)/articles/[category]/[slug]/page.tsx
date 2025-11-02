@@ -90,8 +90,8 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
           gradient.text,
         )}
         aria-labelledby="article-hero-title">
-        <div className="w-full px-4 py-24 md:py-32 lg:py-40">
-          <div className="max-w-5xl mx-auto">
+        <div className="w-full px-12 py-12 md:py-32 md:px-12 lg:py-40 lg:px-4">
+          <div className="max-w-6xl mx-auto">
             <header className="flex flex-col gap-6">
               <div className="flex flex-col gap-3">
                 <span className="text-xs font-medium uppercase tracking-wider">{categoryName}</span>

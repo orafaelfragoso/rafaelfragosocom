@@ -12,9 +12,7 @@ export function ExploreCategoriesSection({ categories }: ExploreCategoriesProps)
 
   return (
     <section aria-labelledby="explore-categories-heading" className="mb-32">
-      <h2 className="text-4xl font-light text-dark-purple dark:text-foreground mb-16 text-center">
-        Explore Categories
-      </h2>
+      <h2 className="text-4xl font-light text-dark-purple mb-16 text-center">Explore Categories</h2>
 
       <nav aria-label="Article categories navigation" className="flex flex-wrap justify-center gap-3 max-w-xl mx-auto">
         {categories.map((category) => {
@@ -26,7 +24,7 @@ export function ExploreCategoriesSection({ categories }: ExploreCategoriesProps)
               key={categorySlug}
               href={`/articles/${categorySlug}`}
               prefetch
-              className="inline-flex items-center justify-center px-4 py-2 uppercase text-black/60 bg-dark-purple/5 hover:bg-purple-100 rounded-lg text-xs font-medium transition-colors focus-visible:outline-none"
+              className="inline-flex items-center justify-center px-4 py-2 uppercase text-black/60 dark:text-white/60 bg-dark-purple/20 hover:bg-purple-100 dark:hover:bg-dark-purple/50 rounded-lg text-xs font-medium transition-colors focus-visible:outline-none"
               aria-label={`Browse ${categoryName} articles`}>
               {categoryName}
             </Link>

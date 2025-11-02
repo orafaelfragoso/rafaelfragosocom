@@ -2,48 +2,32 @@
 
 import type { LngLatBoundsLike, LngLatLike, Map as MapboxMap } from 'mapbox-gl'
 import { useTheme } from 'next-themes'
-import { Activity, useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import { env } from '@/env'
-import { useDistance } from '@/hooks/use-distance'
-import { useIpLocation } from '@/hooks/use-ip-location'
+import { useLocationDistance } from '@/hooks/use-location-distance'
 
-const RIO_COORDINATES = {
-  latitude: -23.0225742,
-  longitude: -43.4972615,
-}
-
-interface MapboxProps {
-  showDistance?: boolean
-}
-
-// Dynamically load Mapbox CSS only when needed to avoid preload warnings
 const loadMapboxCSS = (): Promise<void> => {
   return new Promise((resolve) => {
-    // Check if CSS is already loaded
     const existingLink = document.querySelector('link[href*="mapbox-gl.css"]')
     if (existingLink) {
       resolve()
       return
     }
 
-    // Inject link tag to load CSS from Mapbox CDN
-    // This avoids Next.js preloading since it's loaded dynamically
     const link = document.createElement('link')
     link.rel = 'stylesheet'
     link.href = 'https://api.mapbox.com/mapbox-gl-js/v3.16.0/mapbox-gl.css'
     link.onload = () => resolve()
-    link.onerror = () => resolve() // Resolve anyway to not block map initialization
+    link.onerror = () => resolve()
     document.head.appendChild(link)
   })
 }
 
-export function Mapbox({ showDistance }: MapboxProps) {
+export function Mapbox() {
   const { theme, systemTheme } = useTheme()
-  const { coordinates: userLocation, loading } = useIpLocation()
-  const { formattedDistance } = useDistance(userLocation, RIO_COORDINATES)
+  const { userLocation, rioCoordinates, loading } = useLocationDistance()
   const mapContainerRef = useRef<HTMLDivElement>(null)
   const mapRef = useRef<MapboxMap | null>(null)
-  const [isMounted, setIsMounted] = useState(false)
 
   const mapStyle = useMemo(() => {
     const currentTheme = theme === 'system' ? systemTheme : theme
@@ -53,16 +37,11 @@ export function Mapbox({ showDistance }: MapboxProps) {
   }, [theme, systemTheme])
 
   useEffect(() => {
-    setIsMounted(true)
-  }, [])
-
-  useEffect(() => {
     if (loading || (!userLocation?.latitude && !userLocation?.longitude)) return
 
     let isMounted = true
 
     const initMap = async () => {
-      // Load CSS dynamically before initializing the map
       await loadMapboxCSS()
 
       const mapboxgl = (await import('mapbox-gl')).default
@@ -72,10 +51,10 @@ export function Mapbox({ showDistance }: MapboxProps) {
       mapboxgl.accessToken = env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN!
 
       const pointA: LngLatLike = [userLocation.longitude, userLocation.latitude]
-      const pointB: LngLatLike = [RIO_COORDINATES.longitude, RIO_COORDINATES.latitude]
+      const pointB: LngLatLike = [rioCoordinates.longitude, rioCoordinates.latitude]
       const fullCoordinates = [
         [userLocation.longitude + 0.03, userLocation.latitude + 0.03],
-        [RIO_COORDINATES.longitude - 0.03, RIO_COORDINATES.latitude - 0.03],
+        [rioCoordinates.longitude - 0.03, rioCoordinates.latitude - 0.03],
       ] satisfies LngLatBoundsLike
 
       const el = document.createElement('div')
@@ -189,33 +168,11 @@ export function Mapbox({ showDistance }: MapboxProps) {
         mapRef.current = null
       }
     }
-  }, [userLocation, mapStyle, loading])
+  }, [userLocation, rioCoordinates, mapStyle, loading])
 
   return (
-    <>
-      <div className="flex-1 rounded-md overflow-hidden min-h-64">
-        <div className="map-container w-full h-64" ref={mapContainerRef} aria-hidden="true" />
-      </div>
-      <div className="text-md text-[#4d4357] dark:text-foreground font-body">
-        {showDistance && (
-          <div>
-            I'm from Rio de Janeiro, Brazil
-            {isMounted && formattedDistance ? (
-              <>
-                , roughly <span className="font-bold">{formattedDistance}</span> away from your current location,
-                according to your ip address.
-              </>
-            ) : (
-              <>
-                <Activity aria-label="Loading distance">
-                  <span className="inline-block w-16 h-4 bg-muted animate-pulse rounded mx-1" />
-                </Activity>
-                according to your ip address.
-              </>
-            )}
-          </div>
-        )}
-      </div>
-    </>
+    <div className="flex-1 overflow-hidden w-full h-full">
+      <div className="map-container w-full h-full" ref={mapContainerRef} aria-hidden="true" />
+    </div>
   )
 }
