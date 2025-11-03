@@ -63,7 +63,11 @@ const nextConfig: NextConfig = {
 }
 
 const options: Options = {
-  theme: 'dracula',
+  keepBackground: true,
+  theme: {
+    dark: 'catppuccin-mocha',
+    light: 'catppuccin-latte',
+  },
 }
 
 const withMDX = createMDX({

@@ -99,7 +99,6 @@ export const components: MDXComponents = {
       {...props}
     />
   ),
-  pre: ({ className, ...props }) => <pre className={cn('mb-6', className)} {...props} />,
   hr: ({ className, ...props }) => <hr className={cn('mb-8 border-t border-border', className)} {...props} />,
 }
 

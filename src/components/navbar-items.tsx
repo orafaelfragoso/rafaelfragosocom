@@ -46,7 +46,6 @@ export function NavbarItems({ articles }: NavbarItemsProps) {
               <Link
                 key={page.href}
                 href={page.href}
-                prefetch
                 aria-current={isActive ? 'page' : undefined}
                 className={cn(
                   'relative z-10 text-base font-medium text-black/85 dark:text-white/85 hover:opacity-100 cursor-pointer transition-all duration-200',

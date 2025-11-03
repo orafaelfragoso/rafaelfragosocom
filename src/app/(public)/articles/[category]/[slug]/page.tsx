@@ -22,6 +22,8 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: ArticlePageProps): Promise<Metadata> {
+  'use cache'
+
   const { slug } = await params
   const article = await getArticleBySlug(slug)
 
@@ -60,6 +62,8 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
 }
 
 export default async function ArticlePage({ params }: ArticlePageProps) {
+  'use cache'
+
   const { slug } = await params
   const article = await getArticleBySlug(slug)
 
@@ -137,7 +141,10 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                         [
                           rehypePrettyCode,
                           {
-                            theme: 'dracula',
+                            theme: {
+                              dark: 'catppuccin-mocha',
+                              light: 'catppuccin-latte',
+                            },
                             keepBackground: true,
                           },
                         ],

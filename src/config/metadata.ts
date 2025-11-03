@@ -7,7 +7,7 @@ export const createMetadata = (overrides: Partial<Metadata> = {}): Metadata => {
   const fullUrl = canonicalStr.startsWith('http') ? canonicalStr : new URL(canonicalStr, siteConfig.url).toString()
 
   return {
-    metadataBase: new URL(siteConfig.url),
+    metadataBase: new URL(siteConfig.url).toString(),
     alternates: {
       canonical,
     },

@@ -2,6 +2,8 @@ import { NavbarItems } from '@/components/navbar-items'
 import { getAllArticleFiles } from '@/lib/mdx'
 
 export async function Navbar() {
+  'use cache'
+
   const articles = await getAllArticleFiles()
 
   return (

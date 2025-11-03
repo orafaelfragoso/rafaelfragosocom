@@ -134,6 +134,25 @@
     @apply bg-background text-foreground;
   }
 
+
+  pre,
+  pre * {
+    color: var(--shiki-light) !important;
+    background-color: var(--shiki-light-bg) !important;
+    font-style: var(--shiki-light-font-style) !important;
+    font-weight: var(--shiki-light-font-weight) !important;
+    text-decoration: var(--shiki-light-text-decoration) !important;
+  }
+  
+    .dark pre,
+    .dark pre * {
+      color: var(--shiki-dark) !important;
+      background-color: var(--shiki-dark-bg) !important;
+      font-style: var(--shiki-dark-font-style) !important;
+      font-weight: var(--shiki-dark-font-weight) !important;
+      text-decoration: var(--shiki-dark-text-decoration) !important;
+    }
+
   .northern-lights::before {
     content: '';
     position: absolute;
@@ -161,25 +180,6 @@
     animation: aurora-move 15s linear infinite alternate;
   }
 
-  @view-transition {
-    navigation: auto;
-  }
-
-  ::view-transition-group(navbar) {
-    z-index: 9999;
-  }
-
-  ::view-transition-group(*) {
-    animation-duration: 0.6s;
-    animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  ::view-transition-old(*),
-  ::view-transition-new(*) {
-    animation-duration: 0.6s;
-    animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
   @media (prefers-reduced-motion: reduce) {
     .northern-lights::before,
     .northern-lights::after {
@@ -193,12 +193,6 @@
     .northern-lights::after {
       opacity: 0.4;
       transform: translateX(12%) scaleX(1.05);
-    }
-
-    ::view-transition-group(*),
-    ::view-transition-old(*),
-    ::view-transition-new(*) {
-      animation-duration: 0.01ms !important;
     }
   }
 }
