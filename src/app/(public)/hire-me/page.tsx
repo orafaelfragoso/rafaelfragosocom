@@ -18,7 +18,7 @@ export const metadata: Metadata = createMetadata({
 
 export default function HireMe() {
   return (
-    <PageTemplate maxWidth="screen-lg" as="article">
+    <PageTemplate as="article">
       <section aria-labelledby="hire-me-heading" className="mb-32 text-center">
         <Title id="hire-me-heading" className="text-center">
           Lean Forward. I Got You.
