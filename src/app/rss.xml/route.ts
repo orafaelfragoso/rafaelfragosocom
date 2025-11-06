@@ -1,4 +1,3 @@
-import { cacheLife } from 'next/cache'
 import { siteConfig } from '@/config/site'
 import { getAllArticleFiles } from '@/lib/mdx'
 
@@ -58,9 +57,6 @@ ${rssItems}
 }
 
 export async function GET() {
-  'use cache'
-  cacheLife('hours')
-
   const rss = await generateRssFeed()
 
   return new Response(rss, {

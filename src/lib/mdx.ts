@@ -13,7 +13,8 @@ const readArticleFile = async (slug: string): Promise<Article> => {
 
   const metadata = data as ArticleMetadata
 
-  return {
+  // Return a plain object by explicitly spreading to ensure it's serializable
+  return JSON.parse(JSON.stringify({
     slug,
     category: metadata.category,
     title: metadata.title,
@@ -23,7 +24,7 @@ const readArticleFile = async (slug: string): Promise<Article> => {
     author: metadata.author,
     image: metadata.image,
     content,
-  }
+  }))
 }
 
 export const getAllArticleFiles = async (): Promise<Article[]> => {
