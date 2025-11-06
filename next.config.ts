@@ -1,8 +1,6 @@
 import bundleAnalyzer from '@next/bundle-analyzer'
 import type { NextConfig } from 'next'
 
-import '@/env'
-
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   reactCompiler: true,

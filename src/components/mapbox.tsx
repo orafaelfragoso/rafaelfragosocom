@@ -3,7 +3,6 @@
 import type { LngLatBoundsLike, LngLatLike, Map as MapboxMap } from 'mapbox-gl'
 import { useTheme } from 'next-themes'
 import { useEffect, useMemo, useRef } from 'react'
-import { env } from '@/env'
 import { useLocationDistance } from '@/hooks/use-location-distance'
 
 const loadMapboxCSS = (): Promise<void> => {
@@ -48,7 +47,7 @@ export function Mapbox() {
 
       if (!isMounted) return
 
-      mapboxgl.accessToken = env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN!
+      mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN!
 
       const pointA: LngLatLike = [userLocation.longitude, userLocation.latitude]
       const pointB: LngLatLike = [rioCoordinates.longitude, rioCoordinates.latitude]
