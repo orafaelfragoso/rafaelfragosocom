@@ -1,6 +1,6 @@
 export async function GET(_request: Request) {
   try {
-    const response = await fetch(`https://ipapi.co?format=json&access_key=${process.env.IPAPI_TOKEN}`, {
+    const response = await fetch(`https://ipapi.co/json/?access_key=${process.env.IPAPI_TOKEN}`, {
       next: { revalidate: 86400 },
     })
 
