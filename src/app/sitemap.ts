@@ -1,6 +1,7 @@
 import type { MetadataRoute } from 'next'
 import config from '@/config'
-import { getAllArticles, getAllCategories } from '@/lib/mdx'
+import { getAllArticleFiles, getAllCategories } from '@/lib/mdx'
+import type { Article } from '@/types/article'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = config.site.url
@@ -39,8 +40,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.6,
   }))
 
-  const articles = await getAllArticles()
-  const articleRoutes: MetadataRoute.Sitemap = articles.map((article) => ({
+  const articles = await getAllArticleFiles()
+  const articleRoutes: MetadataRoute.Sitemap = articles.map((article: Article) => ({
     url: `${baseUrl}/articles/${article.category}/${article.slug}`,
     lastModified: new Date(article.date),
     changeFrequency: 'monthly' as const,
