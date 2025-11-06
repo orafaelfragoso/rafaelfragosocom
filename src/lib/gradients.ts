@@ -12,14 +12,18 @@ export const gradients = {
     text: 'text-black',
   },
   development: {
-    background: 'from-gray-600 to-gray-400',
+    background: 'from-[#340B05] to-[#5092C7]',
+    text: 'text-white',
+  },
+  rust: {
+    background: 'from-red-500 to-orange-400',
     text: 'text-white',
   },
   'web-development': {
     background: 'from-[#340B05] to-[#5092C7]',
     text: 'text-white',
   },
-  design: {
+  css: {
     background: 'from-purple-500 to-pink-400',
     text: 'text-white',
   },
@@ -34,5 +38,5 @@ export const gradients = {
 } as const
 
 export const getGradient = (category: string) => {
-  return gradients[category.toLowerCase() as keyof typeof gradients] || gradients.development
+  return gradients[category?.toLowerCase() as keyof typeof gradients] ?? gradients.development
 }

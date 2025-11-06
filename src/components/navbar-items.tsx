@@ -8,21 +8,18 @@ import { CommandMenu } from '@/components/command-menu'
 import { Logo } from '@/components/logo'
 import config from '@/config'
 import { cn } from '@/lib/utils'
-import type { Article } from '@/types/article'
 
-interface NavbarItemsProps {
-  articles: Article[]
-}
-
-export function NavbarItems({ articles }: NavbarItemsProps) {
+export function NavbarItems() {
   const pathname = usePathname()
   const [isScrolled, setIsScrolled] = useState(false)
+  const [mounted, setMounted] = useState(false)
 
   const handleScroll = useEffectEvent(() => {
     setIsScrolled(window.scrollY > 0)
   })
 
   useEffect(() => {
+    setMounted(true)
     handleScroll()
     window.addEventListener('scroll', handleScroll, { passive: true })
 
@@ -32,9 +29,11 @@ export function NavbarItems({ articles }: NavbarItemsProps) {
   return (
     <nav className="flex mx-4 mt-4 items-center justify-between relative" aria-label="Main navigation">
       <div
+        suppressHydrationWarning
         className={cn(
           'flex items-center gap-4 rounded-xl px-5 py-3 transition-all duration-200',
-          isScrolled &&
+          mounted &&
+            isScrolled &&
             'backdrop-blur-xl supports-backdrop-filter:bg-[rgba(0,0,0,0.05)] dark:supports-backdrop-filter:bg-[rgba(255,255,255,0.1)]',
         )}>
         <Logo href="/" aria-label="Rafael Fragoso" />
@@ -60,12 +59,14 @@ export function NavbarItems({ articles }: NavbarItemsProps) {
       </div>
 
       <div
+        suppressHydrationWarning
         className={cn(
           'flex items-center rounded-xl transition-all duration-200 p-2',
-          isScrolled &&
+          mounted &&
+            isScrolled &&
             'backdrop-blur-xl supports-backdrop-filter:bg-[rgba(0,0,0,0.05)] dark:supports-backdrop-filter:bg-[rgba(255,255,255,0.1)]',
         )}>
-        <CommandMenu articles={articles} />
+        <CommandMenu />
       </div>
     </nav>
   )

@@ -1,0 +1,453 @@
+---
+title: CSS Just Got JavaScript Conditionals and Nobody's Talking About It
+description: CSS now evaluates conditions within property values. The `if()` function assigns different values to properties based on style queries, media queries, or feature queries—all without JavaScript, without extra classes, without computed properties.
+date: 2025-11-05
+category: css
+tags:
+  - css
+  - html
+  - web-development
+---
+
+CSS now evaluates conditions within property values. The `if()` function assigns different values to properties based on style queries, media queries, or feature queries—all without JavaScript, without extra classes, without computed properties. This changes how you approach responsive design and feature detection at the style level.
+
+## Syntax and Structure: Understanding the Conditional Chain
+
+The `if()` function accepts a semicolon-separated list of condition-value pairs. Each condition evaluates in order, and the first that returns true provides the value. An optional `else` keyword provides a default when all conditions fail.
+
+```css
+property: if(
+  condition-1: value-1;
+  condition-2: value-2;
+  else: fallback-value;
+);
+```
+
+Critically, there must be no space between `if` and the opening parenthesis. The parser treats `if (` as invalid:
+
+```css
+/* ✅ Valid */
+padding: if(style(--size: "2xl"): 1em; else: 0.25em);
+
+/* ❌ Invalid—space between if and ( */
+padding: if (style(--size: "2xl"): 1em; else: 0.25em);
+```
+
+Each condition ends with a colon, each value-pair ends with a semicolon. The final semicolon is optional.
+
+## Style Queries: Conditional Values Based on Custom Properties
+
+Style queries test whether a custom property exists and holds a specific value. This lets you apply different property values based on component state encoded in CSS variables:
+
+```css
+div {
+  background-image: if(
+    style(--scheme: ice): linear-gradient(#caf0f8, white, #caf0f8);
+    style(--scheme: fire): linear-gradient(#ffc971, white, #ffc971);
+    else: none;
+  );
+}
+```
+
+When `--scheme` equals `ice`, the first condition passes and returns the ice-blue gradient. If `--scheme` equals `fire`, the gradient switches to warm tones. If `--scheme` is undefined or set to anything else, the `else` clause applies.
+
+This pattern eliminates the need for multiple rulesets or JavaScript-driven class switching. Define your design system state with custom properties, then style queries read those values:
+
+```css
+/* Design system configuration via custom properties */
+:root {
+  --theme: light;
+  --layout: desktop;
+  --motion: reduced;
+}
+
+body {
+  background-color: if(
+    style(--theme: light): #ffffff;
+    style(--theme: dark): #1a1a1a;
+    else: #f0f0f0;
+  );
+  
+  color: if(
+    style(--theme: light): #333333;
+    style(--theme: dark): #eeeeee;
+    else: #666666;
+  );
+}
+
+button {
+  transition: background-color if(
+    style(--motion: reduced): 0s;
+    else: 0.3s ease-in-out;
+  );
+}
+```
+
+Style queries support logical operators—`and`, `or`, and `not`—for complex conditions:
+
+```css
+button {
+  background-color: if(
+    style((--theme: dark) and (--contrast: high)): #ffffff;
+    style((--theme: dark) or (--theme: very-dark)): #333333;
+    not style(--theme: light): #f0f0f0;
+    else: #999999;
+  );
+}
+```
+
+The `and` operator requires both conditions to be true. The `or` operator passes if either condition is true. The `not` operator inverts the result. These operators enable precise state testing without cascading multiple independent queries.
+
+One constraint: style queries work only with custom properties, not standard CSS properties. You cannot query `color: white` directly. This design prevents unbounded introspection and keeps the feature performant.
+
+## Media Queries: Property Values That Respond to Viewport and User Preferences
+
+Media query conditions inside `if()` test viewport characteristics and user preferences, assigning different values based on the results:
+
+```css
+/* Respond to viewport width */
+.container {
+  margin: if(
+    media(width < 700px): 0 auto;
+    else: 20px auto;
+  );
+  
+  padding: if(
+    media(width < 500px): 1rem;
+    media(width < 1000px): 1.5rem;
+    else: 2rem;
+  );
+}
+```
+
+The first condition tests if viewport width is less than 700px. If true, margin becomes `0 auto` (centered). Otherwise, margin is `20px auto`. The second example chains multiple breakpoints.
+
+This approach applies a single property value conditionally without needing separate selectors or media query blocks. Compare this to traditional media queries:
+
+```css
+/* Traditional media query approach */
+.container {
+  margin: 20px auto;
+  padding: 2rem;
+}
+
+@media (max-width: 1000px) {
+  .container {
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 700px) {
+  .container {
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 500px) {
+  .container {
+    padding: 1rem;
+  }
+}
+
+/* vs. with if() */
+.container {
+  margin: if(media(width < 700px): 0 auto; else: 20px auto);
+  padding: if(
+    media(width < 500px): 1rem;
+    media(width < 1000px): 1.5rem;
+    else: 2rem;
+  );
+}
+```
+
+The `if()` approach consolidates all breakpoints for a property into a single declaration. No separate blocks needed.
+
+Media features within `if()` support all standard media query features: `orientation`, `prefers-color-scheme`, `prefers-reduced-motion`, `prefers-contrast`, and more:
+
+```css
+html {
+  font-size: if(
+    media(prefers-reduced-motion: reduce): 14px;
+    else: 16px;
+  );
+  
+  color-scheme: if(
+    media(prefers-color-scheme: dark): dark;
+    else: light;
+  );
+  
+  background-color: if(
+    media(prefers-color-scheme: dark): #1a1a1a;
+    else: #ffffff;
+  );
+}
+
+@media (prefers-contrast: more) {
+  button {
+    border-width: if(
+      media(prefers-contrast: more): 2px;
+      else: 1px;
+    );
+  }
+}
+```
+
+Combine media features with logical operators for compound conditions:
+
+```css
+/* Only apply on small, landscape screens */
+.sidebar {
+  display: if(
+    media((width < 1000px) and (orientation: landscape)): block;
+    media(width < 800px): none;
+    else: block;
+  );
+}
+
+/* Apply unless on dark mode and high contrast */
+.dialog {
+  background-color: if(
+    not media((prefers-color-scheme: dark) and (prefers-contrast: more)): white;
+    else: #f5f5f5;
+  );
+}
+```
+
+## Feature Queries: Conditional Fallbacks for Browser Support
+
+Feature queries test whether the browser supports a specific CSS property value or selector. Return different values based on support:
+
+```css
+h1 {
+  color: if(
+    supports(color: oklch(59.69% 0.1547 29.23)): oklch(59.69% 0.1547 29.23);
+    else: #d97706;
+  );
+}
+
+button {
+  border: if(
+    supports(color: lch(75% 0 0)): 3px solid lch(75% 0 0);
+    else: 3px solid silver;
+  );
+}
+```
+
+The first example checks if the browser supports the `oklch()` color space. If yes, use the modern color. If no, fall back to hex.
+
+Feature queries also check selector support:
+
+```css
+.element {
+  margin-top: if(
+    supports(selector(:has(+ *))):  1em;
+    else: 0;
+  );
+}
+```
+
+This tests whether the browser understands the `:has()` pseudo-class. If supported, apply the margin. Otherwise, omit it.
+
+Combine feature queries with logical operators:
+
+```css
+.text {
+  background: if(
+    supports((color: lch(50% 0.2 50)) and (backdrop-filter: blur(10px))): 
+      rgba(255, 255, 255, 0.8);
+    else: white;
+  );
+}
+
+.gradient {
+  background: if(
+    supports(color-mix(in srgb, white 50%, black 50%)): 
+      color-mix(in srgb, white 50%, black 50%);
+    else: #808080;
+  );
+}
+```
+
+Feature queries handle the most common browser compatibility scenario—not all browsers support the newest CSS features. Instead of hoping users upgrade or providing broad fallbacks, query specific support and serve appropriate values.
+
+## Partial Values: Conditional Components Within Properties
+
+`if()` functions can determine entire property values or just portions of them. For shorthand properties, you can conditionally set one component:
+
+```css
+/* Conditional entire border */
+border: if(
+  supports(color: lch(75% 0 0)): 3px solid lch(75% 0 0);
+  else: 3px solid silver;
+);
+
+/* Conditional color component only */
+border: 3px solid if(
+  supports(color: lch(75% 0 0)): lch(75% 0 0);
+  else: silver;
+);
+```
+
+Both approaches work. The first replaces the entire `border` value. The second sets only the color component, keeping the width and style static.
+
+This flexibility lets you vary only the parts of a property that need conditions:
+
+```css
+.box {
+  /* Keep size static, vary color conditionally */
+  box-shadow: 
+    2px 2px 4px if(
+      supports(color: lch(50% 0.2 50)): lch(50% 0.2 50);
+      else: rgba(0, 0, 0, 0.2);
+    );
+  
+  /* Keep width and style static, vary color */
+  border: 
+    2px 
+    solid 
+    if(
+      style(--theme: dark): #ffffff;
+      else: #000000;
+    );
+}
+```
+
+## Nesting and Composition: Complex Conditional Logic
+
+`if()` functions nest within other `if()` functions and within functions like `calc()`:
+
+```css
+color: if(
+  style(--scheme: ice):
+    if(
+      media(prefers-color-scheme: dark): #caf0f8;
+      else: #03045e;
+    );
+  style(--scheme: fire):
+    if(
+      media(prefers-color-scheme: dark): #ffc971;
+      else: #621708;
+    );
+  else: black
+);
+```
+
+This nested structure tests the `--scheme` custom property first. If `ice`, it then checks the user's color scheme preference and returns a light or dark ice color accordingly. If `fire`, similar logic applies with warm tones.
+
+Nesting with `calc()` enables conditional arithmetic:
+
+```css
+width: calc(if(
+  style(--layout: wide): 70%;
+  style(--layout: standard): 50%;
+  else: 30%;
+) - 50px);
+```
+
+The `if()` function resolves to a percentage (70%, 50%, or 30%), then `calc()` subtracts 50px from that percentage. This computes different final widths based on the layout mode.
+
+Combining multiple condition types creates sophisticated decision trees:
+
+```css
+.card {
+  padding: if(
+    media(width < 500px): if(
+      style(--density: compact): 0.5rem;
+      else: 1rem;
+    );
+    media(width < 1000px): if(
+      style(--density: compact): 1rem;
+      else: 1.5rem;
+    );
+    else: if(
+      style(--density: compact): 1.5rem;
+      else: 2rem;
+    );
+  );
+}
+```
+
+This structure tests viewport width first, then for each breakpoint, tests the density preference. The final padding adapts to both screen size and the user's preference for compact or spacious layouts.
+
+## Fallback Strategy: Supporting Non-Supporting Browsers
+
+Browsers that don't recognize `if()` ignore the conditional declaration entirely, falling back to the initial property value. Provide explicit fallbacks:
+
+```css
+padding: 1em;
+padding: if(style(--size: "2xl"): 1em; else: 0.25em);
+```
+
+Non-supporting browsers apply `padding: 1em`. Supporting browsers override with the second declaration, conditionally applying either `1em` or `0.25em`.
+
+For properties without a safe initial value, provide a complete fallback:
+
+```css
+background-color: #000000;
+background-color: if(
+  style(--theme: light): #ffffff;
+  style(--theme: dark): #1a1a1a;
+  else: #888888;
+);
+```
+
+Omitting an `else` clause means non-matching conditions result in the property becoming `initial`. This is usually undesirable:
+
+```css
+/* Without else—if no condition matches, padding becomes initial (0) */
+padding: if(
+  media(width > 700px): 2rem;
+  media(width > 400px): 1rem;
+);
+
+/* With else—if no condition matches, padding is a sensible default */
+padding: if(
+  media(width > 700px): 2rem;
+  media(width > 400px): 1rem;
+  else: 0.5rem;
+);
+```
+
+## Browser Support and Experimental Status
+
+The `if()` function is experimental and not yet supported across all major browsers. Check current compatibility before production use. Provide fallbacks for all deployments that encounter older browsers.
+
+The feature demonstrates CSS's evolution toward more declarative conditionals. Previously, applying different values based on conditions required either JavaScript or multiple CSS rules spread across media queries and class selectors. The `if()` function consolidates these patterns into single declarations.
+
+## Practical Integration: Real-World Application Patterns
+
+Replace scattered media queries with centralized conditional declarations. A button component that adapts to viewport, theme, and motion preferences:
+
+```css
+button {
+  /* Size adapts to viewport */
+  padding: if(
+    media(width < 500px): 0.5rem 1rem;
+    media(width < 1000px): 0.75rem 1.5rem;
+    else: 1rem 2rem;
+  );
+  
+  /* Color adapts to theme */
+  background-color: if(
+    style(--theme: light): #007bff;
+    style(--theme: dark): #0056b3;
+    else: #cccccc;
+  );
+  
+  /* Transition respects motion preference */
+  transition: background-color if(
+    media(prefers-reduced-motion: reduce): 0s;
+    else: 0.3s ease-in-out;
+  );
+  
+  /* Border uses modern color if supported */
+  border: 1px solid if(
+    supports(color: lch(50% 0.2 50)): lch(50% 0.2 50);
+    else: #999999;
+  );
+}
+```
+
+All conditions for a single component consolidate into one ruleset, eliminating scattered declarations across multiple selectors and media query blocks.
+
+The `if()` function represents a maturation of CSS's conditional capabilities. What previously required architectural decisions—separate files, class management, JavaScript state—now lives declaratively where styles belong.

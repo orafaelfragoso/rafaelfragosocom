@@ -24,7 +24,7 @@ export function Hero() {
             </div>
           </div>
 
-          <div className="flex justify-center lg:justify-end order-first lg:order-0">
+          <div className="flex justify-center md:justify-end order-first md:order-0">
             <Image
               src="/floating-avatar.webp"
               alt={`${config.site.author.name} avatar`}

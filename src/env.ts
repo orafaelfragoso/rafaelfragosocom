@@ -2,7 +2,7 @@ function getClientEnv() {
   const mapboxToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN
 
   if (!mapboxToken || mapboxToken.trim() === '') {
-    throw new Error('NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN environment variable is required')
+    throw new Error('MAPBOX_ACCESS_TOKEN environment variable is required')
   }
 
   return {
@@ -15,6 +15,7 @@ function getServerEnv() {
     isDev: process.env.NODE_ENV === 'development',
     isProd: process.env.NODE_ENV === 'production',
     isTest: process.env.NODE_ENV === 'test',
+    IPAPI_TOKEN: process.env.IPAPI_TOKEN,
   }
 }
 

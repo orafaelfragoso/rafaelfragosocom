@@ -1,0 +1,594 @@
+---
+title: Ownership and Borrowing in Rust - How Memory Safety Becomes Compile-Time Verification
+description: Rust's ownership system enforces memory safety rules at compile time rather than relying on garbage collection or manual deallocation.
+date: 2025-11-06
+category: rust
+tags:
+  - rust
+  - back-end
+  - low-level
+---
+
+Rust's ownership system enforces memory safety rules at compile time rather than relying on garbage collection or manual deallocation. Every value has exactly one owner. When the owner goes out of scope, the value is deallocated. Borrowing lets you access values temporarily without transferring ownership. The borrow checker verifies that these rules hold before code runs. Understanding ownership and borrowing eliminates entire categories of runtime errors—use-after-free, double-free, data races—before they happen.
+
+## Ownership: The Core Rule
+
+In Rust, every value bound to a variable has one owner. When that variable goes out of scope, its value is deallocated. This applies to heap-allocated data like `String` and `Vec`, as well as stack-allocated types with custom `Drop` implementations.
+
+```rust
+fn main() {
+    let s1 = String::from("hello");
+    println!("{}", s1); // "hello"
+} // s1 goes out of scope here, memory is freed
+```
+
+When `s1` goes out of scope at the closing brace, Rust calls `drop()` on the `String`, deallocating the heap memory. The programmer never explicitly calls `drop()`—Rust inserts it automatically.
+
+Assigning a value to another variable transfers ownership:
+
+```rust
+fn main() {
+    let s1 = String::from("hello");
+    let s2 = s1; // Ownership moves from s1 to s2
+    
+    println!("{}", s1); // ❌ Compile error: s1 no longer owns the value
+    println!("{}", s2); // ✅ "hello"
+}
+```
+
+After `let s2 = s1`, the `String` value is owned by `s2`, not `s1`. Attempting to use `s1` results in a compile error: "value used after move". This move semantics prevents double-free bugs. The old owner can't accidentally use the value after someone else took ownership.
+
+This behavior differs fundamentally from types that implement `Copy`, like integers and booleans:
+
+```rust
+fn main() {
+    let x = 5;
+    let y = x; // x is copied, not moved
+    
+    println!("{}", x); // ✅ 5
+    println!("{}", y); // ✅ 5
+}
+```
+
+Integer values are small enough to fit on the stack. Copying them is cheap, so `Copy` types copy by default rather than move. `String` does not implement `Copy`—copying heap data is potentially expensive and should be explicit.
+
+Passing values to functions transfers ownership:
+
+```rust
+fn takes_ownership(s: String) {
+    println!("{}", s);
+} // s goes out of scope, memory is freed
+
+fn main() {
+    let s = String::from("hello");
+    takes_ownership(s); // Ownership moves into the function
+    
+    println!("{}", s); // ❌ Compile error: s no longer owns the value
+}
+```
+
+After calling `takes_ownership(s)`, the `String` is owned by the `s` parameter inside the function. When the function returns, that parameter goes out of scope and the memory is freed. The original `s` in `main` is invalid.
+
+Returning values from functions transfers ownership back:
+
+```rust
+fn gives_ownership() -> String {
+    String::from("hello")
+} // The String is returned, ownership transfers to the caller
+
+fn main() {
+    let s = gives_ownership(); // Ownership enters main
+    println!("{}", s); // ✅ "hello"
+} // s goes out of scope, memory is freed
+```
+
+The function creates a `String`, returns it, and the caller takes ownership. Without this transfer, the `String` would be deallocated when the function returns, and the caller would receive a dangling pointer.
+
+## Borrowing: Temporary Access Without Ownership Transfer
+
+Borrowing lets you access a value without taking ownership. The original owner retains the value and deallocates it when appropriate. There are two forms: immutable borrows and mutable borrows.
+
+### Immutable Borrows: Read-Only Access
+
+An immutable borrow (`&T`) gives temporary read-only access:
+
+```rust
+fn print_length(s: &String) {
+    println!("Length: {}", s.len());
+} // s goes out of scope, but the String is not deallocated
+
+fn main() {
+    let s = String::from("hello");
+    print_length(&s); // Borrow s immutably
+    
+    println!("{}", s); // ✅ s is still valid, not deallocated
+}
+```
+
+The `&s` syntax borrows `s` immutably. Inside `print_length`, the parameter `s` is a reference—it refers to the original `String` but doesn't own it. When the function returns, the reference goes out of scope, but the original `String` remains valid in `main`.
+
+Multiple immutable borrows can coexist:
+
+```rust
+fn main() {
+    let s = String::from("hello");
+    
+    let r1 = &s;
+    let r2 = &s;
+    let r3 = &s;
+    
+    println!("{}, {}, {}", r1, r2, r3); // ✅ All three references are valid
+}
+```
+
+Multiple readers accessing the same data simultaneously is safe—they can't modify the data, so no conflicts occur. The borrow checker allows this.
+
+However, once you create an immutable borrow, the owner cannot modify the value:
+
+```rust
+fn main() {
+    let mut s = String::from("hello");
+    let r = &s; // Immutable borrow
+    
+    s.push_str(" world"); // ❌ Compile error: cannot mutate while borrowed
+    println!("{}", r);
+}
+```
+
+After creating the immutable borrow `r`, attempting to mutate `s` fails. The borrow checker prevents this because `r` refers to the data, and mutation could invalidate or change what `r` points to.
+
+### Mutable Borrows: Exclusive Modification Access
+
+A mutable borrow (`&mut T`) gives temporary exclusive access for modification:
+
+```rust
+fn append_string(s: &mut String, suffix: &str) {
+    s.push_str(suffix);
+}
+
+fn main() {
+    let mut s = String::from("hello");
+    append_string(&mut s, " world"); // Mutable borrow
+    
+    println!("{}", s); // ✅ "hello world"
+}
+```
+
+The `&mut s` syntax creates a mutable borrow. Inside `append_string`, the parameter `s` can modify the original `String`. When the function returns, the mutable borrow ends, and `s` in `main` is valid again.
+
+Only one mutable borrow can exist at a time:
+
+```rust
+fn main() {
+    let mut s = String::from("hello");
+    
+    let r1 = &mut s;
+    let r2 = &mut s; // ❌ Compile error: cannot have two mutable borrows
+    
+    println!("{}, {}", r1, r2);
+}
+```
+
+Two mutable borrows would allow two independent modifications to the same data, creating undefined behavior. The borrow checker enforces exclusivity.
+
+An immutable borrow and mutable borrow cannot coexist:
+
+```rust
+fn main() {
+    let mut s = String::from("hello");
+    
+    let r1 = &s;      // Immutable borrow
+    let r2 = &mut s;  // ❌ Compile error: cannot mutate while immutably borrowed
+    
+    println!("{}", r1);
+}
+```
+
+After creating the immutable borrow, a mutable borrow would violate the guarantee that `r1` refers to stable data. The compiler prevents this.
+
+## Borrow Scope: When Borrows End
+
+Borrows end when the last use of the reference occurs, not necessarily when the reference variable goes out of scope. This rule, called Non-Lexical Lifetimes (NLL), lets you create new borrows after a previous one ends:
+
+```rust
+fn main() {
+    let mut s = String::from("hello");
+    
+    let r1 = &s;
+    let r2 = &s;
+    println!("{}, {}", r1, r2); // Last use of r1 and r2
+    
+    let r3 = &mut s; // ✅ Mutable borrow allowed—r1 and r2 are no longer used
+    println!("{}", r3);
+}
+```
+
+After `println!("{}, {}", r1, r2)`, the immutable borrows are no longer used. Even though `r1` and `r2` variables exist, Rust allows a new mutable borrow because the old borrows won't be accessed.
+
+```rust
+fn main() {
+    let mut s = String::from("hello");
+    
+    let r1 = &s;
+    println!("{}", r1); // Last use of r1
+    
+    let r2 = &mut s; // ✅ Mutable borrow allowed
+    println!("{}", r2);
+}
+```
+
+NLL makes borrowing more flexible. You can create a mutable borrow as soon as immutable borrows finish being used, even if they're still in scope.
+
+## References and Dereferencing
+
+References point to values without owning them. Accessing the referent requires dereferencing with `*`:
+
+```rust
+fn main() {
+    let x = 5;
+    let r = &x; // Reference to x
+    
+    println!("{}", *r); // ✅ 5—dereference to access the value
+    println!("{}", r);  // ✅ 5—println! automatically dereferences
+}
+```
+
+For `String` and `Vec`, indexing and method calls automatically dereference:
+
+```rust
+fn main() {
+    let s = String::from("hello");
+    let r = &s;
+    
+    println!("{}", r.len()); // ✅ Automatically dereferences to call len()
+    println!("{}", (*r).len()); // Also valid but verbose
+}
+```
+
+When calling methods on a reference, Rust automatically dereferences and re-references as needed. This ergonomic improvement makes references feel like direct access.
+
+For function parameters, reference types clarify intent:
+
+```rust
+fn print_string(s: &String) {
+    println!("{}", s);
+}
+
+fn print_slice(s: &str) {
+    println!("{}", s);
+}
+
+fn main() {
+    let s = String::from("hello");
+    print_string(&s); // Borrows the String
+    print_slice(&s);  // Coerces to &str slice
+}
+```
+
+Taking `&String` is more restrictive than taking `&str`. A string slice can accept both owned `String` and string literals. For reusable functions, accepting slices is more flexible.
+
+## Lifetime Annotations: Expressing Borrow Duration
+
+Lifetimes specify how long references are valid. Most of the time, Rust infers lifetimes automatically, but sometimes the compiler needs explicit annotations.
+
+The syntax uses a quote prefix: `'a`, `'b`, `'static`:
+
+```rust
+fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {
+    if x.len() > y.len() {
+        x
+    } else {
+        y
+    }
+}
+```
+
+This function takes two string slices and returns one of them. The lifetime annotation `'a` says: "The returned reference will be valid as long as both input references are valid". The compiler enforces this.
+
+Without the annotation, the compiler can't determine which input the function returns:
+
+```rust
+fn longest(x: &str, y: &str) -> &str {
+    if x.len() > y.len() {
+        x
+    } else {
+        y
+    }
+}
+```
+
+This code doesn't compile. The return type is `&str`, but the compiler doesn't know if it refers to `x` or `y`, so it can't verify the reference is valid.
+
+Struct fields with references need lifetime annotations:
+
+```rust
+struct ImportantExcerpt<'a> {
+    part: &'a str,
+}
+
+fn main() {
+    let novel = String::from("Call me Ishmael. Some years ago...");
+    let first_sentence = novel.split('.').next().unwrap();
+    let excerpt = ImportantExcerpt {
+        part: first_sentence,
+    };
+}
+```
+
+The `'a` lifetime says: "The `ImportantExcerpt` struct cannot outlive the `&str` it refers to". The struct borrows from the `novel` string. When `novel` goes out of scope, the reference inside `excerpt` would be invalid, so the compiler prevents the struct from outliving the borrowed data.
+
+The `'static` lifetime means a reference is valid for the entire program duration:
+
+```rust
+let s: &'static str = "hello"; // String literal lives for the entire program
+```
+
+String literals are hard-coded into the binary and exist for the program's lifetime. Assigning a reference to a string literal to a `'static` reference is safe.
+
+Elision rules let you omit lifetime annotations in common cases. If a function takes one reference parameter and returns a reference, the return reference is assumed to have the same lifetime as the input:
+
+```rust
+fn first_word(s: &str) -> &str {
+    // Lifetime elision: &str -> &str is implicitly &'a str -> &'a str
+    &s[..1]
+}
+```
+
+This works without explicit annotations because the pattern is unambiguous—the returned slice refers to the input string.
+
+## Moving vs. Borrowing: Design Patterns
+
+Choosing between moving and borrowing affects function design and caller ergonomics.
+
+Move semantics when you need to take ownership:
+
+```rust
+fn consume_string(s: String) -> usize {
+    s.len() // Function consumes the String and returns metadata
+}
+
+fn main() {
+    let s = String::from("hello");
+    let len = consume_string(s); // s moves into the function
+    
+    // s is no longer valid here
+}
+```
+
+Use this pattern when the function needs exclusive control—modifying the value, consuming it, or transferring it elsewhere.
+
+Borrow when the function only needs to read or temporarily modify:
+
+```rust
+fn get_length(s: &String) -> usize {
+    s.len() // Read-only access
+}
+
+fn append_exclamation(s: &mut String) {
+    s.push('!'); // Temporary exclusive modification
+}
+
+fn main() {
+    let mut s = String::from("hello");
+    
+    let len = get_length(&s);
+    append_exclamation(&mut s);
+    
+    println!("{}: {}", s, len); // s is still valid
+}
+```
+
+Borrowing lets the caller retain ownership and continue using the value after the function call.
+
+For many types, borrowing with generics makes functions more flexible:
+
+```rust
+// Restrictive—requires owned String
+fn print_owned(s: String) {
+    println!("{}", s);
+}
+
+// Flexible—accepts &str, &String, string slices, etc.
+fn print_flexible(s: &str) {
+    println!("{}", s);
+}
+
+fn main() {
+    let s = String::from("hello");
+    print_flexible(&s); // Works
+    print_flexible("world"); // Works
+    
+    let slice = &s[..5];
+    print_flexible(slice); // Works
+}
+```
+
+The second function accepts `&str`, which covers owned strings, string slices, and literals. The first function only accepts owned `String` values.
+
+## Interior Mutability: Mutation Behind Immutable References
+
+Some types allow mutation through immutable references via `Cell` and `RefCell`. This is useful when the type internally manages how mutations occur.
+
+`Cell<T>` provides mutation without borrowing by copying the value:
+
+```rust
+use std::cell::Cell;
+
+fn main() {
+    let x = Cell::new(5);
+    
+    x.set(10); // Mutation through immutable reference
+    println!("{}", x.get()); // ✅ 10
+}
+```
+
+`set()` modifies the value inside the `Cell` even though `x` is immutable. This works because copying integers is cheap. `Cell<T>` only works with `Copy` types.
+
+`RefCell<T>` allows mutable borrowing at runtime:
+
+```rust
+use std::cell::RefCell;
+
+fn main() {
+    let x = RefCell::new(String::from("hello"));
+    
+    {
+        let mut x_mut = x.borrow_mut(); // Mutable borrow at runtime
+        x_mut.push_str(" world");
+    } // Mutable borrow ends
+    
+    println!("{}", *x.borrow()); // ✅ "hello world"
+}
+```
+
+`RefCell` defers borrow checking to runtime. `borrow_mut()` returns a `RefMut` smart pointer. Mutable borrows must be exclusive—if another mutable borrow exists or an immutable borrow is active, `borrow_mut()` panics.
+
+Interior mutability trades compile-time safety for runtime flexibility. Use it when compile-time borrow checking is too restrictive but you can guarantee safety at runtime.
+
+## Smart Pointers: Ownership Wrappers
+
+Smart pointers wrap values and manage their lifetimes. `Box<T>` allocates on the heap and transfers ownership:
+
+```rust
+fn main() {
+    let b = Box::new(5); // Allocate on heap
+    println!("{}", b); // ✅ 5
+} // b goes out of scope, heap memory is freed
+```
+
+`Box` is useful when you need heap allocation or type erasure.
+
+`Rc<T>` enables multiple ownership through reference counting:
+
+```rust
+use std::rc::Rc;
+
+fn main() {
+    let a = Rc::new(5);
+    let b = Rc::clone(&a); // Increment reference count
+    let c = Rc::clone(&a);
+    
+    println!("{}", *a); // ✅ 5
+    println!("{}", *b); // ✅ 5
+    println!("{}", *c); // ✅ 5
+} // All references are freed when reference count reaches 0
+```
+
+`Rc` tracks how many owners exist. When the last owner drops, the value is deallocated. `Rc` only works in single-threaded contexts.
+
+`Arc<T>` is the thread-safe version:
+
+```rust
+use std::sync::Arc;
+use std::thread;
+
+fn main() {
+    let data = Arc::new(vec![1, 2, 3]);
+    
+    let data_clone = Arc::clone(&data);
+    thread::spawn(move || {
+        println!("{:?}", data_clone); // ✅ Data is safe across threads
+    });
+    
+    println!("{:?}", data); // ✅ Main thread still accesses data
+}
+```
+
+`Arc` uses atomic operations to safely update the reference count across threads.
+
+## Move Semantics in Collections
+
+Collections like `Vec` own their elements. Pushing and removing transfers ownership:
+
+```rust
+fn main() {
+    let mut v = Vec::new();
+    
+    let s1 = String::from("hello");
+    v.push(s1); // Ownership moves into the vector
+    
+    // s1 is no longer valid
+    
+    let s2 = v.pop(); // Ownership moves out of the vector
+    println!("{:?}", s2); // ✅ Some("hello")
+}
+```
+
+Iterating over a collection moves elements:
+
+```rust
+fn main() {
+    let v = vec![
+        String::from("hello"),
+        String::from("world"),
+    ];
+    
+    for s in v {
+        println!("{}", s); // s owns each string
+    } // v is empty and deallocated
+}
+```
+
+To iterate without moving, borrow:
+
+```rust
+fn main() {
+    let v = vec![
+        String::from("hello"),
+        String::from("world"),
+    ];
+    
+    for s in &v {
+        println!("{}", s); // s is a reference
+    }
+    
+    println!("{:?}", v); // ✅ v is still valid
+}
+```
+
+The `&v` syntax creates an iterator over references. Elements aren't moved, just borrowed.
+
+## Practical Implications: Error Prevention Through Ownership
+
+Ownership and borrowing prevent entire categories of bugs at compile time.
+
+Use-after-free becomes impossible:
+
+```rust
+// This doesn't compile
+let x = String::from("hello");
+let r = &x;
+drop(x); // Error: x is borrowed
+println!("{}", r);
+```
+
+The borrow checker ensures `x` cannot be dropped while `r` is still valid.
+
+Double-free prevention:
+
+```rust
+// This doesn't compile
+let x = String::from("hello");
+let y = x;
+drop(x); // Error: x no longer owns the value
+drop(y);
+```
+
+Once `x` is moved to `y`, the borrow checker prevents dropping `x`.
+
+Data races prevented through exclusive mutable access:
+
+```rust
+// This doesn't compile in a multi-threaded context without Arc and Mutex
+let data = String::from("hello");
+thread::spawn(|| {
+    data.push('!'); // Error: cannot move non-Copy into closure
+});
+thread::spawn(|| {
+    println!("{}", data); // Error: data already moved
+});
+```
+
+Safe concurrent access requires explicit types like `Arc<Mutex<T>>`.
+
+Ownership and borrowing form the foundation of Rust's memory safety guarantees. They eliminate entire classes of runtime errors by enforcing rules at compile time. The learning curve is steep—thinking about ownership and lifetimes differs from most other languages—but the payoff is programs that are simultaneously fast and safe.

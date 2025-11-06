@@ -8,7 +8,7 @@ const RIO_COORDINATES: Coordinates = {
 }
 
 export function useLocationDistance() {
-  const { coordinates: userLocation, loading } = useIpLocation()
+  const { coordinates: userLocation, loading, error } = useIpLocation()
   const { formattedDistance } = useDistance(userLocation, RIO_COORDINATES)
 
   return {
@@ -16,5 +16,6 @@ export function useLocationDistance() {
     rioCoordinates: RIO_COORDINATES,
     formattedDistance,
     loading,
+    error,
   }
 }

@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { cacheLife } from 'next/cache'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { MDXRemote } from 'next-mdx-remote/rsc'
@@ -18,11 +19,17 @@ interface ArticlePageProps {
 }
 
 export async function generateStaticParams() {
-  return await getAllArticleFiles()
+  const articles = await getAllArticleFiles()
+
+  return articles.map((article) => ({
+    category: article.category,
+    slug: article.slug,
+  }))
 }
 
 export async function generateMetadata({ params }: ArticlePageProps): Promise<Metadata> {
   'use cache'
+  cacheLife('hours')
 
   const { slug } = await params
   const article = await getArticleBySlug(slug)
@@ -63,6 +70,7 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
 
 export default async function ArticlePage({ params }: ArticlePageProps) {
   'use cache'
+  cacheLife('hours')
 
   const { slug } = await params
   const article = await getArticleBySlug(slug)
@@ -153,7 +161,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                   }}
                 />
               </div>
-              <footer className="flex flex-col gap-4 mt-8 mb-30">
+              <footer className="flex flex-col gap-4 mt-8">
                 <hr className="border-t border-border" />
                 <nav aria-label="Article navigation" className="flex justify-center">
                   <Button variant="outline" asChild>

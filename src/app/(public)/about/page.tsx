@@ -23,8 +23,6 @@ export const metadata: Metadata = createMetadata({
 })
 
 export default async function About() {
-  'use cache'
-
   const structuredData = [createProfilePageSchema(), createBreadcrumbListSchema('/about')]
 
   return (

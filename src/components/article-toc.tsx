@@ -109,40 +109,25 @@ export function ArticleTOC({ initialHeadings = [], className }: ArticleTOCProps)
   }, [initialHeadings])
 
   useEffect(() => {
-    const handleScroll = () => {
-      const headingElements = headings.map((h) => ({
-        id: h.id,
-        element: document.getElementById(h.id),
-      }))
+    if (headings.length === 0) return
 
-      let currentActiveId = ''
-
-      for (let i = headingElements.length - 1; i >= 0; i--) {
-        const { element, id } = headingElements[i]
-        if (element) {
-          const rect = element.getBoundingClientRect()
-          if (rect.top <= 150) {
-            currentActiveId = id
-            break
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActiveId(entry.target.id)
           }
-        }
-      }
+        })
+      },
+      { rootMargin: '-100px 0px -80% 0px', threshold: 0 },
+    )
 
-      if (!currentActiveId && headingElements.length > 0) {
-        currentActiveId = headingElements[0].id
-      }
+    headings.forEach(({ id }) => {
+      const element = document.getElementById(id)
+      if (element) observer.observe(element)
+    })
 
-      setActiveId(currentActiveId)
-    }
-
-    if (headings.length > 0) {
-      window.addEventListener('scroll', handleScroll, { passive: true })
-      handleScroll()
-    }
-
-    return () => {
-      window.removeEventListener('scroll', handleScroll)
-    }
+    return () => observer.disconnect()
   }, [headings])
 
   const handleHeadingClick = (id: string) => {
@@ -167,15 +152,12 @@ export function ArticleTOC({ initialHeadings = [], className }: ArticleTOCProps)
 
   return (
     <aside
-      className={cn(
-        'hidden lg:block w-56 shrink-0 sticky top-24 h-fit max-h-[calc(100vh-8rem)] overflow-y-auto',
-        'text-sm pr-8',
-        className,
-      )}
+      className={cn('hidden lg:block w-56 shrink-0 sticky top-24 self-start', 'text-sm pr-8', className)}
+      style={{ maxHeight: 'calc(100vh - 7rem)' }}
       aria-label="Table of contents">
-      <nav>
+      <nav className="h-full flex flex-col">
         <h2 className="text-xs font-medium uppercase tracking-wider text-muted-foreground mb-4">Contents</h2>
-        <ul className="space-y-1.5">
+        <ul className="space-y-1.5 overflow-y-auto pr-2 flex-1">
           {headings.map((heading) => {
             const isActive = activeId === heading.id
             const indentClass =

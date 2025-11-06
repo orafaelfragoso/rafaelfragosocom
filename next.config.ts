@@ -1,7 +1,5 @@
 import bundleAnalyzer from '@next/bundle-analyzer'
-import createMDX from '@next/mdx'
 import type { NextConfig } from 'next'
-import type { Options } from 'rehype-pretty-code'
 
 import '@/env'
 
@@ -10,14 +8,10 @@ const nextConfig: NextConfig = {
   reactCompiler: true,
   compress: true,
   poweredByHeader: false,
-  productionBrowserSourceMaps: true,
-  experimental: {
-    viewTransition: true,
-    mdxRs: true,
-  },
-  output: 'standalone',
+  productionBrowserSourceMaps: false,
   cacheComponents: true,
-  pageExtensions: ['js', 'jsx', 'md', 'mdx', 'ts', 'tsx'],
+  output: 'standalone',
+  pageExtensions: ['js', 'jsx', 'ts', 'tsx'],
 
   images: {
     formats: ['image/avif', 'image/webp'],
@@ -59,27 +53,19 @@ const nextConfig: NextConfig = {
         },
       ],
     },
+    {
+      source: '/fonts/:path*',
+      headers: [{ key: 'Cache-Control', value: 'public, max-age=31536000, immutable' }],
+    },
+    {
+      source: '/_next/static/:path*',
+      headers: [{ key: 'Cache-Control', value: 'public, max-age=31536000, immutable' }],
+    },
   ],
 }
-
-const options: Options = {
-  keepBackground: true,
-  theme: {
-    dark: 'catppuccin-mocha',
-    light: 'catppuccin-latte',
-  },
-}
-
-const withMDX = createMDX({
-  extension: /\.mdx?$/,
-  options: {
-    remarkPlugins: [],
-    rehypePlugins: [['rehype-pretty-code', options]],
-  },
-})
 
 const withBundleAnalyzer = bundleAnalyzer({
   enabled: process.env.ANALYZE === 'true',
 })
 
-export default withBundleAnalyzer(withMDX(nextConfig))
+export default withBundleAnalyzer(nextConfig)

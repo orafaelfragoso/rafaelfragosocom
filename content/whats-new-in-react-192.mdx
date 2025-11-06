@@ -1,0 +1,650 @@
+---
+title: What's New in React 19.2 - Essential Features You Need to Know
+description: Explore React 19.2's powerful new features including Activity components, useEffectEvent, Partial Pre-rendering, and enhanced DevTools. Learn how to leverage them in your projects.
+date: 2025-11-01
+category: react
+tags:
+  - react
+  - javascript
+  - web-development
+  - performance
+  - hooks
+---
+
+React 19.2 introduces fundamental shifts in how you manage component visibility, effect dependencies, and server rendering. The framework now provides explicit control over rendering priorities, cache invalidation signals, and partial static pre-rendering. This tutorial explores each feature through production implementation patterns.
+
+## Activity: Visibility-Aware Rendering Without Performance Degradation
+
+The `Activity` component manages component rendering based on visibility state, allowing pre-rendering of offscreen content without blocking the main thread. This differs from conditional rendering—instead of removing components from the tree, `Activity` toggles their rendering priority.
+
+Enable this by wrapping components that should render in the background:
+
+```tsx
+// app/dashboard/layout.tsx
+'use client';
+
+import { Activity, useState } from 'react';
+
+export default function DashboardLayout() {
+  const [activeTab, setActiveTab] = useState<'overview' | 'analytics' | 'settings'>('overview');
+  
+  return (
+    <div>
+      <nav>
+        <button onClick={() => setActiveTab('overview')}>Overview</button>
+        <button onClick={() => setActiveTab('analytics')}>Analytics</button>
+        <button onClick={() => setActiveTab('settings')}>Settings</button>
+      </nav>
+      
+      <Activity mode={activeTab === 'overview' ? 'visible' : 'hidden'}>
+        <OverviewTab />
+      </Activity>
+      
+      <Activity mode={activeTab === 'analytics' ? 'visible' : 'hidden'}>
+        <AnalyticsTab />
+      </Activity>
+      
+      <Activity mode={activeTab === 'settings' ? 'visible' : 'hidden'}>
+        <SettingsTab />
+      </Activity>
+    </div>
+  );
+}
+```
+
+When a tab's `Activity` is set to `hidden` mode, React deprioritizes its rendering. Effects pause without unmounting, state persists, and data fetching continues in the background. This means switching back to a tab shows content instantly instead of re-rendering from scratch.
+
+The rendering approach differs fundamentally from conditional rendering with `&&`. Conditional rendering unmounts the component tree and loses all state. `Activity` preserves component state, effects, and subscriptions while deferring visual updates.
+
+For multi-step forms, this pattern prevents users from losing progress when navigating between steps:
+
+```tsx
+// app/checkout/form.tsx
+'use client';
+
+import { Activity, useState } from 'react';
+
+type Step = 'shipping' | 'payment' | 'review';
+
+function ShippingForm({ data, onChange }) {
+  return (
+    <form>
+      <input 
+        defaultValue={data.address}
+        onChange={(e) => onChange({ ...data, address: e.target.value })}
+      />
+      <input 
+        defaultValue={data.city}
+        onChange={(e) => onChange({ ...data, city: e.target.value })}
+      />
+    </form>
+  );
+}
+
+function PaymentForm({ data, onChange }) {
+  return (
+    <form>
+      <input 
+        defaultValue={data.cardNumber}
+        onChange={(e) => onChange({ ...data, cardNumber: e.target.value })}
+        placeholder="Card number"
+      />
+    </form>
+  );
+}
+
+function ReviewForm({ shippingData, paymentData }) {
+  return (
+    <div>
+      <p>Ship to: {shippingData.address}, {shippingData.city}</p>
+      <p>Card ending in: {paymentData.cardNumber.slice(-4)}</p>
+    </div>
+  );
+}
+
+export default function CheckoutFlow() {
+  const [step, setStep] = useState<Step>('shipping');
+  const [shippingData, setShippingData] = useState({ address: '', city: '' });
+  const [paymentData, setPaymentData] = useState({ cardNumber: '' });
+  
+  return (
+    <div>
+      <div className="steps">
+        <button 
+          onClick={() => setStep('shipping')}
+          className={step === 'shipping' ? 'active' : ''}
+        >
+          Shipping
+        </button>
+        <button 
+          onClick={() => setStep('payment')}
+          className={step === 'payment' ? 'active' : ''}
+        >
+          Payment
+        </button>
+        <button 
+          onClick={() => setStep('review')}
+          className={step === 'review' ? 'active' : ''}
+        >
+          Review
+        </button>
+      </div>
+      
+      <Activity mode={step === 'shipping' ? 'visible' : 'hidden'}>
+        <ShippingForm data={shippingData} onChange={setShippingData} />
+      </Activity>
+      
+      <Activity mode={step === 'payment' ? 'visible' : 'hidden'}>
+        <PaymentForm data={paymentData} onChange={setPaymentData} />
+      </Activity>
+      
+      <Activity mode={step === 'review' ? 'visible' : 'hidden'}>
+        <ReviewForm shippingData={shippingData} paymentData={paymentData} />
+      </Activity>
+    </div>
+  );
+}
+```
+
+Users navigate between steps without losing form state. When they return to the shipping step, their previously entered address and city remain. This eliminates the common frustration of re-entering data on multi-step flows.
+
+`Activity` also enables background data fetching. Hidden tabs can load their data while the user views the visible tab:
+
+```tsx
+// app/analytics/analytics-tab.tsx
+'use client';
+
+import { Activity, useEffect, useState } from 'react';
+
+function AnalyticsTab() {
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  
+  useEffect(() => {
+    fetch('/api/analytics')
+      .then(res => res.json())
+      .then(data => {
+        setData(data);
+        setLoading(false);
+      });
+  }, []);
+  
+  if (loading) return <p>Loading analytics...</p>;
+  
+  return (
+    <div>
+      <h2>Analytics</h2>
+      <p>Monthly revenue: ${data.revenue}</p>
+    </div>
+  );
+}
+
+export default function Dashboard() {
+  const [visibleTab, setVisibleTab] = useState('overview');
+  
+  return (
+    <div>
+      <nav>
+        <button onClick={() => setVisibleTab('overview')}>Overview</button>
+        <button onClick={() => setVisibleTab('analytics')}>Analytics</button>
+      </nav>
+      
+      <Activity mode="visible">
+        <OverviewTab />
+      </Activity>
+      
+      <Activity mode={visibleTab === 'analytics' ? 'visible' : 'hidden'}>
+        <AnalyticsTab />
+      </Activity>
+    </div>
+  );
+}
+```
+
+Even when the analytics tab is hidden, its effect runs and fetches data in the background. When users click the analytics tab, the data is already loaded, making the transition feel instant.
+
+## useEffectEvent: Decoupling Event Handlers from Dependency Arrays
+
+The `useEffectEvent` hook solves a specific problem: effect dependencies that change frequently but shouldn't trigger re-runs. This commonly occurs with event handlers that need access to the latest props or state.
+
+Traditional effects require all dependencies to be listed:
+
+```tsx
+'use client';
+
+import { useEffect } from 'react';
+
+function ChatConnection({ roomId, theme }) {
+  useEffect(() => {
+    const connection = createConnection(serverUrl, roomId);
+    
+    const handleConnected = () => {
+      showNotification('Connected!', theme);
+    };
+    
+    connection.on('connected', handleConnected);
+    connection.connect();
+    
+    return () => connection.disconnect();
+  }, [roomId, theme]); // ❌ theme changes cause unnecessary reconnections
+}
+```
+
+The problem: `theme` changes whenever the user switches the app's color scheme. Each `theme` change triggers the effect, which disconnects and reconnects the websocket. This causes unnecessary network activity and breaks the user experience.
+
+`useEffectEvent` lets you define event handlers that capture current props without becoming effect dependencies:
+
+```tsx
+'use client';
+
+import { useEffect, useEffectEvent } from 'react';
+
+function ChatConnection({ roomId, theme }) {
+  const onConnected = useEffectEvent(() => {
+    showNotification('Connected!', theme);
+  });
+  
+  useEffect(() => {
+    const connection = createConnection(serverUrl, roomId);
+    connection.on('connected', () => onConnected());
+    connection.connect();
+    
+    return () => connection.disconnect();
+  }, [roomId]); // ✅ Only roomId—theme changes don't trigger reconnection
+}
+```
+
+The `onConnected` event function always sees the latest `theme` value, but changes to `theme` don't trigger the effect. The websocket connection only disconnects and reconnects when `roomId` actually changes.
+
+This pattern extends to other scenarios where dependencies change frequently but shouldn't trigger effect re-runs. Consider a component that needs to handle user interactions while maintaining references to current app state:
+
+```tsx
+'use client';
+
+import { useEffect, useEffectEvent, useState } from 'react';
+
+function NotificationListener({ userId }) {
+  const [unreadCount, setUnreadCount] = useState(0);
+  const [isDarkMode, setIsDarkMode] = useState(false);
+  
+  const handleNotification = useEffectEvent((notification) => {
+    // Access latest state without triggering dependency array
+    setUnreadCount(prev => prev + 1);
+    
+    // Display notification with current theme
+    if (isDarkMode) {
+      showDarkNotification(notification);
+    } else {
+      showLightNotification(notification);
+    }
+  });
+  
+  useEffect(() => {
+    const unsubscribe = subscribeToNotifications(userId, handleNotification);
+    return () => unsubscribe();
+  }, [userId]); // Only userId matters for subscription setup
+  
+  return (
+    <div>
+      <p>Unread: {unreadCount}</p>
+      <button onClick={() => setIsDarkMode(!isDarkMode)}>
+        Toggle theme
+      </button>
+    </div>
+  );
+}
+```
+
+The notification subscription doesn't re-establish when `isDarkMode` toggles. The handler always sees the current theme preference without destabilizing the effect dependency array.
+
+Without `useEffectEvent`, managing this required either disabling the linter rule (masking real issues) or restructuring the component significantly. `useEffectEvent` provides an officially sanctioned escape hatch for the specific case where event handlers need current state but shouldn't trigger effect re-runs.
+
+## cacheSignal: Monitoring Cache Lifecycle in Server Components
+
+React's `cache()` function deduplicates fetch calls during a single render pass. The new `cacheSignal` exposes when that cache becomes invalid, enabling cleanup and preventing wasted work.
+
+Use `cacheSignal` to monitor cache lifetime:
+
+```tsx
+// app/api/posts/route.ts
+import { cache, cacheSignal } from 'react';
+
+const cachedFetch = cache(async (url: string) => {
+  const signal = cacheSignal();
+  
+  try {
+    const response = await fetch(url, { signal });
+    return response.json();
+  } catch (error) {
+    if (signal.aborted) {
+      console.log('Fetch aborted due to cache invalidation');
+    } else {
+      throw error;
+    }
+  }
+});
+
+export async function GET() {
+  const posts = await cachedFetch('/api/posts');
+  return Response.json(posts);
+}
+```
+
+The signal aborts when rendering completes, fails, or is cancelled. This prevents unnecessary processing of results that won't be used.
+
+Leverage `cacheSignal` to manage resource subscriptions:
+
+```tsx
+// lib/cached-data.ts
+import { cache, cacheSignal } from 'react';
+
+export const getCachedAnalytics = cache(async (userId: string) => {
+  const signal = cacheSignal();
+  const listeners: (() => void)[] = [];
+  
+  const subscription = analytics.subscribe(userId, (data) => {
+    if (!signal.aborted) {
+      // Only process if cache is still valid
+      processAnalyticsData(data);
+    }
+  });
+  
+  // Cleanup when cache invalidates
+  signal.addEventListener('abort', () => {
+    subscription.unsubscribe();
+    listeners.forEach(listener => listener());
+  });
+  
+  return {
+    data: await fetchInitialAnalytics(userId),
+    subscribe: (callback) => {
+      listeners.push(callback);
+      return () => {
+        listeners.splice(listeners.indexOf(callback), 1);
+      };
+    }
+  };
+});
+```
+
+When rendering fails or is abandoned, the signal fires, cleanup runs, and subscriptions terminate. This prevents ghost listeners and unnecessary background work.
+
+## Partial Pre-rendering: Static Shells with Dynamic Content
+
+Partial pre-rendering separates static page shells from dynamic content sections. React renders the static portions at build time, then fills in dynamic content on each request. This combines the speed of static generation with the freshness of dynamic rendering.
+
+The core API uses `prerender()` for the build-time phase and `resume()` for request-time completion:
+
+```tsx
+// lib/page-renderer.ts
+import { prerender, resume } from 'react';
+
+export async function buildPageShell(app: React.ReactNode) {
+  const controller = new AbortController();
+  
+  const { prelude, postponed } = await prerender(app, {
+    signal: controller.signal,
+  });
+  
+  // prelude contains the static shell
+  // postponed contains markers for dynamic sections
+  return { prelude, postponed };
+}
+
+export async function completePageWithDynamicContent(
+  app: React.ReactNode,
+  postponed: unknown
+) {
+  const resumeStream = await resume(app, postponed);
+  return resumeStream;
+}
+```
+
+This pattern works in Next.js and server-rendering scenarios where you can defer certain component trees:
+
+```tsx
+// app/dashboard/page.tsx
+import { Suspense } from 'react';
+
+// Static header, renders at build time
+function DashboardHeader() {
+  return <header>Dashboard</header>;
+}
+
+// Dynamic content, renders on request
+async function UserMetrics({ userId }: { userId: string }) {
+  const metrics = await fetch(`/api/metrics/${userId}`).then(r => r.json());
+  return <div>{metrics.activeUsers}</div>;
+}
+
+// Defer expensive component tree
+function DeferredChart({ userId }: { userId: string }) {
+  return <Suspense fallback={<p>Loading...</p>}>
+    <UserMetrics userId={userId} />
+  </Suspense>;
+}
+
+export default function Dashboard() {
+  return (
+    <div>
+      <DashboardHeader />
+      <DeferredChart userId="user-123" />
+    </div>
+  );
+}
+```
+
+During build, React renders `DashboardHeader` and serializes it. When a request comes in, React resumes rendering from where it postponed, filling in the `UserMetrics` component with fresh data.
+
+The benefit: Time-to-First-Byte improves because the server sends the static shell immediately. Users see the page structure while React populates metrics and dynamic sections.
+
+## Suspense Batching During Streaming SSR
+
+React 19.2 batches Suspense fallback resolutions during streaming server-side rendering. Instead of sending individual pieces as they load, React groups completed sections and sends them together. This reduces layout thrashing and improves perceived performance.
+
+When multiple Suspense boundaries complete around the same time, React flushes them in a single batch:
+
+```tsx
+// app/products/[id]/page.tsx
+import { Suspense } from 'react';
+
+function ProductImages({ productId }: { productId: string }) {
+  // Completes quickly
+  return <img src={`/products/${productId}/main.jpg`} />;
+}
+
+function ProductDescription({ productId }: { productId: string }) {
+  // Takes slightly longer
+  return <p>Product description...</p>;
+}
+
+function ProductReviews({ productId }: { productId: string }) {
+  // Takes longest
+  return <div>Reviews...</div>;
+}
+
+export default function ProductPage({ params }: { params: Promise<{ id: string }> }) {
+  const productId = use(params).id;
+  
+  return (
+    <div>
+      <Suspense fallback={<div>Loading images...</div>}>
+        <ProductImages productId={productId} />
+      </Suspense>
+      
+      <Suspense fallback={<div>Loading description...</div>}>
+        <ProductDescription productId={productId} />
+      </Suspense>
+      
+      <Suspense fallback={<div>Loading reviews...</div>}>
+        <ProductReviews productId={productId} />
+      </Suspense>
+    </div>
+  );
+}
+```
+
+Without batching, the server sends each completed section immediately, causing multiple page updates as the browser renders each batch. With batching, sections completing within a similar timeframe send together, resulting in fewer re-renders and a smoother experience.
+
+This optimization applies automatically in streaming SSR contexts—no code changes required.
+
+## Web Streams API Support in Node.js
+
+React's `renderToReadableStream()` and the new `resume()` API now work directly in Node.js environments, not just browsers. This simplifies server rendering setup:
+
+```ts
+// server.ts
+import { renderToReadableStream } from 'react-dom/server';
+import express from 'express';
+
+const app = express();
+
+app.get('/', async (req, res) => {
+  const stream = await renderToReadableStream(
+    <App userId={req.query.userId} />,
+    {
+      bootstrapScripts: ['/app.js'],
+    }
+  );
+  
+  stream.pipe(res);
+});
+
+app.listen(3000);
+```
+
+The stream pipes directly to the response, eliminating intermediate buffering or manual stream management. React handles backpressure automatically—if the client stops reading, React pauses rendering.
+
+For production deployments, streams reduce memory usage by rendering and sending components incrementally instead of buffering the entire HTML in memory:
+
+```ts
+// Streaming large pages with many components
+const stream = await renderToReadableStream(
+  <LargePageWithManyComponents />,
+  {
+    onError: (error) => {
+      console.error('Rendering error:', error);
+      res.statusCode = 500;
+    },
+  }
+);
+
+// Handles backpressure automatically
+// Won't buffer entire page if client is slow
+stream.pipe(res);
+```
+
+## DevTools Integration: Scheduler and Components Tracks
+
+React 19.2 integrates with Chrome DevTools to expose React's rendering priorities and component lifecycle. Two new tracks appear in the Performance tab:
+
+**Scheduler Track** shows tasks grouped by priority:
+
+```
+Blocking (user interaction)
+  ├─ handleClick (12ms)
+  └─ state update (8ms)
+
+Blocking (input)
+  └─ onChange handler (3ms)
+
+Normal (background)
+  └─ data fetch (150ms)
+```
+
+Blocking tasks execute immediately for user interactions. Normal priority tasks run when the browser is idle. This visualization helps identify why certain updates feel slow—you can see if high-priority work is being starved by lower-priority tasks.
+
+**Components Track** shows component lifecycle events:
+
+```
+Mount: UserProfile
+  └─ Layout effect
+  └─ Paint
+
+Update: <div className="card">
+  └─ Render
+  └─ Layout effect
+  └─ Paint
+
+Unmount: NotificationBadge
+```
+
+Inspect which components render, when effects run, and what triggers re-renders. If a component re-renders unexpectedly, the Components track reveals whether it was a parent update, prop change, or state change.
+
+These tools surface information previously hidden or difficult to discover. Debugging slow renders becomes concrete instead of speculative.
+
+## ESLint Plugin Improvements: Flat Config and Compiler Rules
+
+The `eslint-plugin-react-hooks` package now ships with flat config format by default. Flat config simplifies eslint configuration significantly:
+
+```js
+// eslint.config.js (modern flat config)
+import reactHooks from 'eslint-plugin-react-hooks';
+
+export default [
+  {
+    files: ['**/*.js', '**/*.jsx', '**/*.ts', '**/*.tsx'],
+    plugins: { 'react-hooks': reactHooks },
+    rules: reactHooks.configs.recommended.rules,
+  },
+];
+```
+
+If you're still on legacy eslintrc format, explicitly opt into legacy rules:
+
+```js
+// .eslintrc (legacy format - not recommended)
+{
+  "extends": ["plugin:react-hooks/recommended-legacy"]
+}
+```
+
+New rules for React Compiler users validate that code patterns work with automatic memoization:
+
+```js
+// eslint.config.js
+export default [
+  {
+    files: ['**/*.js', '**/*.jsx', '**/*.ts', '**/*.tsx'],
+    plugins: { 'react-compiler': reactCompiler },
+    rules: {
+      'react-compiler/react-compiler': 'error',
+    },
+  },
+];
+```
+
+The React Compiler rule catches patterns that break automatic memoization, like non-stable references or missing dependency declarations.
+
+## Minor Breaking Changes: useId Prefix Update
+
+The `useId` hook changes the default ID prefix from `:r:` to `_r_` (underscores instead of colons). This enables View Transitions support—CSS selectors and XML specs don't allow colons in element IDs.
+
+If you're using `useId` for custom purposes, the new format is more compatible:
+
+```tsx
+function UserProfile() {
+  const id = useId(); // Now generates _r_123abc instead of :r:123abc
+  
+  return (
+    <div>
+      <label htmlFor={id}>Name</label>
+      <input id={id} type="text" />
+    </div>
+  );
+}
+```
+
+No migration needed—React handles the change internally. If you're parsing or storing IDs, the underscore format works better with CSS selectors and regular expressions.
+
+## Implementation Priorities for Production
+
+Start by adopting `useEffectEvent` in existing projects. It requires minimal code changes and solves real problems with effect dependencies. Audit effects with multiple dependencies where one changes frequently but shouldn't trigger re-runs.
+
+For new projects, evaluate `Activity` for tabbed interfaces and multi-step forms. The pattern preserves state elegantly and eliminates common bugs around lost form input.
+
+Server-rendering projects benefit most from partial pre-rendering and Suspense batching. These changes require Next.js integration, but the performance improvements justify exploration.
+
+Enable DevTools tracking to understand component render behavior. The visualizations reveal performance bottlenecks and unexpected re-renders more effectively than mental models.
+
+React 19.2 provides concrete tools for managing complexity in modern applications. The features address genuine pain points—dependency management, visibility control, and rendering visibility—without introducing abstract concepts. Adoption focuses on specific problems in your codebase rather than wholesale architectural changes.

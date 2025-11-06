@@ -19,17 +19,21 @@ import {
 import { config } from '@/config'
 import { useCommand } from '@/hooks/use-command'
 import { categoryNameToSlug } from '@/lib/articles'
-import type { Article } from '@/types/article'
 
-interface CommandMenuProps extends DialogProps {
-  articles: Article[]
+interface ArticleSearchResult {
+  slug: string
+  title: string
+  category: string
 }
 
-export function CommandMenu({ articles, ...props }: CommandMenuProps) {
+interface CommandMenuProps extends DialogProps {}
+
+export function CommandMenu({ ...props }: CommandMenuProps) {
   const { setTheme } = useTheme()
   const router = useRouter()
   const command = useCommand()
   const [search, setSearch] = React.useState('')
+  const [articles, setArticles] = React.useState<ArticleSearchResult[]>([])
 
   const runCommand = React.useCallback(
     (cmd: () => unknown) => {
@@ -42,8 +46,20 @@ export function CommandMenu({ articles, ...props }: CommandMenuProps) {
   React.useEffect(() => {
     if (!command.isOpen) {
       setSearch('')
+      setArticles([])
     }
   }, [command.isOpen])
+
+  React.useEffect(() => {
+    if (search) {
+      fetch(`/api/articles/search?q=${encodeURIComponent(search)}`)
+        .then((r) => r.json())
+        .then(setArticles)
+        .catch(() => setArticles([]))
+    } else {
+      setArticles([])
+    }
+  }, [search])
 
   return (
     <>

@@ -48,9 +48,7 @@ export function useIpLocation(): LocationResult {
 
     const fetchLocation = async () => {
       try {
-        const response = await fetch('https://ipapi.co/json/', {
-          cache: 'force-cache',
-        })
+        const response = await fetch('/api/location')
 
         if (!response.ok) {
           throw new Error('Failed to fetch location')
