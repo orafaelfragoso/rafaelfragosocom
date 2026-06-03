@@ -1,0 +1,16 @@
+node_modules
+.next
+.git
+.env
+.env*.local
+coverage
+playwright-report
+test-results
+lighthouse-results
+.lighthouseci
+Dockerfile
+.dockerignore
+npm-debug.log*
+yarn-debug.log*
+.DS_Store
+*.pem

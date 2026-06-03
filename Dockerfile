@@ -9,13 +9,11 @@ RUN npm install
 # Disable telemetry during runtime if desired
 ENV NEXT_TELEMETRY_DISABLED=1
 
-# Accept environment variables as build arguments
+# Accept public environment variables as build arguments
 ARG NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN
-ARG IPAPI_TOKEN
 
-# Set environment variables for Next.js build (NEXT_PUBLIC_* must be set at build time)
+# Set public environment variables for Next.js build (NEXT_PUBLIC_* must be set at build time)
 ENV NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN=${NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN}
-ENV IPAPI_TOKEN=${IPAPI_TOKEN}
 
 # Copy source files and build the app
 COPY . .
@@ -26,13 +24,9 @@ FROM oven/bun:1.3-slim AS runner
 WORKDIR /app
 ENV NODE_ENV=production
 
-# Accept runtime environment variables
-ARG IPAPI_TOKEN
-ENV IPAPI_TOKEN=${IPAPI_TOKEN}
-
-# Install wget and curl
+# Install runtime tools and user-management utilities
 RUN apt-get update && \
-    apt-get install -y wget curl --no-install-recommends && \
+    apt-get install -y wget curl adduser --no-install-recommends && \
     rm -rf /var/lib/apt/lists/*
 
 # Create a non-root user

@@ -19,6 +19,7 @@
 # misc
 .DS_Store
 *.pem
+/.pi/
 
 # debug
 npm-debug.log*
